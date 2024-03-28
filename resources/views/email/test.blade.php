@@ -1,0 +1,2 @@
+<h1 style="color:red; text-align: center;">Xin chào {{$name}}</h1>
+<p style="text-align: center;">Lorem ipsum dolor sit amet consectetur adipisicing elit. Vero accusamus deserunt temporibus explicabo voluptas asperiores quia distinctio hic quo modi. Asperiores, id. Et, beatae? Rem a nulla possimus necessitatibus reprehenderit.</p>

@@ -1,0 +1,63 @@
+.btn__person-outline {
+    position: relative;
+}
+
+.btn__person-outline:hover .person-outline__info-list {
+    display: block;
+
+}
+
+.person-outline__info-list {
+    position: absolute;
+    top: 120%;
+    right: 0;
+    width: 170px;
+    border-radius: 4px;
+    z-index: 1;
+    /* overflow: hidden; */
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    background-color: #fff;
+    display: none;
+    animation: fadeIn 0.3s linear;
+}
+
+.person-outline__info-list::before {
+    content: "";
+    position: absolute;
+    top: -23px;
+    left: 0;
+    width: 100%;
+    height: 30px;
+}
+
+.person-outline__info-item {
+    font-size: 16px;
+    padding: 8px 12px;
+
+}
+
+.person-outline__info-item a {
+    color: var(--onyx);
+}
+
+.person-outline__info-item:hover a{
+    color: var(--salmon-pink);;
+}
+
+.client_header__action {
+    border-radius: 4px;
+    transition: 0.2s linear all;
+}
+
+.client_header__action:hover {
+    background-color: #ccc;
+}
+
+.header-top__account {
+    display: flex;
+}
+
+.header-top__account p{
+    padding: 0 12px;
+    font-size: 14px;
+}
