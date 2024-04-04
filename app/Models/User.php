@@ -22,9 +22,14 @@ class User extends Authenticatable
         'email',
         'password',
         'token',
-        'role_id'
+        'role_id',
+        'user_status_id',
+        'provider_id',
+        'provider',
+        'provider_token',
     ];
 
+    protected $primaryKey = 'user_id';
     /**
      * The attributes that should be hidden for serialization.
      *
@@ -55,5 +60,15 @@ class User extends Authenticatable
         $permission_mapping =  array_flip(config('permission'));
 
         return $permission_mapping[$this->role_id];
+    }
+
+    public function isAdminOrManager()
+    {
+        
+        if($this->role_id == 2 or $this->role_id == 3) {
+            return true;
+        }
+        return false;
+        // dd('Xin chào');
     }
 }

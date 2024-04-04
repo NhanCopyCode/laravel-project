@@ -34,7 +34,7 @@
         </div>
         <div class="sign-up-link">
             <p>Don't have account? <a href="{{route('auth.register')}}">Sign Up</a></p>
-            <p>Are you a car rental person? <a href="{{route('auth.login_owner')}}">Login here</a></p>
+            {{-- <p>Are you a car rental person? <a href="{{route('auth.login_owner')}}">Login here</a></p> --}}
         </div>
     </form>
     {{-- <script src="{{asset('assets/clients/js/login.js')}}"></script> --}}

@@ -3,42 +3,56 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\UserStatus;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
-use App\Http\Requests\OwnerRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use App\Http\Requests\RegisterRequest;
 use App\Http\Requests\Auth\UserRequest;
+use App\Http\Requests\Auth\AdminRequest;
 
 use App\Http\Requests\Auth\LoginRequest;
 use Illuminate\Support\Facades\Validator;
 use Symfony\Component\VarDumper\Caster\RedisCaster;
+use App\Http\Requests\Auth\AdminRequest as AuthAdminRequest;
 
 class UserController extends Controller
 {
     //
     public function index() 
     {
+        $user_status = config('user_status');
+
+        //Kiểm tra người dùng login
+        if(Auth::guard('web')->check() && Auth::guard('web')->user()->user_status_id == $user_status('active')) {
+            return redirect()->route('home');
+        }
+
         return view('auth.login');
     }
 
+    
+
     public function login(LoginRequest $request)
     {   
-        // dd($request->all());
+        //Lấy ra được user status của mỗi user
+        $user_status = config('user_status');
+      
         $data = $request->all('email', 'password');
+        $remember = $request->remember_me == 'on' ? true : false;
+        // dd($remember);
         
-        if(auth()->attempt($data)) {
-            
-            //Nếu tài khoản không có status id = 2 thì tài khoản đó không được vào (status = 2 là active)
-            if(Auth::user()->user_status_id != 2) {
-                // dd('Vào được rồi');
-                return redirect()->route('auth.')->with('msg', 'Tài khoản chưa được kích hoạt, vui lòng click vào <a style="font-size: 20px;font-weight: bold;" href="">đây</a> để kích hoạt');
+        if(Auth::guard('web')->attempt($data, $remember)) {
+            // dd(Auth::user()->user_status_id != $user_status('active'));
+
+            //Nếu tài khoản không có status id = 1 thì tài khoản đó không được vào (status = 1 là active)
+            if(Auth::guard('web')->user()->user_status_id != $user_status('active')) {
+                // dd('Vào lại được if');
+                return redirect()->route('auth.index')->with('msg', 'Tài khoản chưa được kích hoạt, vui lòng click vào <a style="font-size: 20px;font-weight: bold;" href="'.route('auth.get_active').'">đây</a> để kích hoạt');
             }
-            $user = User::where('email', $request->email)->first();
-            // dd(Auth::user());
-            Auth::login($user);
+            // dd('Không vào được if');
             return redirect()->route('home');
         }else {
             return back()->with('msg--wrong-password', 'Nhập sai mật khẩu');
@@ -91,10 +105,15 @@ class UserController extends Controller
         $data = request()->all('name', 'email');
         $token = strtoupper(Str::random(15));
         $data['token'] = $token;
+        $data['role_id'] = 1; // role_id = 1 = User
         
         $data['password'] = Hash::make($request->password);
+        // user_status_id = 3 = pending (Mới đăng kí thì user status = 3)
+        $data['user_status_id'] = 3; 
         // dd($data);
         if($user = User::create($data)) {
+            // dd($user);
+
             Mail::send('email.active_account', compact('user'), function ($email) use($user) {
                 // dd($user); 
                 $email->subject('NhanggWebsite - Xác nhận tài khoản'); 
@@ -102,85 +121,104 @@ class UserController extends Controller
             });
         }
 
-        return redirect()->route('auth.')->with('msg--confirm','Hãy vào email để kích hoạt tài khoản trong 24h');
+        return redirect()->route('auth.index')->with('msg--confirm','Hãy vào email để kích hoạt tài khoản trong 24h');
         // return 'oke';
     }
 
     public function logout(Request $request)
     {
+        // dd($request->all());
         // auth()->logout();
-        Auth::logout();
-        return redirect()->route('auth.');
+        Auth::guard('web')->logout();
+        return redirect()->route('auth.index');
     }
 
-    public function login_owner()
+    public function admin_login()
     {
-        return view('auth.owner_login');
+        return view('auth.admin_login');
     }
 
-    public function check_login_owner(OwnerRequest $request)
+    public function check_admin_login(AdminRequest $request)
     {
-      
-        $ownerLogin = $request->all('email', 'password');
-        if(Auth::attempt($ownerLogin)) {
-            
-            //Nếu tài khoản không có status id = 2 thì tài khoản đó không được vào (status = 2 là active)
-            if(Auth::user()->user_status_id != 2) {
-                // dd('Vào được rồi');
-                return redirect()->route('auth.login_owner')->with('msg--not_active', 'Tài khoản chưa được kích hoạt, vui lòng click vào <a style="font-size: 20px;font-weight: bold;" href="">đây</a> để kích hoạt');
+        $adminLogin = $request->all('email', 'password');
+        // dd($adminLogin);
+        
+       
+
+        // $user = Auth::user();
+        // dd($user->isAdminOrManager());
+        if(Auth::guard('admin')->attempt($adminLogin)) {
+            if(Auth::guard('admin')->user()->isAdminOrManager())
+            {
+                return redirect()->route('admin.index');
+
             }
+            return redirect()->route('403');
+            //Nếu tài khoản không có status id = 1 thì tài khoản đó không được vào (status = 1 là active)
+            // if(Auth::user()->user_status_id != 1) {
+            //     // dd('Vào được rồi');
+            //     return redirect()->route('auth.login_admin')->with('msg--not_active', 'Tài khoản chưa được kích hoạt, vui lòng click vào <a style="font-size: 20px;font-weight: bold;" href="">đây</a> để kích hoạt');
+            // }
 
 
-            $user = User::where('email', $request->email)->first();
+            // $user = User::where('email', $request->email)->first();
             // dd($user);
-            Auth::login($user);
-            return redirect()->route('owner.index');
+            // Auth::login($user);
             
         }
 
         // return redirect()->route('home');
     }
 
-    public function register_owner()
+    public function register_admin()
     {
-        return view('auth.owner_register');
+        return view('auth.admin_register');
     }
 
-    public function check_register_owner(RegisterRequest $request)
+    public function check_register_admin(RegisterRequest $request)
     {
         // dd($request->all());
         $data = $request->all('name', 'email');
         $data['password'] = Hash::make($request->password);
-        $data['role_id'] = 2; // Role Owner = 2
+        $data['role_id'] = 3; // Role admin = 3
 
         $token = strtoupper(Str::random(15));
         $data['token'] = $token;
+        $data['user_status_id'] = 1; // user_status_id = 1 (active)
         
         $data['password'] = Hash::make($request->password);
-        if($user = User::create($data)) {
-            // dd($user);
-            Mail::send('email.active_account_owner', compact('user'), function ($email) use($user) {
-                // dd($user); 
-                $email->subject('NhanggWebsite - Xác nhận tài khoản'); 
-                $email->to($user->email, $user->name);
-            });
+        // dd(User::create($data));
+        // if($user = User::create($data)) {
+        //     Mail::send('email.active_account_admin', compact('user'), function ($email) use($user) {
+        //         // dd($user); 
+        //         $email->subject('NhanggWebsite - Xác nhận tài khoản'); 
+        //         $email->to($user->email, $user->name);
+        //     });
+        // }
+
+        // return redirect()->route('auth.login_admin')->with('msg--confirm','Hãy vào email để kích hoạt tài khoản trong 24h');
+        $user = User::create($data);
+        if($user) {
+            return redirect()->route('auth.login_admin')->with('msg--complete', 'Tạo thành công tài khoản admin');
         }
 
-        return redirect()->route('auth.login_owner')->with('msg--confirm','Hãy vào email để kích hoạt tài khoản trong 24h');
+        return back()->with('msg--reject', 'Tạo tài khoản admin thất bại');
+        
     }
     
 
     public function actived(User $user, $token)
     {
+        
         if($user->token === $token && $user->created_at->diffInHours() <= 24) {
-            $user->user_status_id = 2;
+            $user->user_status_id = 1; // user_status_id = 1 = active
             $user->token = null;
             $user->save();
             // dd($user);
-            return redirect()->route('auth.')->with('msg--actived', 'Xác nhận tài khoản thành công, bạn có thể đăng nhập');
+            return redirect()->route('auth.index')->with('msg--actived', 'Xác nhận tài khoản thành công, bạn có thể đăng nhập');
 
         }else {
-            return redirect()->route('auth.')->with('msg--rejected', 'Mã xác nhận đã hết hạn!');
+            return redirect()->route('auth.index')->with('msg--rejected', 'Mã xác nhận đã hết hạn!');
         }
     }
 
@@ -190,17 +228,17 @@ class UserController extends Controller
     }
 
     
-    public function owner_actived(User $user, $token)
+    public function admin_actived(User $user, $token)
     {
         if($user->token === $token && $user->created_at->diffInHours() <= 24) {
             $user->user_status_id = 2;
             $user->token = null;
             $user->save();
             // dd($user);
-            return redirect()->route('auth.login_owner')->with('msg--actived', 'Xác nhận tài khoản thành công, bạn có thể đăng nhập');
+            return redirect()->route('auth.login_admin')->with('msg--actived', 'Xác nhận tài khoản thành công, bạn có thể đăng nhập');
 
         }else {
-            return redirect()->route('auth.login_owner')->with('msg--rejected', 'Mã xác nhận đã hết hạn!');
+            return redirect()->route('auth.login_admin')->with('msg--rejected', 'Mã xác nhận đã hết hạn!');
         }
     }
 
@@ -269,20 +307,53 @@ class UserController extends Controller
         $user->update(['password' => $password, 'token' => null]);
         $user->save();
 
-        return redirect()->route('auth.')->with('msg--get-password', 'Đổi mật khẩu thành công');
+        return redirect()->route('auth.index')->with('msg--get-password', 'Đổi mật khẩu thành công');
     }
 
-
-    public function test_view()
+    // Active account
+    public function getActive()
     {
-        $user = User::find(2);
-        return view('email.active_account', compact('user'));
+        // return 'Vào được get active account';
+        return view('email.get_active');
     }
+
+    public function postActive(Request $request)
+    {
+        $rules = [
+            'email' => 'required|email|exists:users'
+        ];
+
+        $message = [
+            'required' => ':attribute không được để trống',
+            'email' => ':attribute không hợp lệ',
+            'exists' => ':attribute chưa được đăng kí',
+        ];
+
+        $attributes = [
+            'email' => 'Email',
+        ];
+
+        $request->validate($rules, $message, $attributes);
+
+        $token = strtoupper(Str::random(10));
+        $user = User::where('email', $request->email)->first();
+        $user->update(['token' => $token]);
+        // dd($user);
+
+
+        Mail::send('email.active_account', compact('user'), function ($email) use($user) {
+            // dd($user); 
+            $email->subject('NhanggWebsite - Xác nhận tài khoản'); 
+            $email->to($user->email, $user->name);
+        });
+        return back()->with('msg--email-active-account', 'Vui lòng check email để kích hoạt tài khoản');
+    }
+
 
     public function profile()
     {
         $user = Auth::user();
-        dd($user);
+        // dd($user);
         return view('clients.profile');
     }
 }

@@ -10,7 +10,7 @@
             padding: 8px 12px;
             background-color: #ccc;
 
-        " href="{{route('auth.get_forgot_password', ['user' => $user->id, 'token'=> $user->token])}}">Lấy lại mật khẩu</a>
+        " href="{{route('auth.get_forgot_password', ['user' => $user->user_id, 'token'=> $user->token])}}">Lấy lại mật khẩu</a>
     </div>
 
 </div>

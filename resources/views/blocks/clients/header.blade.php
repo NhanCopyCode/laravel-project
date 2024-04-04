@@ -66,7 +66,7 @@
                 {{-- <a class="client_header__action" style="text-decoration: none; color: #000; padding: 8px 12px;" href="{{route('auth.logout')}}">Logout</a> --}}
             @else
                 
-                <a class="client_header__action" style="text-decoration: none; color: #000; padding: 8px 12px;" href="{{route('auth.')}}" class="header-top__sign-in">Login</a>
+                <a class="client_header__action" style="text-decoration: none; color: #000; padding: 8px 12px;" href="{{route('auth.index')}}" class="header-top__sign-in">Login</a>
                 <a class="client_header__action" style="text-decoration: none; color: #000; padding: 8px 12px;" href="{{route('auth.register')}}" class="header-top__register">Register</a>
             @endif
         </div>
@@ -79,7 +79,7 @@
 
       <div class="container">
 
-        <a href="#" class="header-logo">
+        <a href="{{route('home')}}" class="header-logo">
           {{-- <img src="./assets/images/logo/logo.svg" alt="Anon's logo" width="120" height="36"> --}}
           <h1>Nhangg</h1>
         </a>

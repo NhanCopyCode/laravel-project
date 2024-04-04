@@ -2,10 +2,12 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
+use Laravel\Socialite\Facades\Socialite;
 use App\Http\Controllers\error\ErrorController;
-use App\Http\Controllers\clients\HomeController;
-use App\Http\Controllers\clients\OwnerController;
+use App\Http\Controllers\admins\AdminController;
 
+use App\Http\Controllers\clients\HomeController;
+use App\Http\Controllers\Auth\ProviderController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -21,7 +23,7 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 
 
 Route::prefix('auth')->name('auth.')->group(function () {
-    Route::get('/', [UserController::class, 'index']);
+    Route::get('/', [UserController::class, 'index'])->name('index');
 
     Route::post('/login', [UserController::class, 'login'])->name('login');
 
@@ -42,21 +44,28 @@ Route::prefix('auth')->name('auth.')->group(function () {
 
     Route::post('/get_forgot_password/{user}/{token}', [UserController::class, 'postForgotPasword'])->name('post_forgot_password');
 
+    //Social login
+    Route::get('/{provider}/redirect', [ProviderController::class, 'redirect'])->name('social_login');
 
-    // Owner login
-    Route::get('/owner_login', [UserController::class, 'login_owner'])->name('login_owner');
-
-    Route::post('/owner_login', [UserController::class, 'check_login_owner'])->name('check_login_owner');
-
-    //Owner register
-    Route::get('/owner_register', [UserController::class, 'register_owner'])->name('register_owner');
-
-    Route::post('/owner_register', [UserController::class, 'check_register_owner'])->name('check_register_owner');
-
-    Route::get('/owner_actived/{user}/{token}', [UserController::class, 'owner_actived'])->name('owner.actived');
+    Route::get('/{provider}/callback', [ProviderController::class, 'callback']);
 
 
+    // admin login
+    Route::get('/admin_login', [UserController::class, 'admin_login'])->name('login_admin');
 
+    Route::post('/admin_login', [UserController::class, 'check_admin_login'])->name('check_login_admin');
+
+    //admin register
+    Route::get('/admin_register', [UserController::class, 'register_admin'])->name('register_admin');
+
+    Route::post('/admin_register', [UserController::class, 'check_register_admin'])->name('check_register_admin');
+
+    Route::get('/admin_actived/{user}/{token}', [UserController::class, 'admin_actived'])->name('admin.actived');
+
+    //Active account
+    Route::get('/get_active', [UserController::class, 'getActive'])->name('get_active');
+
+    Route::post('/get_active', [UserController::class, 'postActive'])->name('post_active');
 
 });
 
@@ -69,24 +78,24 @@ Route::prefix('/user')->name('user.')->middleware('auth')->group(function () {
     // Route::post();
 });
 
-// Route owner
+// Route admin
 
-Route::get('/owner/login_error', [OwnerController::class, 'login_error'])->name('owner_login_error');
+Route::get('/admin/login_error', [AdminController::class, 'login_error'])->name('admin_login_error');
 
 
-Route::prefix('/owner')->middleware('permission.checker:OWNER|')->name('owner.')->group(function () {
+Route::prefix('/admin')->middleware('permission.checker:admin|Manager')->name('admin.')->group(function () {
 
-    Route::get('/', [OwnerController::class, 'index'])->name('index');
+    Route::get('/', [AdminController::class, 'index'])->name('index');
 
-    Route::get('/profile', [OwnerController::class, 'profile'])->name('profile');
+    Route::get('/profile', [AdminController::class, 'profile'])->name('profile');
 
-    Route::post('/profile', [OwnerController::class, 'edit_profile'])->name('edit_profile');
+    Route::post('/profile', [AdminController::class, 'edit_profile'])->name('edit_profile');
 
-    Route::get('/vehicle', [OwnerController::class, 'vehicle'])->name('vehicle');
+    Route::get('/vehicle', [AdminController::class, 'vehicle'])->name('vehicle');
 
-    Route::post('/vehicle', [OwnerController::class, 'store_vehicle'])->name('store_vehicle');
+    Route::post('/vehicle', [AdminController::class, 'store_vehicle'])->name('store_vehicle');
 
-   Route::post('/logout', [OwnerController::class, 'logout'])->name('logout');
+   Route::post('/logout', [AdminController::class, 'logout'])->name('logout');
 
 });
 

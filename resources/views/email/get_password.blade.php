@@ -11,7 +11,7 @@
 </head>
 <body>
     {{-- {{time()}} --}}
-    <form action="{{route('auth.post_forgot_password', ['user' => $user->id, 'token' => $user->token])}}" method="POST" class="login-box">
+    <form action="{{route('auth.post_forgot_password', ['user' => $user->user_id, 'token' => $user->token])}}" method="POST" class="login-box">
 
         @csrf
         <div class="login-header">

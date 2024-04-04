@@ -33,7 +33,7 @@ class LoginRequest extends FormRequest
         return [
             'required' => ':attribute không được để trống',
             'email' => ':attribute không hợp lệ',
-            'exists' => ':attribute không tồn tại trong hệ thống',
+            'exists' => ':attribute chưa được đăng kí',
         ];
     }
 

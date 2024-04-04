@@ -33,13 +33,14 @@
             @endif
         </div>
         <div class="input-box">
-            <input type="text" class="input-field" placeholder="Email" name="email" autocomplete="off" required value="{{old('email')}}">
+            
+            <input type="text" class="input-field" placeholder="Email" name="email" autocomplete="off" required @if(isset($_COOKIE['email_user'])) value="{{$_COOKIE['email_user']}}" @else value="{{old('email')}}" @endif>
             @error('email')
                 <span style="color: red;">{{$message}}</span>
             @enderror
         </div>
         <div class="input-box">
-            <input type="password" class="input-field" placeholder="Password" name="password" autocomplete="off" required value="{{old('password')}}">
+            <input type="password" class="input-field" placeholder="Password" name="password" autocomplete="off" required  @if(isset($_COOKIE['password'])) value="{{$_COOKIE['password']}}" @else value="{{old('password')}}" @endif>
             @error('password')
                 <span style="color: red;">{{$message}}</span>
             @enderror
@@ -49,7 +50,7 @@
         </div>
         <div class="forgot">
             <section>
-                <input type="checkbox" id="check">
+                <input name="remember_me" type="checkbox" id="check">
                 <label for="check">Remember me</label>
             </section>
             <section>
@@ -62,7 +63,8 @@
         </div>
         <div class="sign-up-link">
             <p>Don't have account? <a href="{{route('auth.register')}}">Sign Up</a></p>
-            <p>Are you a car rental person? <a href="{{route('auth.login_owner')}}">Login here</a></p>
+            <a href="/auth/google/redirect">Login with Google</a>
+            {{-- <p>Are you a car rental person? <a href="{{route('auth.login_owner')}}">Login here</a></p> --}}
         </div>
     </form>
     {{-- <script src="{{asset('assets/clients/js/login.js')}}"></script> --}}

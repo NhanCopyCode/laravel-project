@@ -38,10 +38,10 @@
             @enderror
         </div>
         <div class="forgot">
-            <section>
+            {{-- <section>
                 <input type="checkbox" id="check">
                 <label for="check">Remember me</label>
-            </section>
+            </section> --}}
 
             <section>
                 <input type="checkbox" id="btnShowPassword"></input>
@@ -53,7 +53,7 @@
             <label for="submit">Sign Up</label>
         </div>
         <div class="sign-up-link">
-            <p>You already have an account? <a href="{{route('auth.')}}">Sign in</a></p>
+            <p>You already have an account? <a href="{{route('auth.index')}}">Sign in</a></p>
         </div>
     </form>
     <script src="{{asset('assets/clients/js/show_password.js')}}"></script>

@@ -1,0 +1,52 @@
+
+
+.header-logo,
+.menu-title, 
+.menu-title a,
+.panel-list-item a{
+    text-decoration: none;
+
+}
+
+.sidebar {
+    display: none;
+}
+
+.sidebar.active {
+    display: block;
+    transition: all 0.2s linear;
+    animation: fadeIn 0.3s linear;
+}
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.sidebar-submenu-category-list.active {
+    min-height: 140px;
+    max-height: none;
+}
+
+a {
+    text-decoration: none;
+}
+
+ul {
+    padding: 0;
+}
+
+.custom-control {
+    display: flex;
+    align-items: center;
+    flex-direction: row-reverse;
+}
+
+.custom-controls-stacked{
+    padding: 0;
+
+}

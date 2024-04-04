@@ -10,7 +10,7 @@
             padding: 8px 12px;
             background-color: #ccc;
 
-        " href="{{route('auth.user.actived', ['user' => $user->id, 'token'=> $user->token])}}">Kích hoạt tài khoản</a>
+        " href="{{route('auth.user.actived', ['user' => $user->user_id, 'token'=> $user->token])}}">Kích hoạt tài khoản</a>
     </div>
 
 </div>

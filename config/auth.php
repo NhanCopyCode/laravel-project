@@ -40,6 +40,10 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
+        'admin' => [
+            'driver' => 'session',
+            'provider' => 'users', // Dùng chung provider ‘users’ vì chúng tôi chỉ sử dụng 1 model User
+        ],
     ],
 
     /*

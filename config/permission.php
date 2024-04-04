@@ -2,6 +2,6 @@
 
 return [
     'User' => 1,
-    'Owner' => 2,
+    'Manager' => 2,
     'Admin' => 3,
 ];
