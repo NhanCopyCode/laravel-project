@@ -3,9 +3,10 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use Laravel\Socialite\Facades\Socialite;
+use App\Http\Controllers\SwitchModeController;
 use App\Http\Controllers\error\ErrorController;
-use App\Http\Controllers\admins\AdminController;
 
+use App\Http\Controllers\admins\AdminController;
 use App\Http\Controllers\clients\HomeController;
 use App\Http\Controllers\Auth\ProviderController;
 /*
@@ -107,3 +108,6 @@ Route::get('error_403', [ErrorController::class, 'error_403'])->name('403');
 
 //Test view
 Route::get('test_view', [UserController::class, 'test_view'])->name('test_view');
+
+//Dark light mode
+Route::get('switch-mode', [SwitchModeController::class, 'switch_mode'])->name('switch_mode');

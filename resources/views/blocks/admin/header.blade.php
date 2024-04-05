@@ -1,5 +1,8 @@
 <header style="text-align: right;">
     Xin chào, {{Auth::guard('admin')->user()->name}}
-    <input id="light_input" name="background-color" value="light" type="radio" checked>Light
-    <input id="dark_input" name="background-color" value="dark" type="radio">Dark
+    <a href="{{route('switch_mode')}}"  class="mode-switcher">
+        <i class="fa-regular fa-moon icon-dark"></i>
+        <i class="fa-regular fa-lightbulb icon-light"></i>
+
+    </a>
 </header>

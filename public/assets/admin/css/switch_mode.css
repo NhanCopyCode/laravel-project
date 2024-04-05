@@ -1,11 +1,11 @@
 /* Light mode style */
-body.light {
+.main.light {
     background-color: #fff;
     color: #333;
 }
 
 /* Dark mode style */
-body.dark {
+.main.dark {
     background-color: #333;
     color: #fff;
 }
