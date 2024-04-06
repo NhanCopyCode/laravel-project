@@ -8,7 +8,11 @@ use App\Http\Controllers\error\ErrorController;
 
 use App\Http\Controllers\admins\AdminController;
 use App\Http\Controllers\clients\HomeController;
+use App\Http\Controllers\admins\BranchController;
 use App\Http\Controllers\Auth\ProviderController;
+use App\Http\Controllers\admins\ProfileController;
+use App\Http\Controllers\admins\VehicleController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -88,13 +92,21 @@ Route::prefix('/admin')->middleware('permission.checker:admin|Manager')->name('a
 
     Route::get('/', [AdminController::class, 'index'])->name('index');
 
-    Route::get('/profile', [AdminController::class, 'profile'])->name('profile');
+    // Profile
 
-    Route::post('/profile', [AdminController::class, 'edit_profile'])->name('edit_profile');
+    Route::get('/profile', [ProfileController::class, 'profile'])->name('profile');
 
-    Route::get('/vehicle', [AdminController::class, 'vehicle'])->name('vehicle');
+    Route::post('/profile', [ProfileController::class, 'edit_profile'])->name('edit_profile');
 
-    Route::post('/vehicle', [AdminController::class, 'store_vehicle'])->name('store_vehicle');
+    // Branch 
+    Route::get('/branch', [BranchController::class, 'index'])->name('branch.index');
+
+    Route::post('/branch', [BranchController::class, 'create'])->name('branch.create');
+
+    //Vehicle
+    Route::get('/vehicle', [VehicleController::class, 'vehicle'])->name('vehicle');
+
+    Route::post('/vehicle', [VehicleController::class, 'store_vehicle'])->name('store_vehicle');
 
    Route::post('/logout', [AdminController::class, 'logout'])->name('logout');
 

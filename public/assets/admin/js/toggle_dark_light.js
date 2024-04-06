@@ -62,20 +62,23 @@ document.addEventListener('DOMContentLoaded', function() {
     const iconDark = document.querySelector('.icon-dark');
     const iconLight = document.querySelector('.icon-light');
 
-    iconLight.style.display = 'none';
-    iconDark.style.display = 'block';
+   
     const mode = localStorage.getItem('mode');
+    // console.log(mode);
     if(mode) {
         if(mode === 'light') {
-           iconLight.style.display = 'block'
-           iconDark.style.display = 'none'
+           iconLight.style.display = 'none'
+           iconDark.style.display = 'block'
         }
 
         if(mode === 'dark') {
-            iconDark.style.display = 'block'
-            iconLight.style.display = 'none'
+            iconDark.style.display = 'none'
+            iconLight.style.display = 'block'
 
         }
+    }else {
+        iconLight.style.display = 'none';
+        iconDark.style.display = 'block';
     }
 
     var savedMode = localStorage.getItem('mode') || 'light';

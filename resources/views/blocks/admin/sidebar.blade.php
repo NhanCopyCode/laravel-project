@@ -11,27 +11,27 @@
         <li class="sidebar-item">
             <a href="{{route('admin.profile')}}" class="sidebar-link">
                 <i class="lni lni-user"></i>
-                <span>Profile</span>
+                <span>Home</span>
             </a>
         </li>
         <li class="sidebar-item">
-            <a href="#" class="sidebar-link">
-                <i class="lni lni-agenda"></i>
-                <span>Task</span>
+            <a href="{{route('admin.branch.index')}}" class="sidebar-link">
+                <i class="fa-solid fa-code-branch"></i>
+                <span>Quản lý chi nhánh</span>
             </a>
         </li>
         <li class="sidebar-item">
             <a href="#" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse"
                 data-bs-target="#auth" aria-expanded="false" aria-controls="auth">
-                <i class="lni lni-protection"></i>
-                <span>Auth</span>
+                <i class="fa-solid fa-motorcycle"></i>
+                <span>Quản lý xe</span>
             </a>
             <ul id="auth" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
                 <li class="sidebar-item">
-                    <a href="#" class="sidebar-link">Login</a>
+                    <a href="#" class="sidebar-link">Mẫu xe</a>
                 </li>
                 <li class="sidebar-item">
-                    <a href="#" class="sidebar-link">Register</a>
+                    <a href="#" class="sidebar-link">Xe</a>
                 </li>
             </ul>
         </li>
@@ -60,8 +60,8 @@
         </li>
         <li class="sidebar-item">
             <a href="#" class="sidebar-link">
-                <i class="lni lni-popup"></i>
-                <span>Notification</span>
+                <i class="fa-solid fa-users"></i>
+                <span>Quản lý user</span>
             </a>
         </li>
         <li class="sidebar-item">
