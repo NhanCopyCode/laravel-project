@@ -6,7 +6,7 @@
     </button>
 
     <!-- Modal -->
-    <form method="POST" action="{{route('admin.branch.create')}}" class="modal fade" id="form_branch" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+    <form method="POST" action="{{route('admin.branch.create')}}" class="modal fade modal-branch" id="form_branch" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
         @csrf
         <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -26,7 +26,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
             <button type="submit" class="btn btn-primary">Thêm</button>
             </div>
         </div>

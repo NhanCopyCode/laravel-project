@@ -27,27 +27,34 @@ document.querySelector('.mode-switcher').addEventListener('click', function(e) {
     const mainApp = document.querySelector('.main');
     const iconDark = document.querySelector('.icon-dark');
     const iconLight = document.querySelector('.icon-light');
+
+    //Table branch / Modal branch
     const tableBranch = document.querySelector('table');
+    const modalBranch = document.querySelector('.modal-branch');
+
 
     // console.log(mainApp);
     const currentMode = mainApp.classList.contains('dark') ? 'dark' : 'light';
     let newMode = currentMode === 'light' ? 'dark' : 'light';
-    console.log(newMode, 'trước');
     localStorage.setItem('mode', newMode);
     newMode = localStorage.getItem('mode') || 'light';
-    console.log(newMode, 'sau');
+
+
     if(newMode === 'light') {
         iconLight.style.display = 'none';
         iconDark.style.display = 'block';
 
         //Add class table-dark into table
         tableBranch.classList.remove('table-dark');
+        
     }else {
         iconLight.style.display = 'block';
         iconDark.style.display = 'none';
 
          //remove class table-dark from table
          tableBranch.classList.add('table-dark');
+         modalBranch.style.color = "#333"; 
+
     }
 
     if(newMode)
@@ -68,10 +75,11 @@ document.querySelector('.mode-switcher').addEventListener('click', function(e) {
 document.addEventListener('DOMContentLoaded', function() {
     const iconDark = document.querySelector('.icon-dark');
     const iconLight = document.querySelector('.icon-light');
+    
+    //Table branch / Modal branch
+    const tableBranch = document.querySelector('table');
+    const modalBranch = document.querySelector('.modal-branch');
 
-   const tableBranch = document.querySelector('table');
-   console.log('table')
-    console.log(tableBranch);
     const mode = localStorage.getItem('mode');
     // console.log(mode);
     if(mode) {
@@ -88,7 +96,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
             //Remove class table-dark from table
             tableBranch.classList.add('table-dark');
-
+            modalBranch.style.color = "#333"; 
         }
 
       
@@ -97,7 +105,7 @@ document.addEventListener('DOMContentLoaded', function() {
         iconDark.style.display = 'block';
 
         //Add default class table-dark into table
-        tableBranch.classList.add('table-dark');
+        tableBranch.classList.remove('table-dark');
         
     }
 
