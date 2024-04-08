@@ -67,7 +67,7 @@ h2{
 @if (url()->previous() != url()->current())
   <h2>Bạn không có quyền truy cập vào trang này, <a href="{{url()->previous()}}">quay trở về trang trước đó</a></h2>
 @else 
-  <h2>Bạn không có quyền truy cập vào trang này, <a href="{{route('auth.admin_login')}}">quay trở về trang trước đó</a></h2>
+  <h2>Bạn không có quyền truy cập vào trang này, <a href="{{route('auth.login_admin')}}">quay trở về trang trước đó</a></h2>
 @endif
 </body>
 </html>

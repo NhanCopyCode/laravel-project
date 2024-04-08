@@ -1,11 +1,19 @@
 /* Light mode style */
 .main.light {
-    background-color: #fff;
-    color: #333;
+    background-color: #fff !important;
+    color: #333 !important;
 }
 
 /* Dark mode style */
 .main.dark {
-    background-color: #333;
-    color: #fff;
+    background-color: #333 !important;
+    color: #fff !important;
 }
+
+/* 
+
+
+.light > * {    
+    background-color: #fff !important;
+    color: #333 !important;
+} */

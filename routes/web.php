@@ -99,9 +99,16 @@ Route::prefix('/admin')->middleware('permission.checker:admin|Manager')->name('a
     Route::post('/profile', [ProfileController::class, 'edit_profile'])->name('edit_profile');
 
     // Branch 
-    Route::get('/branch', [BranchController::class, 'index'])->name('branch.index');
+    Route::prefix('/branch')->group(function () {
+        
+        Route::get('/', [BranchController::class, 'index'])->name('branch.index');
 
-    Route::post('/branch', [BranchController::class, 'create'])->name('branch.create');
+        Route::post('/', [BranchController::class, 'create'])->name('branch.create');
+
+        Route::post('/delete/{id}', [BranchController::class, 'delete'])->name('branch.delete');
+    });
+
+    Route::post('');
 
     //Vehicle
     Route::get('/vehicle', [VehicleController::class, 'vehicle'])->name('vehicle');

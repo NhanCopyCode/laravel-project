@@ -147,8 +147,9 @@ header {
     display: flex;
     align-items: center;
     justify-content: flex-end;
-
-}
+    padding: 16px;
+    border-bottom: 1px solid #ccc;
+}   
 
 header span {
     margin-right: 12px;
@@ -188,5 +189,15 @@ header span {
     top: 0;
     right: 0;
     border-radius: 50%;
+}
+
+.content {
+    padding: 16px;
+    overflow-x: auto;
+    width: 100%;
+}
+
+.btn-update {
+    margin-right: 16px;
 }
 

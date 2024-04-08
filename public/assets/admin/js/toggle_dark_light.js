@@ -27,6 +27,7 @@ document.querySelector('.mode-switcher').addEventListener('click', function(e) {
     const mainApp = document.querySelector('.main');
     const iconDark = document.querySelector('.icon-dark');
     const iconLight = document.querySelector('.icon-light');
+    const tableBranch = document.querySelector('table');
 
     // console.log(mainApp);
     const currentMode = mainApp.classList.contains('dark') ? 'dark' : 'light';
@@ -38,9 +39,15 @@ document.querySelector('.mode-switcher').addEventListener('click', function(e) {
     if(newMode === 'light') {
         iconLight.style.display = 'none';
         iconDark.style.display = 'block';
+
+        //Add class table-dark into table
+        tableBranch.classList.remove('table-dark');
     }else {
         iconLight.style.display = 'block';
         iconDark.style.display = 'none';
+
+         //remove class table-dark from table
+         tableBranch.classList.add('table-dark');
     }
 
     if(newMode)
@@ -62,23 +69,36 @@ document.addEventListener('DOMContentLoaded', function() {
     const iconDark = document.querySelector('.icon-dark');
     const iconLight = document.querySelector('.icon-light');
 
-   
+   const tableBranch = document.querySelector('table');
+   console.log('table')
+    console.log(tableBranch);
     const mode = localStorage.getItem('mode');
     // console.log(mode);
     if(mode) {
         if(mode === 'light') {
            iconLight.style.display = 'none'
            iconDark.style.display = 'block'
+            //Add class table-dark into table
+            tableBranch.classList.remove('table-dark');
         }
 
         if(mode === 'dark') {
             iconDark.style.display = 'none'
             iconLight.style.display = 'block'
 
+            //Remove class table-dark from table
+            tableBranch.classList.add('table-dark');
+
         }
+
+      
     }else {
         iconLight.style.display = 'none';
         iconDark.style.display = 'block';
+
+        //Add default class table-dark into table
+        tableBranch.classList.add('table-dark');
+        
     }
 
     var savedMode = localStorage.getItem('mode') || 'light';
