@@ -23,14 +23,15 @@ class BranchRequest extends FormRequest
     {
         return [
             //
-            'branch_name' => 'required',
+            'branch_name' => 'required|unique:branchs',
         ];
     }
 
     public function messages()
     {
         return [
-            'required' => ':attribute yêu cầu không để trống'
+            'required' => ':attribute yêu cầu không để trống',
+            'unique' => ':attribute đã tồn tại'
         ];
     }
 

@@ -103,9 +103,11 @@ Route::prefix('/admin')->middleware('permission.checker:admin|Manager')->name('a
         
         Route::get('/', [BranchController::class, 'index'])->name('branch.index');
 
-        Route::post('/', [BranchController::class, 'create'])->name('branch.create');
+        Route::post('/add-branch', [BranchController::class, 'addBranch'])->name('branch.add');
 
         Route::post('/delete/{id}', [BranchController::class, 'delete'])->name('branch.delete');
+
+        Route::get('/test_insert', [BranchController::class, 'getBranchStatusId']);
     });
 
     Route::post('');

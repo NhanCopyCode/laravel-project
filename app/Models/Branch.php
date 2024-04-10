@@ -10,6 +10,11 @@ class Branch extends Model
     use HasFactory;
 
     protected $table = 'branchs';
+    protected $fillable = [
+        'branch_name', 
+        'branch_status_id'
+    ];
 
     protected $primaryKey = 'branch_id';
+    public $timestamps = false;
 }
