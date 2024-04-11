@@ -45,15 +45,19 @@ document.querySelector('.mode-switcher').addEventListener('click', function(e) {
         iconDark.style.display = 'block';
 
         //Add class table-dark into table
-        tableBranch.classList.remove('table-dark');
+        if(tableBranch) {
+            tableBranch.classList.remove('table-dark');
+        }
         
     }else {
         iconLight.style.display = 'block';
         iconDark.style.display = 'none';
 
          //remove class table-dark from table
-         tableBranch.classList.add('table-dark');
-         modalBranch.style.color = "#333"; 
+        if(tableBranch) {
+            tableBranch.classList.add('table-dark');
+            modalBranch.style.color = "#333"; 
+        }
 
     }
 
@@ -87,7 +91,9 @@ document.addEventListener('DOMContentLoaded', function() {
            iconLight.style.display = 'none'
            iconDark.style.display = 'block'
             //Add class table-dark into table
-            tableBranch.classList.remove('table-dark');
+            if(tableBranch) {
+                tableBranch.classList.remove('table-dark');
+            }
         }
 
         if(mode === 'dark') {
@@ -95,8 +101,10 @@ document.addEventListener('DOMContentLoaded', function() {
             iconLight.style.display = 'block'
 
             //Remove class table-dark from table
-            tableBranch.classList.add('table-dark');
-            modalBranch.style.color = "#333"; 
+           if(tableBranch) {
+                tableBranch.classList.add('table-dark');
+                modalBranch.style.color = "#333"; 
+           }
         }
 
       

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\admins;
 
 use App\Models\Brand;
+use App\Models\Branch;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -14,7 +15,7 @@ class AdminController extends Controller
     {
         //
         // dd(123);
-        $dataBrand = Brand::all();
+        $dataBrand = Branch::all();
         
         return view('admin.home', compact('dataBrand'));
     }

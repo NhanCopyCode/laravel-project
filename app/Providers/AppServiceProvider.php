@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\BranchStatus;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Pagination\Paginator;
 
@@ -22,10 +23,12 @@ class AppServiceProvider extends ServiceProvider
     {
         //
         Paginator::useBootstrap();
+        
         view()->composer('*', function($view) {
-            $testData = 'Test dữ liệu';
 
-            $view->with(compact('testData'));
+            $branch_status_list = BranchStatus::all();
+
+            $view->with(compact('branch_status_list'));
         });
     }
 }

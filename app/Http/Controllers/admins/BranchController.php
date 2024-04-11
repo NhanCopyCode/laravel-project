@@ -14,10 +14,12 @@ class BranchController extends Controller
 
     public function index()
     {
+        // dd('xin chào');
         $branchList = Branch::paginate(5);
 
         // dd($branchList);
         return view('admin.branch', compact('branchList'))->with('i', (request()->input('page', 1) - 1) * 5);
+        // return view('admin.branch', compact('branchList'));
     }
 
     public function addBranch(BranchRequest $request)
@@ -41,15 +43,63 @@ class BranchController extends Controller
 
 
 
-    public function update()
+    public function update(Request $request)
     {
+        // return $request->all();
+        $rules = [
+            'branch_name' => 'required|unique:branchs,branch_name,'.$request->branch_id.',branch_id',
+            'branch_status_id' => 'required',
+        ];
 
+        $messages = [
+            'required' => ':attribute không được để trống',
+            'unique' => ':attribute đã tồn tại trong hệ thống',
+        ];
+
+        $attributes = [
+            'branch_name' => 'Tên chi nhánh',
+            'branch_status_id' => 'Trạng thái chi nhánh'
+        ];
+        $request->validate($rules, $messages, $attributes);
+
+        // $branch_id = $request->branch_id;
+        // $branch = Branch::findOrFail($branch_id);
+
+        Branch::where('branch_id', $request->branch_id)->update([
+            'branch_name' => $request->branch_name,
+            'branch_status_id' => $request->branch_status_id
+        ]);
+
+        return response()->json([
+            'status' => 'success',
+        ]);
     }
 
     public function delete(Request $request)
     {
-        dd('Xin chào');
+        // dd('Xin chào');
+        $branch_id = $request->branch_id;
 
+        if(!$branch_id) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Không tìm thấy id của chi nhánh'
+            ]);
+        }
+
+        $branch = Branch::find($branch_id);
+        if($branch) {
+            $branch->delete();
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Xóa thành công chi nhánh'
+            ]);
+        }else {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Không tìm thấy chi nhánh cần xóa'
+            ]);
+        }
 
     }
 
@@ -73,5 +123,10 @@ class BranchController extends Controller
                 return $key;
             }
         }
+    }
+
+    public function testcart()
+    {
+        return 'xi ncahfo ';
     }
 }

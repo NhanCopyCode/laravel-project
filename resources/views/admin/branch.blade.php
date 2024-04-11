@@ -4,7 +4,7 @@
     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#form_add_branch">
         Thêm chi nhánh mới
     </button>
-
+    
     <!-- Modal -->
     <form method="POST" action="{{route('admin.branch.add')}}" class="modal fade modal-branch" id="form_add_branch" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
         @csrf
@@ -27,11 +27,14 @@
             </div>
             <div class="modal-footer">
             <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-            <button type="submit" class="btn btn-primary">Thêm</button>
+            <button type="submit" class="btn btn-primary btn-add-branch">Thêm</button>
             </div>
         </div>
         </div>
     </form>
+
+    {{-- Modal update branch --}}
+    @include('blocks.admin.modal_update_branch')
 
     {{-- Display list branch  --}}
    <table class="table table-bordered " style="margin-top: 24px; min-width: 400px;">
@@ -69,15 +72,32 @@
                     @endphp
                 </td>
                 <td style="display: flex;align-items: center;">
-                    <button class="btn btn-primary btn-update" >
+                    <a  href=""
+                        class="btn btn-primary btn-update btn-update-branch" 
+                        data-toggle = "modal"
+                        data-target = "#form_update_branch"
+                        data-id = "{{$item->branch_id}}"
+                        data-branch-name = "{{$item->branch_name}}"
+                        data-branch-status-id = "{{$item->branch_status_id}}"
+                    >
                         <i class="fa-regular fa-pen-to-square"></i>
-                    </button>
-                    <form action="{{route('admin.branch.delete', ['id' => $item->branch_id])}}" method="POST">
+                    </a>
+                    {{-- <form action="{{route('admin.branch.delete')}}" method="POST" id="form_delete_branch">
                         @csrf
+                        <input type="hidden" name="delete_branch_id" value="{{$item->branch_id}}">
                         <button type="submit" class="btn btn-danger">
                             <i class="fa-regular fa-trash-can"></i>
                         </button>
-                    </form>
+                    </form> --}}
+                    <a  href=""
+                        class="btn btn-danger btn-delete btn-delete-branch" 
+                        data-toggle = "modal"
+                        data-target = "#form_delete_branch"
+                        data-branch-id = "{{$item->branch_id}}"
+                        data-branch-name = "{{$item->branch_name}}"
+                    >
+                        <i class="fa-regular fa-trash-can"></i>
+                    </a>
                 </td>
             </tr>
             @endforeach
@@ -122,7 +142,7 @@
             });
 
             // Xử lý ajax phần add branch
-            $('#form_add_branch').submit(function(e) {
+            $(document).on('click', '.btn-add-branch', function(e) {
                 e.preventDefault();
 
                 let branch_name = $('#branch_name').val().trim();
@@ -149,6 +169,95 @@
                         });
                     }
                 });
+            });
+
+            // Xử lý phần hiển thị modal update branch
+            $(document).on('click', '.btn-update-branch', function(e){
+                // alert('Xin chào');
+                let id = $(this).data('id');
+                let branch_status_id = $(this).data('branch-status-id');
+                let branch_status_name = $(this).data('branch-name');
+                
+                console.log(branch_status_id, branch_status_name)
+                $('#update_branch_name').val(branch_status_name);
+                $('#update_branch_status').val(branch_status_id);
+                $('#update_branch_id').val(id);
+            });
+
+            //xử lý sự kiện Update branch
+            $(document).on('click', '.btn-submit-update-branch', function(e) {
+                e.preventDefault();
+
+                let branch_id = $('#update_branch_id').val();
+                let branch_name = $('#update_branch_name').val().trim();
+                let branch_status_id = $('#update_branch_status').val().trim();
+
+                
+                $.ajax({
+                    url: "{{route('admin.branch.update')}}",
+                    method: 'POST',
+                    data: { 
+                        branch_id : branch_id,
+                        branch_name: branch_name,
+                        branch_status_id : branch_status_id,
+                    },
+                    success: function(response) {
+                        console.log(response);
+                        if(response.status === 'success') {
+                            $('#form_update_branch').modal('hide');
+                            $('#form_update_branch')[0].reset();
+                            $('.table').load(location.href + ' .table-bordered');
+                        }
+                    },
+                    error: function(error) {
+                        $('.message_error_branch_name').append('');
+
+                        let errorMessage = error.responseJSON;
+                        console.log(errorMessage);
+                        $.each(errorMessage.errors, function (index, errMesage) { 
+                            console.log('Xin chào lỗi');
+                            $('.message_error_branch_name').append('<span class="text-danger">' + errMesage + '</span>')
+                        });
+                    }
+                });
+            });
+
+
+            // Xử lý sự kiện Delete branch
+            $(document).on('click', '.btn-delete-branch', function(e) {
+                e.preventDefault();
+                let branch_id = $(this).data('branch-id');
+                let branch_name = $(this).data('branch-name');
+                
+                alert(branch_id);
+                // alert(branch_id);
+                if(confirm(`Bạn có muốn xóa chi nhánh ${branch_name} không`)) {
+                    $.ajax({
+                    url: "{{route('admin.branch.delete')}}",
+                    method: 'POST',
+                    data: { 
+                        branch_id : branch_id,
+                    },
+                    success: function(response) {
+                        console.log(response);
+                        if(response.status === 'success') {
+                            $('.table').load(location.href + ' .table-bordered');
+                        }
+
+                        if(response.status === 'error') {
+                            alert(response.message);
+                        }
+                    },
+                    error: function(error) {
+                        let errorMessage = error.responseJSON;
+                        console.log(errorMessage);
+                        $.each(errorMessage.errors, function (index, errMesage) { 
+                            console.log('Xin chào lỗi');
+                            $('.message_error_branch_name').append('<span class="text-danger">' + errMesage + '</span>')
+                        });
+                    }
+                });
+                }
             });
         });
     </script>

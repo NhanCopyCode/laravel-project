@@ -356,4 +356,10 @@ class UserController extends Controller
         // dd($user);
         return view('clients.profile');
     }
+
+    public function test_view()
+    {
+        $user = User::all();
+        dd($user);
+    }
 }
