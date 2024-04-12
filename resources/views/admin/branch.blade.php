@@ -117,28 +117,21 @@
 
     <script>
         $(document).ready(function () {
-            // alert('Xin chào');
-            const checkAllInput = $('.check-all');
-            const allBranchIdInput = $('input:checkbox');
+            const checkAllInputSelector = '.check-all';
+            const checkBoxSelector = 'input[type="checkbox"]:not(.check-all)';
 
-            console.log(allBranchIdInput);
-            
-            checkAllInput.on('click', function() {
-                allBranchIdInput.not(this).prop('checked', this.checked);
+            // Delegate 'click' event for dynamic and current '.check-all' checkboxes
+            $(document).on('click', checkAllInputSelector, function() {
+                $(checkBoxSelector).prop('checked', this.checked);
             });
 
-            allBranchIdInput.change(function() {
-                let totalInputTypeCheckboxWithoutInputCheckAll = $('input:checkbox').not('.check-all').length;
-                let countChecked = $('input:checkbox:checked').not('.check-all').length;
-
-                if(countChecked === 0) {
-                    checkAllInput.prop('checked', false);
-                }
-
-
-                if(countChecked === totalInputTypeCheckboxWithoutInputCheckAll) {
-                    checkAllInput.prop('checked', true);
-                }
+            // Delegate 'change' event for all checkboxes except '.check-all'
+            $(document).on('change', checkBoxSelector, function() {
+                const totalInputTypeCheckboxWithoutInputCheckAll = $(checkBoxSelector).length;
+                const countChecked = $(checkBoxSelector + ':checked').length;
+                
+                // Update the '.check-all' checkbox based on other checkboxes' state
+                $(checkAllInputSelector).prop('checked', totalInputTypeCheckboxWithoutInputCheckAll === countChecked);
             });
 
             // Xử lý ajax phần add branch
@@ -197,6 +190,10 @@
                 let id = $(this).data('id');
                 let branch_status_id = $(this).data('branch-status-id');
                 let branch_status_name = $(this).data('branch-name');
+                let messageError = $('.message_error_branch_name');
+
+                //Clear message error exists
+                messageError.empty();
                 
                 console.log(branch_status_id, branch_status_name)
                 $('#update_branch_name').val(branch_status_name);
