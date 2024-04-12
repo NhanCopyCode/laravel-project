@@ -5,7 +5,7 @@
         Thêm chi nhánh mới
     </button>
     
-    <!-- Modal -->
+    <!-- Modal add bracnh -->
     <form method="POST" action="{{route('admin.branch.add')}}" class="modal fade modal-branch" id="form_add_branch" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
         @csrf
         <div class="modal-dialog" role="document">
@@ -150,7 +150,12 @@
                         if(response.status === 'success') {
                             $('#form_add_branch').modal('hide');
                             $('#form_add_branch')[0].reset();
-                            $('.table').load(location.href + ' .table-bordered');
+                            $('.table').load(location.href + ' .table > *');
+
+                            //Check if pagination exists and load it neccessary
+                            if($('.pagination').length) {
+                                $('.pagination').load(location.href + ' .pagination > *');
+                            }
 
                             Command: toastr["success"](`Thêm thành công chi nhánh "<span style="font-weight: bold;">${branch_name}</span>"`, "Thêm chi nhánh")
 
@@ -223,7 +228,12 @@
                         if(response.status === 'success') {
                             $('#form_update_branch').modal('hide');
                             $('#form_update_branch')[0].reset();
-                            $('.table').load(location.href + ' .table-bordered');
+                            $('.table').load(location.href + ' .table > *');
+
+                            //Check if pagination exists and load it neccessary
+                            if($('.pagination').length) {
+                                $('.pagination').load(location.href + ' .pagination > *');
+                            }
 
                             Command: toastr["success"](`Cập nhật thành công chi nhánh "<span style="font-weight: bold;">${branch_name}</span>"`, "Cập nhật chi nhánh")
 
@@ -276,8 +286,13 @@
                     success: function(response) {
                         console.log(response);
                         if(response.status === 'success') {
-                            $('.table').load(location.href + ' .table-bordered');
+                            $('.table').load(location.href + ' .table > *');
 
+                            //Check if pagination exists and load it neccessary
+                            if($('.pagination').length) {
+                                $('.pagination').load(location.href + ' .pagination > *');
+                            }
+                            
                             Command: toastr["success"](`Xóa thành công chi nhánh`, "Xóa chi nhánh")
 
                             toastr.options = {
