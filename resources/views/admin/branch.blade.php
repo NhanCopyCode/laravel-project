@@ -36,8 +36,12 @@
     {{-- Modal update branch --}}
     @include('blocks.admin.modal_update_branch')
 
-    {{-- Display list branch  --}}
-   <table class="table table-bordered " style="margin-top: 24px; min-width: 400px;">
+    {{-- Search button --}}
+    <input type="text" class="form-control mb-3 mt-3" id="search-branch" name="search-branch" placeholder="Tìm kiếm...">
+
+
+    {{-- Display table list branch  --}}
+   <table class="table table-bordered table-branch" style="margin-top: 24px; min-width: 400px;">
         <thead>
             <tr>
                 <th class="text-center">STT</th>
@@ -102,8 +106,8 @@
             </tr>
             @endforeach
         </tbody>
-   </table>
-   {{$branchList->links()}}
+    </table>
+    {{$branchList->links()}}
 @endsection
 
 @section('js')
@@ -292,7 +296,7 @@
                             if($('.pagination').length) {
                                 $('.pagination').load(location.href + ' .pagination > *');
                             }
-                            
+
                             Command: toastr["success"](`Xóa thành công chi nhánh`, "Xóa chi nhánh")
 
                             toastr.options = {
@@ -329,6 +333,31 @@
                 });
                 }
             });
+
+            // Seach branch realtime
+            $(document).on('keyup', '#search-branch', function(e) {
+                e.preventDefault();
+                let searchBranchValue = $(this).val();
+
+                $.ajax({
+                    url : "{{route('admin.branch.search')}}",
+                    method: 'GET',
+                    data: {
+                        search_string_branch : searchBranchValue
+                    },
+                    success: function(res) {
+                        if (res.status === 'not found') {
+                            $('.table-branch').html('<span class="text-danger">Không tìm thấy kết quả</span>');
+                            $('.pagination').hide(); // Ẩn phân trang khi không có kết quả
+                        } else {
+                            $('.table-branch').html(res);
+                            $('.pagination').show(); // Hiện phân trang khi có kết quả
+                        }
+                    }
+                });
+            });
+
+
         });
     </script>
 @endsection

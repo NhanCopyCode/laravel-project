@@ -105,11 +105,29 @@ class BranchController extends Controller
 
     }
 
-    public function testToastMessage() 
-    {
-        Toastr::success('Messages in here', 'Title', ["positionClass" => "toast-top-center"]);
 
+    // return view('admin.branch', compact('branchList'))->with('i', (request()->input('page', 1) - 1) * 5);
+
+    //Search branch
+    public function searchBranch(Request $request) {
+        $branchList = Branch::where('branch_name', 'like', '%'.$request->search_string_branch.'%')
+            ->orWhere('branch_id', 'like', '%'.$request->search_string_branch.'%')
+            ->orderBy('branch_id', 'asc')
+            ->paginate(5);
+        
+        // dd($request->search_string_branch);
+        // dd($branchs);
+
+        if($branchList->count() > 0) {
+            return view('blocks.admin.search_branch', compact('branchList'))->with('i', (request()->input('page', 1) - 1) * 5)->render();
+        }else {
+            return response()->json([
+                'status' => 'not found',
+                'message' => 'Không tìm thấy chi nhánh'
+            ]);
+        }
     }
+    
 
     public function getBranchStatusId($branch_status_name) {
         $branch_status_list = config('branch_status');

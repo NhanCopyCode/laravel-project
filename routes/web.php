@@ -112,7 +112,7 @@ Route::prefix('/admin')->middleware('permission.checker:admin|Manager')->name('a
 
         Route::post('/delete', [BranchController::class, 'delete'])->name('branch.delete');
 
-        Route::get('/testToastMessage', [BranchController::class, 'testToastMessage']);
+        Route::get('/search', [BranchController::class, 'searchBranch'])->name('branch.search');
     });
 
     //Model
