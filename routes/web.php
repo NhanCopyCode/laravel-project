@@ -3,9 +3,10 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use Laravel\Socialite\Facades\Socialite;
+use App\Http\Controllers\ModelController;
 use App\Http\Controllers\SwitchModeController;
-use App\Http\Controllers\error\ErrorController;
 
+use App\Http\Controllers\error\ErrorController;
 use App\Http\Controllers\admins\AdminController;
 use App\Http\Controllers\clients\HomeController;
 use App\Http\Controllers\admins\BranchController;
@@ -111,10 +112,17 @@ Route::prefix('/admin')->middleware('permission.checker:admin|Manager')->name('a
 
         Route::post('/delete', [BranchController::class, 'delete'])->name('branch.delete');
 
-        // Route::get('/test_insert', [BranchController::class, 'getBranchStatusId']);
+        Route::get('/testToastMessage', [BranchController::class, 'testToastMessage']);
     });
 
-    Route::post('');
+    //Model
+    Route::prefix('/model')->group(function() {
+
+        Route::get('/', [ModelController::class, 'index'])->name('model.index');
+
+        Route::post('/add-model', [ModelController::class, 'addModel'])->name('model.add');
+    });
+
 
     //Vehicle
     Route::get('/vehicle', [VehicleController::class, 'vehicle'])->name('vehicle');

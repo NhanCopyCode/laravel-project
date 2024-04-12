@@ -158,6 +158,26 @@
                             $('#form_add_branch').modal('hide');
                             $('#form_add_branch')[0].reset();
                             $('.table').load(location.href + ' .table-bordered');
+
+                            Command: toastr["success"](`Thêm thành công chi nhánh "<span style="font-weight: bold;">${branch_name}</span>"`, "Thêm chi nhánh")
+
+                            toastr.options = {
+                                "closeButton": false,
+                                "debug": false,
+                                "newestOnTop": true,
+                                "progressBar": true,
+                                "positionClass": "toast-top-right",
+                                "preventDuplicates": false,
+                                "onclick": null,
+                                "showDuration": "300",
+                                "hideDuration": "1000",
+                                "timeOut": "5000",
+                                "extendedTimeOut": "1000",
+                                "showEasing": "swing",
+                                "hideEasing": "linear",
+                                "showMethod": "fadeIn",
+                                "hideMethod": "fadeOut"
+                            }
                         }
                     },
                     error: function(error) {
@@ -207,6 +227,26 @@
                             $('#form_update_branch').modal('hide');
                             $('#form_update_branch')[0].reset();
                             $('.table').load(location.href + ' .table-bordered');
+
+                            Command: toastr["success"](`Cập nhật thành công chi nhánh "<span style="font-weight: bold;">${branch_name}</span>"`, "Cập nhật chi nhánh")
+
+                            toastr.options = {
+                                "closeButton": false,
+                                "debug": false,
+                                "newestOnTop": true,
+                                "progressBar": true,
+                                "positionClass": "toast-top-right",
+                                "preventDuplicates": false,
+                                "onclick": null,
+                                "showDuration": "300",
+                                "hideDuration": "1000",
+                                "timeOut": "5000",
+                                "extendedTimeOut": "1000",
+                                "showEasing": "swing",
+                                "hideEasing": "linear",
+                                "showMethod": "fadeIn",
+                                "hideMethod": "fadeOut"
+                            }
                         }
                     },
                     error: function(error) {
@@ -229,8 +269,6 @@
                 let branch_id = $(this).data('branch-id');
                 let branch_name = $(this).data('branch-name');
                 
-                alert(branch_id);
-                // alert(branch_id);
                 if(confirm(`Bạn có muốn xóa chi nhánh ${branch_name} không`)) {
                     $.ajax({
                     url: "{{route('admin.branch.delete')}}",
@@ -242,6 +280,26 @@
                         console.log(response);
                         if(response.status === 'success') {
                             $('.table').load(location.href + ' .table-bordered');
+
+                            Command: toastr["success"](`Xóa thành công chi nhánh`, "Xóa chi nhánh")
+
+                            toastr.options = {
+                                "closeButton": false,
+                                "debug": false,
+                                "newestOnTop": true,
+                                "progressBar": true,
+                                "positionClass": "toast-top-right",
+                                "preventDuplicates": false,
+                                "onclick": null,
+                                "showDuration": "300",
+                                "hideDuration": "1000",
+                                "timeOut": "5000",
+                                "extendedTimeOut": "1000",
+                                "showEasing": "swing",
+                                "hideEasing": "linear",
+                                "showMethod": "fadeIn",
+                                "hideMethod": "fadeOut"
+                            }
                         }
 
                         if(response.status === 'error') {

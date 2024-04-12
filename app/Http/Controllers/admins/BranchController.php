@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\BranchRequest;
 
+use Brian2694\Toastr\Facades\Toastr;
+
 class BranchController extends Controller
 {
     //
@@ -103,15 +105,10 @@ class BranchController extends Controller
 
     }
 
-    public function testInsert() 
+    public function testToastMessage() 
     {
-        $branch = new Branch();
+        Toastr::success('Messages in here', 'Title', ["positionClass" => "toast-top-center"]);
 
-        $branch->branch_name = 'Nhân '. Str::random(10);
-
-        $branch->save();
-
-        // return back();
     }
 
     public function getBranchStatusId($branch_status_name) {

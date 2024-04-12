@@ -21,14 +21,14 @@
             </a>
         </li>
         <li class="sidebar-item">
-            <a href="#" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse"
+            <a href="#" class="sidebar-car sidebar-link collapsed has-dropdown" data-bs-toggle="collapse"
                 data-bs-target="#auth" aria-expanded="false" aria-controls="auth">
                 <i class="fa-solid fa-motorcycle"></i>
                 <span>Quản lý xe</span>
             </a>
-            <ul id="auth" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
+            <ul id="auth" class="sidebar-dropdown list-unstyled collapse list-car-sidebar" data-bs-parent="#sidebar">
                 <li class="sidebar-item">
-                    <a href="#" class="sidebar-link">Mẫu xe</a>
+                    <a href="" class="sidebar-link">Mẫu xe</a>
                 </li>
                 <li class="sidebar-item">
                     <a href="#" class="sidebar-link">Xe</a>
