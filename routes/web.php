@@ -10,6 +10,7 @@ use App\Http\Controllers\error\ErrorController;
 use App\Http\Controllers\admins\AdminController;
 use App\Http\Controllers\clients\HomeController;
 use App\Http\Controllers\admins\BranchController;
+use App\Http\Controllers\admins\BrandController;
 use App\Http\Controllers\Auth\ProviderController;
 use App\Http\Controllers\admins\ProfileController;
 use App\Http\Controllers\admins\VehicleController;
@@ -115,6 +116,20 @@ Route::prefix('/admin')->middleware('permission.checker:admin|Manager')->name('a
         Route::get('/search', [BranchController::class, 'searchBranch'])->name('branch.search');
     });
 
+    // Brand 
+    Route::prefix('/brand')->group(function () {
+        
+        Route::get('/', [BrandController::class, 'index'])->name('brand.index');
+
+        Route::post('/add-brand', [BrandController::class, 'addbrand'])->name('brand.add');
+
+        Route::post('/update-brand', [BrandController::class, 'update'])->name('brand.update');
+
+        Route::post('/delete', [BrandController::class, 'delete'])->name('brand.delete');
+
+        Route::get('/search', [BrandController::class, 'searchbrand'])->name('brand.search');
+    });
+
     //Model
     Route::prefix('/model')->group(function() {
 
@@ -125,9 +140,12 @@ Route::prefix('/admin')->middleware('permission.checker:admin|Manager')->name('a
 
 
     //Vehicle
-    Route::get('/vehicle', [VehicleController::class, 'vehicle'])->name('vehicle');
+    Route::prefix('/vehicle')->group(function() {
 
-    Route::post('/vehicle', [VehicleController::class, 'store_vehicle'])->name('store_vehicle');
+        Route::get('/', [VehicleController::class, 'index'])->name('vehicle.index');
+
+        
+    });
 
    Route::post('/logout', [AdminController::class, 'logout'])->name('logout');
 

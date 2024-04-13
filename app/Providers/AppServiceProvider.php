@@ -2,9 +2,10 @@
 
 namespace App\Providers;
 
+use App\Models\BrandStatus;
 use App\Models\BranchStatus;
-use Illuminate\Support\ServiceProvider;
 use Illuminate\Pagination\Paginator;
+use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -28,7 +29,9 @@ class AppServiceProvider extends ServiceProvider
 
             $branch_status_list = BranchStatus::all();
 
-            $view->with(compact('branch_status_list'));
+            $brand_status_list = BrandStatus::all();
+
+            $view->with(compact('branch_status_list', 'brand_status_list'));
         });
     }
 }

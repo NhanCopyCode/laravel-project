@@ -28,10 +28,13 @@
             </a>
             <ul id="auth" class="sidebar-dropdown list-unstyled collapse list-car-sidebar" data-bs-parent="#sidebar">
                 <li class="sidebar-item">
-                    <a href="" class="sidebar-link">Mẫu xe</a>
+                    <a href="{{route('admin.brand.index')}}" class="sidebar-link">Hãng xe</a>
                 </li>
                 <li class="sidebar-item">
-                    <a href="#" class="sidebar-link">Xe</a>
+                    <a href="{{route('admin.model.index')}}" class="sidebar-link">Mẫu xe</a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="{{route('admin.vehicle.index')}}" class="sidebar-link">Xe</a>
                 </li>
             </ul>
         </li>

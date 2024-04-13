@@ -30,7 +30,7 @@ document.querySelector('.mode-switcher').addEventListener('click', function(e) {
 
     //Table branch / Modal branch
     const tableBranch = document.querySelector('table');
-    const modalBranch = document.querySelector('.modal-branch');
+    const modal = document.querySelectorAll('.modal');
 
 
     // console.log(mainApp);
@@ -56,7 +56,9 @@ document.querySelector('.mode-switcher').addEventListener('click', function(e) {
          //remove class table-dark from table
         if(tableBranch) {
             tableBranch.classList.add('table-dark');
-            modalBranch.style.color = "#333"; 
+            modal.forEach(function(e) {
+                e.style.color = "#333"; 
+            })
         }
 
     }
@@ -82,7 +84,9 @@ document.addEventListener('DOMContentLoaded', function() {
     
     //Table branch / Modal branch
     const tableBranch = document.querySelector('table');
-    const modalBranch = document.querySelector('.modal-branch');
+    const modal = document.querySelectorAll('.modal');
+
+    console.log(modal); 
 
     const mode = localStorage.getItem('mode');
     // console.log(mode);
@@ -103,7 +107,9 @@ document.addEventListener('DOMContentLoaded', function() {
             //Remove class table-dark from table
            if(tableBranch) {
                 tableBranch.classList.add('table-dark');
-                modalBranch.style.color = "#333"; 
+                modal.forEach(function(e) {
+                    e.style.color = "#333"; 
+                });
            }
         }
 
