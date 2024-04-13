@@ -9,7 +9,7 @@ class BrandStatus extends Model
 {
     use HasFactory;
 
-    protected $table = 'branchs';
+    protected $table = 'brandstatus';
 
     protected $fillable = [
         'brand_status_id',

@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers\admins;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\BrandRequest;
 use App\Models\Brand;
+use App\Models\BrandStatus;
 use Illuminate\Http\Request;
+use App\Http\Requests\BrandRequest;
+use App\Http\Controllers\Controller;
 
 class BrandController extends Controller
 {
@@ -105,14 +106,14 @@ class BrandController extends Controller
     // return view('admin.brand', compact('brandList'))->with('i', (request()->input('page', 1) - 1) * 5);
 
     //Search brand
-    public function searchbrand(Request $request) {
+    public function searchBrand(Request $request) {
         $brandList = Brand::where('brand_name', 'like', '%'.$request->search_string_brand.'%')
             ->orWhere('brand_id', 'like', '%'.$request->search_string_brand.'%')
             ->orderBy('brand_id', 'asc')
             ->paginate(5);
         
         // dd($request->search_string_brand);
-        // dd($brands);
+        // dd($brandList);
 
         if($brandList->count() > 0) {
             return view('blocks.admin.search_brand', compact('brandList'))->with('i', (request()->input('page', 1) - 1) * 5)->render();
@@ -135,4 +136,6 @@ class BrandController extends Controller
             }
         }
     }
+
+    
 }

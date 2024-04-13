@@ -127,7 +127,8 @@ Route::prefix('/admin')->middleware('permission.checker:admin|Manager')->name('a
 
         Route::post('/delete', [BrandController::class, 'delete'])->name('brand.delete');
 
-        Route::get('/search', [BrandController::class, 'searchbrand'])->name('brand.search');
+        Route::get('/search', [BrandController::class, 'searchBrand'])->name('brand.search');
+
     });
 
     //Model
