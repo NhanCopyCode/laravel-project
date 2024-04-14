@@ -137,6 +137,12 @@ Route::prefix('/admin')->middleware('permission.checker:admin|Manager')->name('a
         Route::get('/', [ModelController::class, 'index'])->name('model.index');
 
         Route::post('/add-model', [ModelController::class, 'addModel'])->name('model.add');
+
+        Route::post('/update-model', [ModelController::class, 'update'])->name('model.update');
+
+        Route::post('/delete', [ModelController::class, 'delete'])->name('model.delete');
+
+        Route::get('/search', [ModelController::class, 'searchModel'])->name('model.search');
     });
 
 

@@ -335,26 +335,33 @@
             });
 
             // Seach branch realtime
+            var timeout = null;
+    
             $(document).on('keyup', '#search-branch', function(e) {
                 e.preventDefault();
-                let searchBranchValue = $(this).val();
+                clearTimeout(timeout); // Hủy timeout trước đó để thiết lập mới
 
-                $.ajax({
-                    url : "{{route('admin.branch.search')}}",
-                    method: 'GET',
-                    data: {
-                        search_string_branch : searchBranchValue
-                    },
-                    success: function(res) {
-                        if (res.status === 'not found') {
-                            $('.table-branch').html('<span class="text-danger">Không tìm thấy kết quả</span>');
-                            $('.pagination').hide(); // Ẩn phân trang khi không có kết quả
-                        } else {
-                            $('.table-branch').html(res);
-                            $('.pagination').show(); // Hiện phân trang khi có kết quả
+                let searchbranchValue = $(this).val();
+
+                // Đặt một timeout khi người dùng gõ xong
+                timeout = setTimeout(function() {
+                    $.ajax({
+                        url : "{{route('admin.branch.search')}}",
+                        method: 'GET',
+                        data: {
+                            search_string_branch : searchbranchValue
+                        },
+                        success: function(res) {
+                            if (res.status === 'not found') {
+                                $('.table-branch').html('<span class="text-danger">Không tìm thấy kết quả</span>');
+                                $('.pagination').hide();
+                            } else {
+                                $('.table-branch').html(res);
+                                $('.pagination').show();
+                            }
                         }
-                    }
-                });
+                    });
+                }, 300); 
             });
 
 

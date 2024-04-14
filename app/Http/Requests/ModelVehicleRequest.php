@@ -11,7 +11,7 @@ class ModelVehicleRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,32 @@ class ModelVehicleRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'model_name' => 'required',
+            'engine_type' => 'required|integer|min:1',
+            'color' => 'required',
+            'year_of_production' => 'required|integer|min:1900|max: '.date('Y'),
+            'brand_id' => 'required|integer|min:1',
+            // 'model_status_id' => 'required|integer|min:1',
+        ];
+    }
+
+    public function messages() {
+        return [
+            'required' => ':attribute không được để trống',
+            'integer' => ':attribute phải là số nguyên',
+            'min' => ':attribute không được bé hơn :min',
+            'max' => ':attribute không được lớn hơn :max'
+        ];
+    }
+
+    public function attributes()
+    {
+        return [
+            'model_name' => 'Mẫu xe',
+            'engine_type' => 'Dung tích động cơ',
+            'color' => 'Màu sắc',
+            'year_of_production' => 'Năm sản xuất',
+            'brand_id' => 'Hãng xe',
         ];
     }
 }

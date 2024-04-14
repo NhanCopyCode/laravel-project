@@ -335,26 +335,33 @@
             });
 
             // Seach brand realtime
+            var timeout = null;
+    
             $(document).on('keyup', '#search-brand', function(e) {
                 e.preventDefault();
+                clearTimeout(timeout); // Hủy timeout trước đó để thiết lập mới
+
                 let searchbrandValue = $(this).val();
 
-                $.ajax({
-                    url : "{{route('admin.brand.search')}}",
-                    method: 'GET',
-                    data: {
-                        search_string_brand : searchbrandValue
-                    },
-                    success: function(res) {
-                        if (res.status === 'not found') {
-                            $('.table-brand').html('<span class="text-danger">Không tìm thấy kết quả</span>');
-                            $('.pagination').hide(); // Ẩn phân trang khi không có kết quả
-                        } else {
-                            $('.table-brand').html(res);
-                            $('.pagination').show(); // Hiện phân trang khi có kết quả
+                // Đặt một timeout khi người dùng gõ xong
+                timeout = setTimeout(function() {
+                    $.ajax({
+                        url : "{{route('admin.brand.search')}}",
+                        method: 'GET',
+                        data: {
+                            search_string_brand : searchbrandValue
+                        },
+                        success: function(res) {
+                            if (res.status === 'not found') {
+                                $('.table-brand').html('<span class="text-danger">Không tìm thấy kết quả</span>');
+                                $('.pagination').hide();
+                            } else {
+                                $('.table-brand').html(res);
+                                $('.pagination').show();
+                            }
                         }
-                    }
-                });
+                    });
+                }, 300); 
             });
 
 

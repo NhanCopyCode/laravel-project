@@ -2,8 +2,9 @@
 
 namespace App\Models\admins;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Brand;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class ModelVehicle extends Model
 {
@@ -17,8 +18,14 @@ class ModelVehicle extends Model
         'color',
         'year_of_production',
         'brand_id',
+        'model_status_id'
     ];
 
     protected $primaryKey = 'model_id';
     public $timestamps = false;
+
+    public function brand() 
+    {
+        return $this->belongsTo(Brand::class, 'brand_id');
+    }
 }
