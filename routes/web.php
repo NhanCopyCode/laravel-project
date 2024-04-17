@@ -2,18 +2,21 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\WardController;
 use Laravel\Socialite\Facades\Socialite;
 use App\Http\Controllers\ModelController;
-use App\Http\Controllers\SwitchModeController;
 
+use App\Http\Controllers\DistrictController;
+use App\Http\Controllers\SwitchModeController;
 use App\Http\Controllers\error\ErrorController;
 use App\Http\Controllers\admins\AdminController;
+use App\Http\Controllers\admins\BrandController;
 use App\Http\Controllers\clients\HomeController;
 use App\Http\Controllers\admins\BranchController;
-use App\Http\Controllers\admins\BrandController;
 use App\Http\Controllers\Auth\ProviderController;
 use App\Http\Controllers\admins\ProfileController;
 use App\Http\Controllers\admins\VehicleController;
+use App\Http\Controllers\CarRentalStoreController;
 
 /*
 |--------------------------------------------------------------------------
@@ -145,16 +148,44 @@ Route::prefix('/admin')->middleware('permission.checker:admin|Manager')->name('a
         Route::get('/search', [ModelController::class, 'searchModel'])->name('model.search');
     });
 
+    //CarRentalStore
+    Route::prefix('/car-rental-store')->group(function() {
+
+        Route::get('/', [CarRentalStoreController::class, 'index'])->name('carrentalstore.index');
+
+        Route::post('/add-carrentalstore', [CarRentalStoreController::class, 'addcarrentalstore'])->name('carrentalstore.add');
+
+        Route::post('/update-carrentalstore', [CarRentalStoreController::class, 'update'])->name('carrentalstore.update');
+
+        Route::post('/delete', [CarRentalStoreController::class, 'delete'])->name('carrentalstore.delete');
+
+        Route::get('/search', [CarRentalStoreController::class, 'searchcarrentalstore'])->name('carrentalstore.search');
+    });
+
 
     //Vehicle
     Route::prefix('/vehicle')->group(function() {
 
         Route::get('/', [VehicleController::class, 'index'])->name('vehicle.index');
 
-        
+        Route::post('/add-vehicle', [VehicleController::class, 'addVehicle'])->name('vehicle.add');
+
+        Route::post('/update-vehicle', [VehicleController::class, 'update'])->name('vehicle.update');
+
+        Route::post('/delete', [VehicleController::class, 'delete'])->name('vehicle.delete');
+
+        Route::get('/search', [VehicleController::class, 'searchvehicle'])->name('vehicle.search');
     });
 
-   Route::post('/logout', [AdminController::class, 'logout'])->name('logout');
+
+    //Wards
+    Route::get('/ward', [WardController::class, 'getWardById'])->name('ward.get');
+
+    //District
+    Route::get('/district', [DistrictController::class, 'getDistrictById'])->name('district.get');
+
+    
+    Route::post('/logout', [AdminController::class, 'logout'])->name('logout');
 
 });
 

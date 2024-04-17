@@ -47,13 +47,13 @@ class ProviderController extends Controller
 
                 // dd($user, 'đã tạo được user');
 
-                Auth::login($user);
+                Auth::guard('web')->login($user);
                 
                 return redirect()->route('home');
             }
         } catch (\Exception $th) {
             //throw $th;
-            dd($th  );
+            // dd($th  );
             return redirect()->route('auth.index');
         }
        

@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Models\Brand;
+use App\Models\Branch;
 use App\Models\BrandStatus;
 use App\Models\ModelStatus;
 use App\Models\BranchStatus;
@@ -37,11 +38,14 @@ class AppServiceProvider extends ServiceProvider
 
             $brand_list = Brand::all();
 
+            $branch_list = Branch::all();
+
             $view->with(compact(
                  'branch_status_list', 
                 'brand_status_list', 
                 'brand_list',
-                'model_status_list'
+                'model_status_list',
+                'branch_list',
             ));
         });
     }

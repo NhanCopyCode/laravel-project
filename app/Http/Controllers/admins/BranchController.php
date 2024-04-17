@@ -5,9 +5,10 @@ namespace App\Http\Controllers\admins;
 use App\Models\Branch;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\BranchRequest;
 
+use App\Http\Requests\BranchRequest;
 use Brian2694\Toastr\Facades\Toastr;
 
 class BranchController extends Controller
@@ -144,4 +145,6 @@ class BranchController extends Controller
     {
         return 'xi ncahfo ';
     }
+
+   
 }

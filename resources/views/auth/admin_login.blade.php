@@ -37,14 +37,17 @@
 
         </div>
         <div class="input-box">
-            <input type="text" class="input-field" placeholder="Email" name="email" autocomplete="off" required value="{{old('email')}}">
+            <input type="text" class="input-field" placeholder="Email" name="email" autocomplete="off" required value="{{old('password')}}">
             @error('email')
                 <span style="color: red;">{{$message}}</span>
             @enderror
         </div>
         <div class="input-box">
-            <input type="password" class="input-field" placeholder="Password" name="password" autocomplete="off" required value="{{old('email')}}">
+            <input type="password" class="input-field" placeholder="Password" name="password" autocomplete="off" required value="{{old('password')}}">
         </div>
+        @if (session('wrong-password-message'))
+                <span style="color: red;">{!!session('wrong-password-message')!!}</span>
+            @endif
         @error('password')
             <span style="color: red;">{{$message}}</span>
         @enderror
@@ -65,5 +68,6 @@
     </form>
     {{-- <script src="{{asset('assets/clients/js/login.js')}}"></script> --}}
 
+    
 </body>
 </html>

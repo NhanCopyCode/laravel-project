@@ -21,6 +21,12 @@
             </a>
         </li>
         <li class="sidebar-item">
+            <a href="{{route('admin.carrentalstore.index')}}" class="sidebar-link">
+                <i class="fa-solid fa-store"></i>
+                <span>Quản lý cửa hàng</span>
+            </a>
+        </li>
+        <li class="sidebar-item">
             <a href="#" class="sidebar-car sidebar-link collapsed has-dropdown" data-bs-toggle="collapse"
                 data-bs-target="#auth" aria-expanded="false" aria-controls="auth">
                 <i class="fa-solid fa-motorcycle"></i>

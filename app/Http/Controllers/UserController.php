@@ -165,6 +165,8 @@ class UserController extends Controller
             // dd($user);
             // Auth::login($user);
             
+        }else {
+            return back()->with('wrong-password-message', 'Nhập sai mật khẩu!');
         }
 
         // return redirect()->route('home');
