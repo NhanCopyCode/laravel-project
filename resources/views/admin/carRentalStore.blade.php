@@ -639,9 +639,8 @@
             $(document).on('click', '.btn-delete-carrentalstore', function(e) {
                 e.preventDefault();
                 let CarRentalStore_id = $(this).data('carrentalstore-id');
-                let carrentalstore_name = $(this).data('carrentalstore-name');
                 
-                if(confirm(`Bạn có muốn xóa cửa hàng ${carrentalstore_name} không`)) {
+                if(confirm(`Bạn có muốn xóa cửa hàng ${CarRentalStore_id} không`)) {
                     $.ajax({
                     url: "{{route('admin.carrentalstore.delete')}}",
                     method: 'POST',

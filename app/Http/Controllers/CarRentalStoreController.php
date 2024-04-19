@@ -79,29 +79,41 @@ class CarRentalStoreController extends Controller
     {
         // return $request->all();
         $rules = [
-            'carRentalStore_name' => 'required|unique:carrentalstore,carRentalStore_name,'.$request->carRentalStore_id.',carRentalStore_id',
-            'engine_type' => 'required|integer|min:1',
-            'color' => 'required',
-            'year_of_production' => 'required|integer|min:1900|max:'.date('Y'),
-            'brand_id' => 'required|integer|min:1',
-            'carRentalStore_status_id' => 'required|integer|min:1',
+            'province' => 'required',
+            'ward' => 'required',
+            'district' => 'required',
+            'province_id' => 'required|not_in:0',
+            'ward_id' => 'required|not_in:0',
+            'district_id' => 'required|not_in:0',
+            'unique_location' => 'required',
+            'phone_number' => 'required|min:10|max:11',
+            'avatar' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'description' => 'required',
+            'branch_id' => 'required|integer|min:1',
         ];
 
         $messages = [
-            'required' => ':attribute không được để trống',
-            'unique' => ':attribute đã tồn tại trong hệ thống',
-            'integer' => ':attribute phải là số lớn hơn 0',
-            'min' => ':attribute không được bé hơn :min',
-            'max' => ':attribute không được lớn hơn :max'
+            'required' => ':attribute không được bỏ trống',
+            'phone_number.digits' => ':attribute phải chứa đúng :digits chữ số',
+            'avatar.max' => ':attribute có dung lượng tối đa là :max kilobytes.',
+            'avatar.mimes' => ':attribute phải là một trong các kiểu file sau: :values.',
+            'province_id.not_in' => ':attribute không được bỏ trống',
+            'ward_id.not_in' => ':attribute không được bỏ trống',
+            'district_id.not_in' => ':attribute không được bỏ trống'
         ];
 
         $attributes = [
-            'carRentalStore_name' => 'Mẫu xe',
-            'engine_type' => 'Dung tích động cơ',
-            'color' => 'Màu sắc',
-            'year_of_production' => 'Năm sản xuất',
-            'brand_id' => 'Hãng xe',
-            'carRentalStore_status_id' => 'Trạng thái'
+            'province' => 'Tỉnh/Thành phố',
+            'district' => 'Quận/huyện',
+            'ward' => 'Phường/xã',
+            'province_id' => 'Tỉnh/Thành Phố',
+            'district_id' => 'Quận/Huyện',
+            'ward_id' => 'Phường/Xã',
+            'unique_location' => 'Địa chỉ',
+            'phone_number' => 'Số điện thoại',
+            'avatar' => 'Ảnh cửa hàng',
+            'description' => 'Mô tả',
+            'branch_id' => 'Chi nhánh',
         ];
         $request->validate($rules, $messages, $attributes);
 
@@ -125,7 +137,7 @@ class CarRentalStoreController extends Controller
     public function delete(Request $request)
     {
         // dd('Xin chào');
-        $carRentalStore_id = $request->carRentalStore_id;
+        $carRentalStore_id = $request->CarRentalStore_id;
 
         if(!$carRentalStore_id) {
             return response()->json([
