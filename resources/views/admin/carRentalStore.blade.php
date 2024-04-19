@@ -22,7 +22,7 @@
                     <select class="form-control provinceSelectClass" name="province" id="provinceSelect">
 
                     </select>
-                    <div class="message_error_province">
+                    <div class="message_error_add_carrentalstore message_error_province_id">
 
                     </div>
                 </div>
@@ -32,7 +32,7 @@
                     <select class="form-control districtSelectClass" name="district" id="districtSelect">
 
                     </select>
-                    <div class="message_error_district">
+                    <div class="message_error_add_carrentalstore message_error_district_id">
 
                     </div>
                 </div>
@@ -42,7 +42,7 @@
                     <select class="form-control wardSelectClass" name="ward" id="wardSelect">
 
                     </select>
-                    <div class="message_error_ward">
+                    <div class="message_error_add_carrentalstore message_error_ward_id">
 
                     </div>
                 </div>
@@ -50,7 +50,7 @@
                 <div class="form-group">
                     <label for="unique_location">Địa chỉ cụ thể</label>
                     <input type="text" name="unique_location" class="form-control" id="unique_location" placeholder="Nhập địa chỉ....">
-                    <div class="message_error_unique_location">
+                    <div class="message_error_add_carrentalstore message_error_unique_location">
 
                     </div>
                 </div>
@@ -58,7 +58,7 @@
                 <div class="form-group">
                     <label for="phone_number">Số điện thoại liên hệ</label>
                     <input type="number" name="phone_number" class="form-control" id="phone_number" placeholder="Nhập số điện thoại....">
-                    <div class="message_error_phone_number">
+                    <div class="message_error_add_carrentalstore message_error_phone_number">
 
                     </div>
                 </div>
@@ -66,7 +66,7 @@
                 <div class="form-group">
                     <label for="avatar">Hình ảnh cửa hàng</label>
                     <input type="file" id="avatar" class="form-control" name="avatar">
-                    <div class="message_error_avatar">
+                    <div class="message_error_add_carrentalstore message_error_avatar">
 
                     </div>
                 </div>
@@ -74,7 +74,7 @@
                 <div class="form-group">
                     <label for="avatar">Nhập thêm tiểu sử cửa hàng</label>
                     <textarea class="form-control" name="description" id="description" cols="30" rows="2"></textarea>
-                    <div class="message_error_avatar">
+                    <div class="message_error_add_carrentalstore message_error_avatar">
 
                     </div>
                 </div>
@@ -86,7 +86,7 @@
                             <option value="{{$branch->branch_id}}">{{$branch->branch_name}}</option>
                         @endforeach
                     </select>
-                    <div class="message_error_carrentalstore_id">
+                    <div class="message_error_add_carrentalstore message_error_carrentalstore_id">
 
                     </div>
                 </div>
@@ -153,10 +153,13 @@
                         data-description = "{{$item->description}}"
                         data-location-id = "{{$item->location_id}}"
                         data-branch-id = "{{$item->branch_id}}"
-                        data-province = "{{$item->province}}"
-                        data-district = "{{$item->district}}"
-                        data-ward = "{{$item->ward}}"
+                        data-province = "{{$item->province_id}}"
+                        data-district = "{{$item->district_id}}"
+                        data-ward = "{{$item->ward_id}}"
                         data-unique-location = "{{$item->unique_location}}"
+                        data-province-id = "{{$item->province_id}}"
+                        data-district-id = "{{$item->district_id}}"
+                        data-ward-id = "{{$item->ward_id}}"
                     >
                         <i class="fa-regular fa-pen-to-square"></i>
                     </a>
@@ -195,25 +198,70 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Hàm lấy dữ liệu từ API và thêm vào thẻ select
-            window.fetchProvinces = function() {
-                fetch('http://127.0.0.1:8000/api/provine')
-                .then(response => response.json()) // Chuyển response thành JSON
-                .then(data => {
-                    console.log(data);
-                if (data.provines.exitcode === 1) { // Kiểm tra exitcode để đảm bảo rằng yêu cầu thành công
-                    populateSelect(data.provines.data.data); // Truy cập vào mảng chứa dữ liệu tỉnh
-                } else {
-                    throw new Error('Lỗi khi lấy dữ liệu');
-                }
+            window.fetchWard = function() {
+                return new Promise(function(resolve, reject) {
+                    fetch('http://127.0.0.1:8000/api/wards')
+                        .then(response => response.json())
+                        .then(data => {
+                            const wardSelect = document.getElementById('update-wardSelect')
+                            apendDataIntoSelect(data.wards.data.data, wardSelect);
+                            resolve();
+                        })
+                        .catch(function(error) {
+                            reject(error);
+                        })
+
+                });
+            }
+            window.fetchDistrict = function() {
+
+                return new Promise(function(resolve, reject) {
+                    fetch('http://127.0.0.1:8000/api/districts')
+                        .then(response => response.json())
+                        .then(data => {
+                            const districtSelect = document.getElementById('update-districtSelect')
+                            apendDataIntoSelect(data.district.data.data, districtSelect);
+                            resolve();
+                        })
+
+                        .catch(function(error) {
+                            reject(error);
+                        })
                 })
-                .catch(error => console.error('Có lỗi xảy ra:', error)); // Bắt lỗi nếu có
+            };
+
+            function apendDataIntoSelect(data, selector) {
+                data.forEach(function(item) {
+                    const option_list = document.createElement('option');
+
+                    option_list.value = item.code; // Dùng _id làm giá trị cho thẻ option
+                    option_list.textContent = item.name_with_type; // Dùng tên đầy đủ của tỉnh làm nội dung hiển thị
+                    selector.appendChild(option_list);
+                })
+            }
+            window.fetchProvinces = function() {
+                return new Promise(function(resolve, reject) {
+                    fetch('http://127.0.0.1:8000/api/provine')
+                        .then(response => response.json()) // Chuyển response thành JSON
+                        .then(data => {
+                        if (data.provines.exitcode === 1) { // Kiểm tra exitcode để đảm bảo rằng yêu cầu thành công
+                            populateSelect(data.provines.data.data); // Truy cập vào mảng chứa dữ liệu tỉnh
+                            resolve();
+                        } else {
+                            throw new Error('Lỗi khi lấy dữ liệu');
+                        }
+                        })
+                        .catch(error => {
+                            console.error('Có lỗi xảy ra:', error)
+                            reject();
+                        }); // Bắt lỗi nếu có
+                })
             }
             
             // Hàm thêm các tỉnh vào trong thẻ select
             function populateSelect(provinces) {
                 const select = document.querySelector('.provinceSelectClass');
                 const updateSelectProvince = document.querySelector('.update-provinceSelectClass');
-                console.log(updateSelectProvince);
                 const option = document.createElement('option');
                 option.value = '0';
                 option.textContent = 'Chọn Tỉnh/Thành phố';
@@ -260,7 +308,6 @@
                             provine_id: provine_id
                         },
                         success: function(res) {
-                            console.log(res.status_code);
                             $('#districtSelect').empty();
                             if(res.status_code === 'success'){
                                     
@@ -299,7 +346,6 @@
                         success: function(res) {
                             $('#wardSelect').empty();
                             if(res.status_code === 'success') {
-                                console.log(res);
                                 $('#wardSelect').append(`<option value="0">Chọn Phường/Xã</option>`)
                                 $.each(res['wards'], function (index, ward) { 
                                     $('#wardSelect').append(`<option value="${ward.code}">${ward.name_with_type}</option>`);
@@ -340,6 +386,9 @@
                 formData.append('province', $('#provinceSelect option:selected').text());
                 formData.append('district', $('#districtSelect option:selected').text());
                 formData.append('ward', $('#wardSelect option:selected').text());
+                formData.append('province_id', $('#provinceSelect option:selected').val() || 0);;
+                formData.append('ward_id', $('#wardSelect option:selected').val() || 0);
+                formData.append('district_id', $('#districtSelect option:selected').val() || 0);
                 formData.append('unique_location', $('#unique_location').val().trim());
                 formData.append('description', $('#description').val().trim());
                 formData.append('phone_number', $('#phone_number').val().trim());
@@ -356,7 +405,6 @@
                     processData: false,
                     contentType: false,
                     success: function(response) {
-                        console.log(response);
                         if(response.status === 'success') {
                             $('#form_add_carrentalstore').modal('hide');
                             $('#form_add_carrentalstore')[0].reset();
@@ -389,13 +437,12 @@
                         }
                     },
                     error: function(error) {
-                        $('.message_error_carrentalstore_name').append('');
+                        $('.message_error_add_carrentalstore').append('');
 
                         let errorMessage = error.responseJSON;
-                        console.log(errorMessage);
-                        $.each(errorMessage.errors, function (index, errMesage) { 
-                            console.log('Xin chào lỗi');
-                            $('.message_error_carrentalstore_name').append('<span class="text-danger">' + errMesage + '</span>')
+                        $.each(errorMessage.errors, function (field, errMesage) { 
+                            $('.message_error_' + field).append('<span class="text-danger">' + errMesage + '</span>')
+                            // console.log(field);
                         });
                     }
                 });
@@ -403,31 +450,128 @@
 
             // Xử lý phần hiển thị modal update carrentalstore
             $(document).on('click', '.btn-update-carrentalstore', function(e){
+            
+
                 // alert('Xin chào');
                 let id = $(this).data('id');
                 let phone_number = $(this).data('phone-number');
                 let description = $(this).data('description');
-                let avatar = 'http://127.0.0.1:8000' +$(this).data('avatar');
+                let avatar = 'http://127.0.0.1:8000/' +$(this).data('avatar');
                 let branch_id = $(this).data('branch-id');
                 let location_id = $(this).data('location-id');
                 let province = $(this).data('province');
                 let ward = $(this).data('ward');
                 let district = $(this).data('district');
                 let unique_location = $(this).data('unique-location');
-              
-                console.log(phone_number, description, avatar, unique_location);
+                let province_id = $(this).data('province-id');
+                let district_id = $(this).data('district-id');
+                let ward_id = $(this).data('ward-id');
 
-                window.fetchProvinces();
-                // $('#provinceSelect').val(province);
-                // $('#wardSelect').val(ward);
-                // $('#districtSelect').val(district);
-                $('#update-phone_number').val(phone_number);
-                $('#update-unique_location').val(unique_location);
-                $('#update-description').val(description);
-                $('#update-unique_location').val(unique_location);
-                $('#update-branch_id').val(branch_id);
-                $('#update_carrentalstore_id').val(id);
-            });
+                console.log(avatar);
+                // Xử lý phần hiển thị preivew image
+                $('.image-preview-carrentalstore').prop('src', avatar);
+                
+
+                Promise.all([window.fetchProvinces(), window.fetchDistrict(), window.fetchWard()])
+                .then(() => {
+                    console.log(province_id, district_id, ward_id);
+                    
+                    // Các hàm này sẽ được gọi chỉ sau khi dữ liệu đã được tải xong
+                    $('#update-districtSelect').prop('disabled', true);
+                    $('#update-wardSelect').prop('disabled', false);
+                    
+                    // Sự kiện udpate form 
+                    $('#update-provinceSelect').val(province_id).trigger('change');
+        
+                    //Xử lý sự kiện onchange ở update select carrentalstore
+                    $(document).on('change', '#update-provinceSelect', function(e) {
+                        e.preventDefault();
+                      
+                        let provine_id = $(this).val().trim();
+
+                        if(provine_id){
+                            $.ajax({
+                                url: "{{route('admin.district.get')}}",
+                                method: 'GET',
+                                dataType: 'json',
+                                data: {
+                                    provine_id: provine_id
+                                },
+                                success: function(res) {
+                                    $('#update-districtSelect').empty();
+                                    if(res.status_code === 'success'){
+                                        $('#update-districtSelect').prop('disabled', false);
+                                        $('#update-districtSelect').append(`<option value="0">Chọn Quận/Huyện</option>`)
+                                        $.each(res['district'], function (index, district) { 
+                                            $('#update-districtSelect').append(`<option value="${district.code}">${district.name_with_type}</option>`);
+                                        });
+                                    }else {
+                                        return;
+                                    }
+
+                                    $('#update-wardSelect').empty();
+                                },
+                                error: function(err) {
+                                    console.log(err);
+                                }
+                            });
+                        }
+                        
+                    });
+
+                    $(document).on('change', '#update-districtSelect', function(e) {
+                        e.preventDefault();
+
+                        let district_id = $(this).val().trim();
+
+                        if(district_id)  {
+                            $.ajax({
+                                url : "{{route('admin.ward.get')}}",
+                                method : 'GET',
+                                dataType : 'json',
+                                data: {
+                                    district_id : district_id
+                                },
+                                success: function(res) {
+                                    $('#update-wardSelect').empty();
+
+                                    console.log('vào được khi chưa change');
+                                    if(res.status_code === 'success') {
+                                        $('#update-wardSelect').prop('disabled', false);
+
+                                        $('#update-wardSelect').append(`<option value="0">Chọn Phường/Xã</option>`)
+                                        $.each(res['wards'], function (index, ward) { 
+                                            $('#update-wardSelect').append(`<option value="${ward.code}">${ward.name_with_type}</option>`);
+                                        });
+
+                                        $('#update-wardSelect').val(ward_id);
+                                        
+
+                                    }
+                                },  
+                                error: function(err) {
+
+                                }
+                            });
+                        }
+                    });
+
+                    $('#update-districtSelect').val(district_id).trigger('change');
+                    $('#update-wardSelect').val(ward_id);
+                    
+                    // ... set các giá trị khác ...
+                    })
+                    .catch((error) => {
+                        console.error('Error loading data:', error);
+                    });
+
+                    $('#update-phone_number').val(phone_number);
+                    $('#update-unique_location').val(unique_location);
+                    $('#update-description').val(description);
+                    $('#update-unique_location').val(unique_location);
+                    $('#update-branch_id').val(branch_id);
+                    $('#update_carrentalstore_id').val(id);
+                });
 
             //xử lý sự kiện Update carrentalstore
             $(document).on('click', '.btn-submit-update-carrentalstore', function(e) {
@@ -448,7 +592,6 @@
                         carrentalstore_status_id : carrentalstore_status_id,
                     },
                     success: function(response) {
-                        console.log(response);
                         if(response.status === 'success') {
                             $('#form_update_carrentalstore').modal('hide');
                             $('#form_update_carrentalstore')[0].reset();
@@ -484,9 +627,7 @@
                         $('.message_error_carrentalstore_name').append('');
 
                         let errorMessage = error.responseJSON;
-                        console.log(errorMessage);
                         $.each(errorMessage.errors, function (index, errMesage) { 
-                            console.log('Xin chào lỗi');
                             $('.message_error_carrentalstore_name').append('<span class="text-danger">' + errMesage + '</span>')
                         });
                     }
@@ -508,7 +649,6 @@
                         CarRentalStore_id : CarRentalStore_id,
                     },
                     success: function(response) {
-                        console.log(response);
                         if(response.status === 'success') {
                             $('.table').load(location.href + ' .table > *');
 
@@ -544,9 +684,7 @@
                     },
                     error: function(error) {
                         let errorMessage = error.responseJSON;
-                        console.log(errorMessage);
                         $.each(errorMessage.errors, function (index, errMesage) { 
-                            console.log('Xin chào lỗi');
                             $('.message_error_carrentalstore_name').append('<span class="text-danger">' + errMesage + '</span>')
                         });
                     }

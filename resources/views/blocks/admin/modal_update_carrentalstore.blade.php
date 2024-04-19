@@ -60,6 +60,7 @@
                 <div class="form-group">
                     <label for="avatar">Hình ảnh cửa hàng</label>
                     <input type="file" id="update-avatar" class="form-control" name="avatar">
+                    <img class="image-preview-carrentalstore"  alt="Ảnh cửa hàng" style="width: 100px; height: 100px;margin-top: 12px;">
                     <div class="message_error_avatar">
 
                     </div>

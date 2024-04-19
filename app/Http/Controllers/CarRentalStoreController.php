@@ -45,6 +45,9 @@ class CarRentalStoreController extends Controller
             ], 500);
         }
         $location_id = Location::insertGetId([
+            'province_id' => $request->province_id,
+            'district_id' => $request->district_id,
+            'ward_id' => $request->ward_id,
             'province' => $request->input('province'),
             'district' => $request->input('district'),
             'ward' => $request->input('ward'),

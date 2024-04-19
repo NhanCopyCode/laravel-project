@@ -23,9 +23,12 @@ class CarRentalStoreRequest extends FormRequest
     {
         return [
             //
-            'province' => 'required|min:1',
-            'ward' => 'required|min:1',
-            'district' => 'required|min:1',
+            'province' => 'required',
+            'ward' => 'required',
+            'district' => 'required',
+            'province_id' => 'required|not_in:0',
+            'ward_id' => 'required|not_in:0',
+            'district_id' => 'required|not_in:0',
             'unique_location' => 'required',
             'phone_number' => 'required|min:10|max:11',
             'avatar' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
@@ -40,19 +43,26 @@ class CarRentalStoreRequest extends FormRequest
             'required' => ':attribute không được bỏ trống',
             'phone_number.digits' => ':attribute phải chứa đúng :digits chữ số',
             'avatar.max' => ':attribute có dung lượng tối đa là :max kilobytes.',
+            'avatar.required' => ':attribute không được bỏ trống',
             'avatar.mimes' => ':attribute phải là một trong các kiểu file sau: :values.',
+            'province_id.not_in' => ':attribute không được bỏ trống',
+            'ward_id.not_in' => ':attribute không được bỏ trống',
+            'district_id.not_in' => ':attribute không được bỏ trống'
         ];
     }
 
     public function attributes()
     {
         return [
-            'province' => 'Tỉnh',
+            'province' => 'Tỉnh/Thành phố',
             'district' => 'Quận/huyện',
             'ward' => 'Phường/xã',
+            'province_id' => 'Tỉnh/Thành Phố',
+            'district_id' => 'Quận/Huyện',
+            'ward_id' => 'Phường/Xã',
             'unique_location' => 'Địa chỉ',
             'phone_number' => 'Số điện thoại',
-            'avatar' => 'Ảnh đại diện',
+            'avatar' => 'Ảnh cửa hàng',
             'description' => 'Mô tả',
             'branch_id' => 'Chi nhánh',
             // Các thuộc tính khác...
