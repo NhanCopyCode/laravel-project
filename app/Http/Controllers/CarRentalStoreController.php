@@ -21,7 +21,7 @@ class CarRentalStoreController extends Controller
         ->select('carrentalstore.*', 
                  'branchs.branch_name as branch_name', 
                  'location.*',
-                  DB::raw("CONCAT(location.province, ' ', location.district, ' ', location.ward) as real_location"))
+                  DB::raw("CONCAT(location.province, ' - ', location.district, ' - ', location.ward, ' - ', location.unique_location) as real_location"))
                   
         ->paginate(2);
         // dd($carRentalStoreList);
@@ -120,17 +120,41 @@ class CarRentalStoreController extends Controller
         // $carRentalStore_id = $request->carRentalStore_id;
         // $carRentalStore = carRentalStore::findOrFail($carRentalStore_id);
 
-        CarRentalStore::where('carRentalStore_id', $request->carRentalStore_id)->update([
-            'carRentalStore_name' => $request->carRentalStore_name,
-            'engine_type' => $request->engine_type,
-            'color' => $request->color,
-            'year_of_production' => $request->year_of_production,
-            'brand_id' => $request->brand_id,
-            'carRentalStore_status_id' => $request->carRentalStore_status_id
+        $fileName = "";
+        if ($request->hasFile('avatar') && $request->file('avatar')->isValid()) {
+            $fileName = Str::slug($request->input('unique_location')) . '_' . time() . '.' . $request->avatar->extension();
+             // Lưu vào thư mục 'public/storage/uploads/carrentalstores'
+            $request->avatar->storeAs('uploads/carrentalstores', $fileName, 'public');
+        } 
+
+        Location::where('location_id', $request->location_id)->update([
+            'province_id' => $request->province_id,
+            'district_id' => $request->district_id,
+            'ward_id' => $request->ward_id,
+            'province' => $request->province,
+            'district' => $request->district,
+            'ward' => $request->ward,
+            'unique_location' => $request->input('unique_location'),
         ]);
+        $current_datetime = date('Y-m-d H:i:s');
+
+        $carRentalStore = CarRentalStore::find($request->CarRentalStore_id);
+        // dd($carRentalStore);
+        $carRentalStore->location_id = $request->location_id;
+        $carRentalStore->description = $request->description;
+        $carRentalStore->phone_number = $request->phone_number;
+        $carRentalStore->branch_id = $request->branch_id;
+        if (isset($avatarPath)) {
+            $carRentalStore->avatar = $avatarPath;
+        }
+        $carRentalStore->updated_at = $current_datetime;
+        $carRentalStore->save();
+    
+   
 
         return response()->json([
             'status' => 'success',
+            'message' => 'Cập nhật của hàng thành công',
         ]);
     }
 
@@ -138,6 +162,7 @@ class CarRentalStoreController extends Controller
     {
         // dd('Xin chào');
         $carRentalStore_id = $request->CarRentalStore_id;
+        $location_id = $request->location_id;
 
         if(!$carRentalStore_id) {
             return response()->json([
@@ -147,8 +172,11 @@ class CarRentalStoreController extends Controller
         }
 
         $carRentalStore = CarRentalStore::find($carRentalStore_id);
-        if($carRentalStore) {
+        $location = Location::find($location_id);
+        // dd($location);
+        if($carRentalStore && $location) {
             $carRentalStore->delete();
+            $location->delete();
             return response()->json([
                 'status' => 'success',
                 'message' => 'Xóa thành công mẫu xe'
@@ -167,19 +195,28 @@ class CarRentalStoreController extends Controller
 
     //Search carRentalStore
     public function searchcarRentalStore(Request $request) {
-        $carRentalStoreList = CarRentalStore::join('brands', 'carrentalstore.brand_id', '=', 'brands.brand_id')
-        ->where('carrentalstore.carRentalStore_name', 'like', '%'.$request->search_string_carRentalStore.'%')
-        ->orWhere('carrentalstore.carRentalStore_id', 'like', '%'.$request->search_string_carRentalStore.'%')
-        ->orWhere('carrentalstore.engine_type', 'like', '%'.$request->search_string_carRentalStore.'%')
-        ->orWhere('carrentalstore.color', 'like', '%'.$request->search_string_carRentalStore.'%')
-        ->orWhere('carrentalstore.year_of_production', 'like', '%'.$request->search_string_carRentalStore.'%')
-        ->orWhere('brands.brand_name', 'like', '%'.$request->search_string_carRentalStore.'%')
-        ->orderBy('carrentalstore.carRentalStore_id', 'asc')
-        ->select('carrentalstore.*', 'brands.brand_name as brand_name')
-        ->paginate(5);
-        // dd($request->search_string_carRentalStore);
-        // dd($carRentalStoreList);
-
+        $searchString = $request->search_string_carrentalstore;
+        
+        $carRentalStoreList = CarRentalStore::join('location', 'carrentalstore.location_id', '=', 'location.location_id')
+            ->join('branchs', 'carrentalstore.branch_id', '=', 'branchs.branch_id')
+            ->where(function($query) use ($searchString) {
+                $query->where('carrentalstore.CarRentalStore_id', 'like', '%'.$searchString.'%')
+                    ->orWhere('carrentalstore.description', 'like', '%'.$searchString.'%')
+                    ->orWhere('carrentalstore.phone_number', 'like', '%'.$searchString.'%')
+                    ->orWhere('location.province', 'like', '%'.$searchString.'%')
+                    ->orWhere('location.district', 'like', '%'.$searchString.'%')
+                    ->orWhere('location.ward', 'like', '%'.$searchString.'%');
+            })
+            ->orderBy('carrentalstore.carRentalStore_id', 'asc')
+            ->select('carrentalstore.*',
+                 'location.*',
+                 DB::raw("CONCAT(location.province, ' - ', location.district, ' - ', location.ward, ' - ', location.unique_location) as real_location"),
+                'branchs.*'  
+            )
+            ->paginate(5);
+    
+        // dd($searchString);
+    
         if($carRentalStoreList->count() > 0) {
             return view('blocks.admin.search_carRentalStore', compact('carRentalStoreList'))->with('i', (request()->input('page', 1) - 1) * 5)->render();
         }else {
@@ -189,6 +226,7 @@ class CarRentalStoreController extends Controller
             ]);
         }
     }
+    
     
 
     public function getcarrentalstoretatusId($carRentalStore_status_name) {

@@ -153,9 +153,9 @@
                         data-description = "{{$item->description}}"
                         data-location-id = "{{$item->location_id}}"
                         data-branch-id = "{{$item->branch_id}}"
-                        data-province = "{{$item->province_id}}"
-                        data-district = "{{$item->district_id}}"
-                        data-ward = "{{$item->ward_id}}"
+                        data-province = "{{$item->province}}"
+                        data-district = "{{$item->district}}"
+                        data-ward = "{{$item->ward}}"
                         data-unique-location = "{{$item->unique_location}}"
                         data-province-id = "{{$item->province_id}}"
                         data-district-id = "{{$item->district_id}}"
@@ -175,6 +175,7 @@
                         data-toggle = "modal"
                         data-target = "#form_delete_carrentalstore"
                         data-carrentalstore-id = "{{$item->CarRentalStore_id}}"
+                        data-location-id = "{{$item->location_id}}"
                     >
                         <i class="fa-regular fa-trash-can"></i>
                     </a>
@@ -297,7 +298,7 @@
             $(document).on('change', '#provinceSelect', function(e) {
                 e.preventDefault();
 
-                let provine_id = $(this).val().trim();
+                let provine_id = $(this).val();
 
                 if(provine_id){
                     $.ajax({
@@ -333,7 +334,7 @@
             $(document).on('change', '#districtSelect', function(e) {
                 e.preventDefault();
 
-                let district_id = $(this).val().trim();
+                let district_id = $(this).val();
 
                 if(district_id)  {
                     $.ajax({
@@ -415,7 +416,7 @@
                                 $('.pagination').load(location.href + ' .pagination > *');
                             }
 
-                            Command: toastr["success"](`Thêm thành công cửa hàng "<span style="font-weight: bold;">${carrentalstore_name}</span>"`, "Thêm cửa hàng")
+                            Command: toastr["success"](`Thêm thành công cửa hàng`, "Thêm cửa hàng")
 
                             toastr.options = {
                                 "closeButton": false,
@@ -460,14 +461,13 @@
                 let branch_id = $(this).data('branch-id');
                 let location_id = $(this).data('location-id');
                 let province = $(this).data('province');
-                let ward = $(this).data('ward');
                 let district = $(this).data('district');
+                let ward = $(this).data('ward');
                 let unique_location = $(this).data('unique-location');
                 let province_id = $(this).data('province-id');
                 let district_id = $(this).data('district-id');
                 let ward_id = $(this).data('ward-id');
 
-                console.log(avatar);
                 // Xử lý phần hiển thị preivew image
                 $('.image-preview-carrentalstore').prop('src', avatar);
                 
@@ -476,18 +476,15 @@
                 .then(() => {
                     console.log(province_id, district_id, ward_id);
                     
-                    // Các hàm này sẽ được gọi chỉ sau khi dữ liệu đã được tải xong
-                    $('#update-districtSelect').prop('disabled', true);
-                    $('#update-wardSelect').prop('disabled', false);
+                    
                     
                     // Sự kiện udpate form 
-                    $('#update-provinceSelect').val(province_id).trigger('change');
         
                     //Xử lý sự kiện onchange ở update select carrentalstore
                     $(document).on('change', '#update-provinceSelect', function(e) {
                         e.preventDefault();
                       
-                        let provine_id = $(this).val().trim();
+                        let provine_id = $(this).val();
 
                         if(provine_id){
                             $.ajax({
@@ -508,6 +505,7 @@
                                     }else {
                                         return;
                                     }
+                                    $('#update-districtSelect').val(district_id).trigger('change');
 
                                     $('#update-wardSelect').empty();
                                 },
@@ -522,7 +520,7 @@
                     $(document).on('change', '#update-districtSelect', function(e) {
                         e.preventDefault();
 
-                        let district_id = $(this).val().trim();
+                        let district_id = $(this).val();
 
                         if(district_id)  {
                             $.ajax({
@@ -535,7 +533,6 @@
                                 success: function(res) {
                                     $('#update-wardSelect').empty();
 
-                                    console.log('vào được khi chưa change');
                                     if(res.status_code === 'success') {
                                         $('#update-wardSelect').prop('disabled', false);
 
@@ -556,8 +553,9 @@
                         }
                     });
 
+                    // Change các select option sau khi fetch xong dữ liệu
+                    $('#update-provinceSelect').val(province_id).trigger('change');
                     $('#update-districtSelect').val(district_id).trigger('change');
-                    $('#update-wardSelect').val(ward_id);
                     
                     // ... set các giá trị khác ...
                     })
@@ -566,31 +564,46 @@
                     });
 
                     $('#update-phone_number').val(phone_number);
+                    $('#location_id').val(location_id);
                     $('#update-unique_location').val(unique_location);
                     $('#update-description').val(description);
-                    $('#update-unique_location').val(unique_location);
                     $('#update-branch_id').val(branch_id);
                     $('#update_carrentalstore_id').val(id);
+                    $('#update_carrentalstore_province_id').val(province_id);
+                    $('#update_carrentalstore_district_id').val(district_id);
+                    $('#update_carrentalstore_ward_id').val(ward_id);
                 });
 
             //xử lý sự kiện Update carrentalstore
             $(document).on('click', '.btn-submit-update-carrentalstore', function(e) {
                 e.preventDefault();
-
-                let CarRentalStore_id = $('#update_carrentalstore_id').val();
-                let carrentalstore_name = $('#update_carrentalstore_name').val().trim();
-                let carrentalstore_status_id = $('#update_carrentalstore_status').val().trim();
+                // console.log($('#location_id').val())
+                // return;
+                let formData = new FormData();
+                formData.append('CarRentalStore_id', $('#update_carrentalstore_id').val());
+                formData.append('location_id', $('#location_id').val());
+                formData.append('province_id', $('#update_carrentalstore_province_id').val());
+                formData.append('district_id', $('#update_carrentalstore_district_id').val());
+                formData.append('ward_id', $('#update_carrentalstore_ward_id').val());
+                formData.append('province', $('#update-provinceSelect option:selected').text() || 'Giá trị mặc định');
+                formData.append('ward', $('#update-wardSelect option:selected').text() );
+                formData.append('district', $('#update-districtSelect option:selected').text() || 'Giá trị mặc định');
+                formData.append('unique_location', $('#update-unique_location').val().trim());
+                formData.append('description', $('#update-description').val().trim());
+                formData.append('phone_number', $('#update-phone_number').val().trim());
+                formData.append('branch_id', $('#update-branch_id').val().trim());
+                let avatarFiles = $('#update-avatar')[0].files;
+                if(avatarFiles.length > 0) {
+                    formData.append('avatar', avatarFiles[0]);
+                }
                
-
                 
                 $.ajax({
                     url: "{{route('admin.carrentalstore.update')}}",
                     method: 'POST',
-                    data: { 
-                        CarRentalStore_id : CarRentalStore_id,
-                        carrentalstore_name: carrentalstore_name,
-                        carrentalstore_status_id : carrentalstore_status_id,
-                    },
+                    data: formData,
+                    processData: false,
+                    contentType: false,
                     success: function(response) {
                         if(response.status === 'success') {
                             $('#form_update_carrentalstore').modal('hide');
@@ -602,7 +615,7 @@
                                 $('.pagination').load(location.href + ' .pagination > *');
                             }
 
-                            Command: toastr["success"](`Cập nhật thành công cửa hàng "<span style="font-weight: bold;">${carrentalstore_name}</span>"`, "Cập nhật cửa hàng")
+                            Command: toastr["success"](`Cập nhật thành công cửa hàng`, "Cập nhật cửa hàng")
 
                             toastr.options = {
                                 "closeButton": false,
@@ -624,11 +637,11 @@
                         }
                     },
                     error: function(error) {
-                        $('.message_error_carrentalstore_name').append('');
+                        $('.message_error_update_carrentalstore').empty();
 
                         let errorMessage = error.responseJSON;
-                        $.each(errorMessage.errors, function (index, errMesage) { 
-                            $('.message_error_carrentalstore_name').append('<span class="text-danger">' + errMesage + '</span>')
+                        $.each(errorMessage.errors, function (field, errMesage) { 
+                            $('.message_error_update_' + field).append('<span class="text-danger">' + errMesage + '</span>')
                         });
                     }
                 });
@@ -639,6 +652,7 @@
             $(document).on('click', '.btn-delete-carrentalstore', function(e) {
                 e.preventDefault();
                 let CarRentalStore_id = $(this).data('carrentalstore-id');
+                let location_id = $(this).data('location-id');
                 
                 if(confirm(`Bạn có muốn xóa cửa hàng ${CarRentalStore_id} không`)) {
                     $.ajax({
@@ -646,6 +660,7 @@
                     method: 'POST',
                     data: { 
                         CarRentalStore_id : CarRentalStore_id,
+                        location_id : location_id
                     },
                     success: function(response) {
                         if(response.status === 'success') {

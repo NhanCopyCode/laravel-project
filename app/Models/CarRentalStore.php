@@ -12,9 +12,8 @@ class CarRentalStore extends Model
 
     protected $fillable = [
         'location_id',
-        'avatar',
         'phone_number',
-        'company_name',
+        'avatar',
         'description',
         'branch_id'
     ];
