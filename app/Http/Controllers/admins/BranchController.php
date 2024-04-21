@@ -91,11 +91,13 @@ class BranchController extends Controller
         }
 
         $branch = Branch::find($branch_id);
+        $branch_list_number = Branch::all()->count();
         if($branch) {
             $branch->delete();
             return response()->json([
                 'status' => 'success',
-                'message' => 'Xóa thành công chi nhánh'
+                'message' => 'Xóa thành công chi nhánh',
+                'branch_list_number' => $branch_list_number,
             ]);
         }else {
             return response()->json([

@@ -56,7 +56,7 @@
         </thead>
         <tbody>
             @if ($branchList->count() === 0)
-                <h1 class="text-center text-danger">Không có dữ liệu</h1>                
+                <h1 id="branch-no-data-text" class="text-center text-danger">Không có dữ liệu</h1>                
             @endif
             @foreach ($branchList as $item)
             <tr>
@@ -146,7 +146,7 @@
                 e.preventDefault();
 
                 let branch_name = $('#branch_name').val().trim();
-                $('.message_error_branch_name').append('');
+                $('.message_error_branch_name').empty();
 
                 $.ajax({
                     url: "{{route('admin.branch.add')}}",
@@ -155,6 +155,7 @@
                     success: function(response) {
                         console.log(response);
                         if(response.status === 'success') {
+                            $('#branch-no-data-text').hide();
                             $('#form_add_branch').modal('hide');
                             $('#form_add_branch')[0].reset();
                             $('.table').load(location.href + ' .table > *');
@@ -293,6 +294,11 @@
                     success: function(response) {
                         console.log(response);
                         if(response.status === 'success') {
+                            if(response.branch_list_number === 1) {
+                                console.log('vào udodwjc xóa')
+                                $('#branch-no-data-text').show();
+                            }
+
                             $('.table').load(location.href + ' .table > *');
 
                             //Check if pagination exists and load it neccessary
