@@ -56,7 +56,7 @@
         </thead>
         <tbody>
             @if ($brandList->count() === 0)
-                <h1 class="text-center text-danger">Không có dữ liệu</h1>                
+                <h1 id="brand-no-data-text" class="text-center text-danger">Không có dữ liệu</h1>                
             @endif
             @foreach ($brandList as $item)
             <tr>
@@ -146,7 +146,7 @@
                 e.preventDefault();
 
                 let brand_name = $('#brand_name').val().trim();
-                $('.message_error_brand_name').append('');
+                $('.message_error_brand_name').empty();
 
                 $.ajax({
                     url: "{{route('admin.brand.add')}}",
@@ -155,6 +155,9 @@
                     success: function(response) {
                         console.log(response);
                         if(response.status === 'success') {
+                            //Ẩn message 'Không có dữ liệu'
+                            $('#brand-no-data-text').hide();
+
                             $('#form_add_brand').modal('hide');
                             $('#form_add_brand')[0].reset();
                             $('.table').load(location.href + ' .table > *');
@@ -221,6 +224,7 @@
                 let brand_name = $('#update_brand_name').val().trim();
                 let brand_status_id = $('#update_brand_status').val().trim();
 
+                $('.message_error_brand_name').empty();
                 
                 $.ajax({
                     url: "{{route('admin.brand.update')}}",
@@ -293,6 +297,10 @@
                     success: function(response) {
                         console.log(response);
                         if(response.status === 'success') {
+                            //Hiển thị message "khong có dữ liệu"
+                            if(response.brand_list_number === 1) {
+                                $('#brand-no-data-text').show();
+                            }
                             $('.table').load(location.href + ' .table > *');
 
                             //Check if pagination exists and load it neccessary

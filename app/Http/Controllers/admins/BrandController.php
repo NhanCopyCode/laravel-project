@@ -87,11 +87,13 @@ class BrandController extends Controller
         }
 
         $brand = Brand::find($brand_id);
+        $brand_list_number = Brand::all()->count();
         if($brand) {
             $brand->delete();
             return response()->json([
                 'status' => 'success',
-                'message' => 'Xóa thành công hãng xe'
+                'message' => 'Xóa thành công hãng xe',
+                'brand_list_number' => $brand_list_number
             ]);
         }else {
             return response()->json([

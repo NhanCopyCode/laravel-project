@@ -23,6 +23,22 @@ class BrandRequest extends FormRequest
     {
         return [
             //
+            'brand_name' => 'required|unique:brands,brand_name,' . $this->brand . ',brand_id',
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'required' => ":attribute không được bỏ trống",
+            'unique' => ":attribute đã tồn tại"
+        ];
+    }
+
+    public function attributes()
+    {
+        return [
+            'brand_name' => 'Hãng xe',
         ];
     }
 }
