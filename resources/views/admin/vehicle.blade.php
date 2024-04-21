@@ -86,16 +86,20 @@
                     <input type="checkbox" class="check-all">
                 </th>
                 <th>Id xe</th>
-                <th>Tên xe</th>
-                <th>Dung tích xilanh</th>
-                <th>Màu sắc</th>
-                <th>Năm sản xuất</th>
-                <th>Hãng sản xuất</th>
+                <th>Cửa hàng</th>
+                <th>Mẫu xe</th>
+                <th>CHi tiết</th>
+                <th>Biển số xe</th>
+                <th>Giá thành thuê /ngày</th>
                 <th>Trạng thái</th>
+                <th>Ngày tạo</th>
                 <th>Lựa chọn</th>
             </tr>
         </thead>
         <tbody>
+            @if ($vehicleList->count() === 0)
+                <h1 class="text-center text-danger">Không có dữ liệu</h1>                
+            @endif
             @foreach ($vehicleList as $item)
             <tr>
                 <th class="text-center">{{++$i}}</th>

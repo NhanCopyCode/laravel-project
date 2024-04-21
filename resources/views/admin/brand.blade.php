@@ -55,6 +55,9 @@
             </tr>
         </thead>
         <tbody>
+            @if ($brandList->count() === 0)
+                <h1 class="text-center text-danger">Không có dữ liệu</h1>                
+            @endif
             @foreach ($brandList as $item)
             <tr>
                 <th class="text-center">{{++$i}}</th>

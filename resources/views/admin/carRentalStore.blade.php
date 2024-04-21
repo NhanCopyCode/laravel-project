@@ -126,6 +126,9 @@
             </tr>
         </thead>
         <tbody>
+            @if ($carRentalStoreList->count() === 0)
+                <h1 id ="carRentalStore-no-data-text" class=" text-center text-danger">Không có dữ liệu</h1>
+            @endif
             @foreach ($carRentalStoreList as $item)
             <tr>
                 <th class="text-center">{{++$i}}</th>
@@ -407,6 +410,7 @@
                     contentType: false,
                     success: function(response) {
                         if(response.status === 'success') {
+                            $('#carRentalStore-no-data-text').hide();
                             $('#form_add_carrentalstore').modal('hide');
                             $('#form_add_carrentalstore')[0].reset();
                             $('.table').load(location.href + ' .table > *');
@@ -664,6 +668,8 @@
                     },
                     success: function(response) {
                         if(response.status === 'success') {
+                            $('#carRentalStore-no-data-text').show();
+
                             $('.table').load(location.href + ' .table > *');
 
                             //Check if pagination exists and load it neccessary
