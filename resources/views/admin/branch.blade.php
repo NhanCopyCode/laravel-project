@@ -221,6 +221,7 @@
                 let branch_id = $('#update_branch_id').val();
                 let branch_name = $('#update_branch_name').val().trim();
                 let branch_status_id = $('#update_branch_status').val().trim();
+                $('.message_error_branch_name').empty();
 
                 
                 $.ajax({
