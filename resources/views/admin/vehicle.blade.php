@@ -6,7 +6,7 @@
     </button>
     
     <!-- Modal add bracnh -->
-    <form method="POST" action="{{route('admin.vehicle.add')}}" class="modal fade modal-vehicle" id="form_add_vehicle" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+    <form method="POST" action="{{route('admin.vehicle.add')}}" class="modal fade modal-vehicle" id="form_add_vehicle" enctype="multipart/form-data" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
         @csrf
         <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -18,48 +18,72 @@
             </div>
             <div class="modal-body">
                 <div class="form-group">
-                    <label for="vehicle-vehicle">Tên xe</label>
-                    <input type="text" class="form-control" id="vehicle_name" name="vehicle_name" placeholder="Nhập tên xe..." required>
-                    <div class="message_error" id="error-vehicle_name">
-
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="engine_type">Dung tích xilanh (cc)</label>
-                    <input type="number" class="form-control" id="engine_type" name="engine_type" placeholder="Nhập dung tích xilanh..." required>
-                    <div class="message_error" id="error-engine_type">
-
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label for="color">Nhập màu sắc (cc)</label>
-                    <input type="text" class="form-control" id="color" name="color" placeholder="Nhập màu sắc..." required>
-                    <div class="message_error" id="error-color">
-
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label for="year_of_production">Năm sản xuất</label>
-                    <input type="number" class="form-control" id="year_of_production" name="year_of_production" placeholder="Nhập năm sản xuất..." required>
-                    <div class="message_error" id="error-year_of_production">
-
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label for="brand_id">Chọn xe</label>
-                    <select class="form-control" name="brand_id" id="brand_id">
-                        @foreach ($brand_list as $brand)
-                            <option value="{{$brand->brand_id}}">{{$brand->brand_name}}</option>
+                    <label for="CarRentalStore_id">Chọn cửa hàng</label>
+                    <select name="CarRentalStore_id" id="CarRentalStore_id" class="form-control">
+                        @foreach ($carrentalstore_list as $carrentalstore_item)
+                            <option value="{{$carrentalstore_item->CarRentalStore_id}}">{{$carrentalstore_item->unique_location}}</option>
                         @endforeach
                     </select>
-                    <div class="message_error" id="error-brand_id">
+                    <div class="message_error" id="error-CarRentalStore_id">
+
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="model_id">Chọn mẫu xe</label>
+                    <select name="model_id" id="model_id" class="form-control">
+                        @foreach ($model_list as $model_item)
+                            <option value="{{$model_item->model_id}}">{{$model_item->model_type}}</option>
+                        @endforeach
+                    </select>
+                    <div class="message_error" id="error-model_id">
+
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="vehicle_description">Nhập thông tin chi tiết</label>
+                    <textarea class="form-control" name="vehicle_description" id="vehicle_description" cols="30" rows="2"></textarea>
+                    <div class="message_error" id="error-vehicle_description">
 
                     </div>
                 </div>
 
+                <div class="form-group">
+                    <label for="license_plate">Nhập biển số xe</label>
+                    <input type="text" class="form-control" id="license_plate" name="license_plate" placeholder="75AF-137.80" value="75AF-137.80" required>
+                    <div class="message_error" id="error-license_plate">
+
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="rental_price_day">Nhập số tiền thuê một ngày</label>
+                    <input type="number" min="0" class="form-control" id="rental_price_day" name="rental_price_day" placeholder="Số tiền thuê mỗi ngày...." required>
+                    <div class="message_error" id="error-rental_price_day">
+
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="vehicle_status_id">Trạng thái xe</label>
+                    <select class="form-control" name="vehicle_status_id" id="vehicle_status_id">
+                        @foreach ($vehicle_status_list as $vehicle_status_item)
+                            <option value="{{$vehicle_status_item->vehicle_status_id}}">{{$vehicle_status_item->vehicle_status_name}}</option>
+                        @endforeach
+                    </select>
+                    <div class="message_error" id="error-vehicle_status">
+
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="vehicle_image_name[]">Hình ảnh của xe (Chọn 3 hình)</label>
+                    <input type="file" name="vehicle_image_name[]" class="form-control" accept="image/*" multiple>
+                    <div class="message_error" id="error-vehicle_image_name">
+
+                    </div>
+                </div>
+
+                
 
             </div>
             <div class="modal-footer">
@@ -88,9 +112,10 @@
                 <th>Id xe</th>
                 <th>Cửa hàng</th>
                 <th>Mẫu xe</th>
-                <th>CHi tiết</th>
+                <th>Thông tin chi tiết</th>
                 <th>Biển số xe</th>
                 <th>Giá thành thuê /ngày</th>
+                <th>Ảnh của xe</th>
                 <th>Trạng thái</th>
                 <th>Ngày tạo</th>
                 <th>Lựa chọn</th>
@@ -98,7 +123,7 @@
         </thead>
         <tbody>
             @if ($vehicleList->count() === 0)
-                <h1 class="text-center text-danger">Không có dữ liệu</h1>                
+                <h1 id="vehicle-no-data-text" class="text-center text-danger">Không có dữ liệu</h1>                
             @endif
             @foreach ($vehicleList as $item)
             <tr>
@@ -107,11 +132,16 @@
                     <input type="checkbox"  id="vehicle-id vehicle-id-{{$item->vehicle_id}}">
                 </th>
                 <td>{{$item->vehicle_id}}</td>
-                <td>{{$item->vehicle_name}}</td>
-                <td>{{$item->engine_type}}</td>
-                <td>{{$item->color}}</td>
-                <td>{{$item->year_of_production}}</td>
-                <td>{{$item->brand_name}}</td>
+                <td>{{$item->unique_location}}</td>
+                <td>{{$item->model_type}}</td>
+                <td>{{$item->vehicle_description}}</td>
+                <td>{{$item->license_plate}}</td>
+                <td>{{$item->rental_price_day}}</td>
+                <td >
+                    <img style="width: 100px; height:100px; object-fit: cover;" src="{{$item->vehicle_image_data_1}}" alt="Ảnh xe">
+                    <img style="width: 100px; height:100px; object-fit: cover;" src="{{$item->vehicle_image_data_2}}" alt="Ảnh xe">
+                    <img style="width: 100px; height:100px; object-fit: cover;" src="{{$item->vehicle_image_data_3}}" alt="Ảnh xe">
+                </td>
                 <td>
                     @php
                         if($item->vehicle_status_id === 1) {
@@ -124,13 +154,14 @@
                             
                     @endphp
                 </td>
+                <td>{{$item->vehicle_created_at}}</td>
                 <td style="display: flex;align-items: center;">
                     <a  href=""
                         class="btn btn-primary btn-update btn-update-vehicle" 
                         data-toggle = "modal"
                         data-target = "#form_update_vehicle"
                         data-id = "{{$item->vehicle_id}}"
-                        data-vehicle-name = "{{$item->vehicle_name}}"
+                        data-vehicle-name = "{{$item->model_type}}"
                         data-vehicle-status-id = "{{$item->vehicle_status_id}}"
                         data-engine-type = "{{$item->engine_type}}"
                         data-color = "{{$item->color}}"
@@ -152,7 +183,7 @@
                         data-toggle = "modal"
                         data-target = "#form_delete_vehicle"
                         data-vehicle-id = "{{$item->vehicle_id}}"
-                        data-vehicle-name = "{{$item->vehicle_name}}"
+                        data-vehicle-image-id = "{{$item->vehicle_img_id}}"
                     >
                         <i class="fa-regular fa-trash-can"></i>
                     </a>
@@ -196,27 +227,37 @@
             $(document).on('click', '.btn-add-vehicle', function(e) {
                 e.preventDefault();
 
-                let vehicle_name = $('#vehicle_name').val().trim();
-                let engine_type = $('#engine_type').val().trim();
-                let color = $('#color').val().trim();
-                let year_of_production = $('#year_of_production').val().trim();
-                let brand_id = $('#brand_id').val().trim();
+                let formData = new FormData();
+                let totalImages = $('input[name="vehicle_image_name[]"]')[0].files.length; // Số lượng hình
 
-                $('.message_error_vehicle_name').append('');
+                for (let i = 0; i < totalImages; i++) {
+                    // Thêm từng hình vào formData
+                    formData.append('vehicle_image_name[]', $('input[name="vehicle_image_name[]"]')[0].files[i]);
+                }
+
+                // Các field dữ liệu khác
+                formData.append('model_id', $('#model_id').val());
+                formData.append('CarRentalStore_id', $('#CarRentalStore_id').val());
+                formData.append('vehicle_description', $('#vehicle_description').val());
+                formData.append('license_plate', $('#license_plate').val());
+                formData.append('rental_price_day', $('#rental_price_day').val());
+                formData.append('vehicle_status_id', $('#vehicle_status_id').val());
+
+
+                $('.message_error_model_type').append('');
 
                 $.ajax({
                     url: "{{route('admin.vehicle.add')}}",
                     method: 'POST',
-                    data: { 
-                        vehicle_name: vehicle_name,
-                        engine_type: engine_type,
-                        color: color,
-                        year_of_production: year_of_production,
-                        brand_id: brand_id
-                    },
+                    data: formData,
+                    processData: false,  // Ngăn jQuery xử lý dữ liệu
+                    contentType: false,  // Ngăn jQuery thiết lập Content-Type
                     success: function(response) {
                         console.log(response);
                         if(response.status === 'success') {
+                            //Ẩn đi message "Không có dữ liệu"
+                            $('#vehicle-no-data-text').hide();
+
                             $('#form_add_vehicle').modal('hide');
                             $('#form_add_vehicle')[0].reset();
                             $('.table').load(location.href + ' .table > *');
@@ -226,7 +267,7 @@
                                 $('.pagination').load(location.href + ' .pagination > *');
                             }
 
-                            Command: toastr["success"](`Thêm thành công xe "<span style="font-weight: bold;">${vehicle_name}</span>"`, "Thêm xe")
+                            Command: toastr["success"](`Thêm thành công xe "<span style="font-weight: bold;">${model_type}</span>"`, "Thêm xe")
 
                             toastr.options = {
                                 "closeButton": false,
@@ -278,7 +319,7 @@
                 
                 // console.log(vehicle_status_id, vehicle_status_name)
                 $('#update_vehicle_id').val(id);
-                $('#update_vehicle_name').val(vehicle_status_name);
+                $('#update_model_type').val(vehicle_status_name);
                 $('#update_engine_type').val(engine_type);
                 $('#update_color').val(color);
                 $('#update_year_of_production').val(year_of_production);
@@ -292,7 +333,7 @@
                 e.preventDefault();
 
                 let vehicle_id = $('#update_vehicle_id').val();
-                let vehicle_name = $('#update_vehicle_name').val().trim();
+                let model_type = $('#update_model_type').val().trim();
                 let engine_type = $('#update_engine_type').val().trim();
                 let color = $('#update_color').val().trim();
                 let year_of_production = $('#update_year_of_production').val().trim();
@@ -304,7 +345,7 @@
                     method: 'POST',
                     data: { 
                         vehicle_id : vehicle_id,
-                        vehicle_name: vehicle_name,
+                        model_type: model_type,
                         engine_type: engine_type,
                         color: color,
                         year_of_production: year_of_production,
@@ -323,7 +364,7 @@
                                 $('.pagination').load(location.href + ' .pagination > *');
                             }
 
-                            Command: toastr["success"](`Cập nhật thành công xe "<span style="font-weight: bold;">${vehicle_name}</span>"`, "Cập nhật xe")
+                            Command: toastr["success"](`Cập nhật thành công xe "<span style="font-weight: bold;">${model_type}</span>"`, "Cập nhật xe")
 
                             toastr.options = {
                                 "closeButton": false,
@@ -364,18 +405,24 @@
             $(document).on('click', '.btn-delete-vehicle', function(e) {
                 e.preventDefault();
                 let vehicle_id = $(this).data('vehicle-id');
-                let vehicle_name = $(this).data('vehicle-name');
+                let vehicle_image_id = $(this).data('vehicle-image-id');
                 
-                if(confirm(`Bạn có muốn xóa xe ${vehicle_name} không`)) {
+                if(confirm(`Bạn có muốn xóa xe ${vehicle_id} không`)) {
                     $.ajax({
                     url: "{{route('admin.vehicle.delete')}}",
                     method: 'POST',
                     data: { 
                         vehicle_id : vehicle_id,
+                        vehicle_image_id : vehicle_image_id,
                     },
                     success: function(response) {
                         console.log(response);
                         if(response.status === 'success') {
+                            if(response.vehicle_list_count === 0) {
+                                $('#vehicle-no-data-text').show();
+
+                            }
+
                             $('.table').load(location.href + ' .table > *');
 
                             //Check if pagination exists and load it neccessary
@@ -413,7 +460,7 @@
                         console.log(errorMessage);
                         $.each(errorMessage.errors, function (index, errMesage) { 
                             console.log('Xin chào lỗi');
-                            $('.message_error_vehicle_name').append('<span class="text-danger">' + errMesage + '</span>')
+                            $('.message_error_model_type').append('<span class="text-danger">' + errMesage + '</span>')
                         });
                     }
                 });
