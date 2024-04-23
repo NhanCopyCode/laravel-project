@@ -150,25 +150,34 @@ class VehicleController extends Controller
 
         if ($request->hasfile('vehicle_image_name')) {
             $images = $request->file('vehicle_image_name');
-        
+            
+            // dd($images);
+            $image_arr = [];
             foreach ($images as $index => $image) {
-                // Tạo tên file dựa trên thông tin độc nhất của yêu cầu, thêm timestamp để tránh trùng lặp
-                $fileName = Str::slug($request->license_plate) . '_' . time() . '.' . $image->extension();
+                $fileName = Str::slug($request->license_plate) . '_' . time() . '.' . $image->getClientOriginalName(). '.' . $image->extension();
     
                 // Store the image and retrieve the path
                 $image->storeAs('vehicle/images', $fileName, 'public');
                 $path = asset('storage/vehicle/images/' . $fileName);
+    
         
-                // Tùy thuộc vào số lượng ảnh và việc lưu chúng vào biến tương ứng
-                // Đoạn code này chỉ là ví dụ, cần được điều chỉnh tùy thuộc vào logic cụ thể của bạn.
-                if ($index === 0) {
-                    $vehicle_image_data_1 = $path;
-                } elseif ($index === 1) {
-                    $vehicle_image_data_2 = $path;
-                } elseif ($index === 2) {
-                    $vehicle_image_data_3 = $path;
+                $image_arr[] = $path;
+            }
+
+            foreach ($image_arr as $index => $path) {
+                switch ($index) {
+                    case 0:
+                        $vehicle_image_data_1 = $path;
+                        break;
+                    case 1:
+                        $vehicle_image_data_2 = $path;
+                        break;
+                    case 2:
+                        $vehicle_image_data_3 = $path;
+                        break;
                 }
             }
+
 
             VehicleImages::where('vehicle_img_id', $request->vehicle_image_id)->update([
                 'vehicle_image_data_1' => $vehicle_image_data_1,
