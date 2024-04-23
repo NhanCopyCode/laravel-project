@@ -26,7 +26,7 @@ class VehicleRequest extends FormRequest
             'CarRentalStore_id' => 'required|min:0',
             'model_id' => 'required|min:0',
             'vehicle_description' => 'required|string',
-            'license_plate' => 'required|string|regex:/^\d{2}[A-Z]{1,2}-\d{3}\.\d{1,2}$/',
+            'license_plate' => 'required|string|regex:/^\d{2}[A-Z]{1,2}-\d{3}\.\d{1,2}$/|unique:vehicles,license_plate',
             'rental_price_day' => 'required|integer|min:0',
             'vehicle_status_id' => 'required|integer|exists:vehiclestatus,vehicle_status_id',
             'vehicle_image_name' => 'required|array|size:3',

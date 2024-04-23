@@ -1,75 +1,93 @@
- <!--Update model Modal -->
- <form method="POST" action="{{ route('admin.model.update') }}" class="modal fade modal-model" id="form_update_model" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+ <!--Update vehicle Modal -->
+ <form method="POST" action="{{ route('admin.vehicle.update') }}" class="modal fade modal-vehicle" id="form_update_vehicle" enctype="multipart/form-data" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
     @csrf
-    <input type="hidden" id="update_model_id">
+    <input type="hidden" id="update_vehicle_id">
+    <input type="hidden" id="update_vehicle_image_id">
     <div class="modal-dialog" role="document">
-    <div class="modal-content">
-        <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLongTitle">Cập nhật mẫu xe</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-        </button>
+        <div class="modal-content">
+            <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">Cập nhật xe</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="update-vehicle-CarRentalStore_id">Chọn cửa hàng</label>
+                    <select name="update-vehicle-CarRentalStore_id" id="update-vehicle-CarRentalStore_id" class="form-control">
+                        @foreach ($carrentalstore_list as $carrentalstore_item)
+                            <option value="{{$carrentalstore_item->CarRentalStore_id}}">{{$carrentalstore_item->unique_location}}</option>
+                        @endforeach
+                    </select>
+                    <div class="message_error" id="error-CarRentalStore_id">
+
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="update-vehicle-model_id">Chọn mẫu xe</label>
+                    <select name="update-vehicle-model_id" id="update-vehicle-model_id" class="form-control">
+                        @foreach ($model_list as $model_item)
+                            <option value="{{$model_item->model_id}}">{{$model_item->model_type}}</option>
+                        @endforeach
+                    </select>
+                    <div class="message_error" id="error-model_id">
+
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="update-vehicle-vehicle_description">Nhập thông tin chi tiết</label>
+                    <textarea class="form-control" name="update-vehicle-vehicle_description" id="update-vehicle-vehicle_description" cols="30" rows="2"></textarea>
+                    <div class="message_error" id="error-vehicle_description">
+
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="update-vehicle-license_plate">Nhập biển số xe</label>
+                    <input type="text" class="form-control" id="update-vehicle-license_plate" name="update-vehicle-license_plate" placeholder="75AF-137.80" value="" required>
+                    <div class="message_error" id="error-license_plate">
+
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="update-vehicle-rental_price_day">Nhập số tiền thuê một ngày</label>
+                    <input type="number" min="0" class="form-control" id="update-vehicle-rental_price_day" name="update-vehicle-rental_price_day" placeholder="Số tiền thuê mỗi ngày...." required>
+                    <div class="message_error" id="error-rental_price_day">
+
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="update-vehicle-vehicle_status_id">Trạng thái xe</label>
+                    <select class="form-control" name="update-vehicle-vehicle_status_id" id="update-vehicle-vehicle_status_id">
+                        @foreach ($vehicle_status_list as $vehicle_status_item)
+                            <option value="{{$vehicle_status_item->vehicle_status_id}}">{{$vehicle_status_item->vehicle_status_name}}</option>
+                        @endforeach
+                    </select>
+                    <div class="message_error" id="error-vehicle_status">
+
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="update-vehicle-vehicle_image_name[]">Hình ảnh của xe (Chọn 3 hình)</label>
+                    <input type="file" id="update-vehicle-vehicle_image_name[]" name="update-vehicle-vehicle_image_name[]" class="form-control" accept="image/*" multiple>
+                    <img style="width: 100px; height: 100px; object-fit: cover;" id="update-vehicle-image-data-1" src="" alt="Hình ảnh của xe">
+                    <img style="width: 100px; height: 100px; object-fit: cover;" id="update-vehicle-image-data-2" src="" alt="Hình ảnh của xe">
+                    <img style="width: 100px; height: 100px; object-fit: cover;" id="update-vehicle-image-data-3" src="" alt="Hình ảnh của xe">
+                    <div class="message_error" id="error-vehicle_image_name">
+
+                    </div>
+                </div>
+
+                
+
+            </div>
+            <div class="modal-footer">
+            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary btn-submit-update-vehicle">Cập nhật</button>
+            </div>
         </div>
-        <div class="modal-body">
-            <div class="form-group">
-                <label for="model-vehicle">Tên mẫu xe</label>
-                <input type="text" class="form-control" id="update_model_name" name="model_name" placeholder="Nhập tên mẫu xe..." required>
-                <div class="message_error" id="update-error-model_name">
-
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="engine_type">Dung tích xilanh (cc)</label>
-                <input type="number" class="form-control" id="update_engine_type" name="engine_type" placeholder="Nhập dung tích xilanh..." required>
-                <div class="message_error" id="update-error-engine_type">
-
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label for="color">Nhập màu sắc (cc)</label>
-                <input type="text" class="form-control" id="update_color" name="color" placeholder="Nhập màu sắc..." required>
-                <div class="message_error" id="update-error-color">
-
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label for="year_of_production">Năm sản xuất</label>
-                <input type="number" class="form-control" id="update_year_of_production" name="year_of_production" placeholder="Nhập năm sản xuất..." required>
-                <div class="message_error" id="update-error-year_of_production">
-
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label for="brand_id">Chọn mẫu xe</label>
-                <select class="form-control" name="brand_id" id="update_brand_id">
-                    @foreach ($brand_list as $brand)
-                        <option value="{{$brand->brand_id}}">{{$brand->brand_name}}</option>
-                    @endforeach
-                </select>
-                <div class="message_error" id="update-error-brand_id">
-
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label for="model_status_id">Trạng thái</label>
-                <select class="form-control" name="model_status_id" id="update_model_status_id">
-                    @foreach ($model_status_list as $status)
-                        <option value="{{$status->model_status_id}}">{{$status->model_status_name}}</option>
-                    @endforeach
-                </select>
-                <div class="message_error" id="update-error-year_of_production">
-
-                </div>
-            </div>
-        </div>
-        <div class="modal-footer">
-        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-        <button type="submit" class="btn btn-primary btn-submit-update-model">Cập nhật</button>
-        </div>
-    </div>
     </div>
 </form>

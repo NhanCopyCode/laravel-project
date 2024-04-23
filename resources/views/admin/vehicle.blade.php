@@ -48,8 +48,8 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="license_plate">Nhập biển số xe</label>
-                    <input type="text" class="form-control" id="license_plate" name="license_plate" placeholder="75AF-137.80" value="75AF-137.80" required>
+                    <label for="license_plate">Nhập biển số xe (VD: 75AF-137.80)</label>
+                    <input type="text" class="form-control" id="license_plate" name="license_plate" placeholder="75AF-137.80" value="" required>
                     <div class="message_error" id="error-license_plate">
 
                     </div>
@@ -161,13 +161,17 @@
                         data-toggle = "modal"
                         data-target = "#form_update_vehicle"
                         data-id = "{{$item->vehicle_id}}"
-                        data-vehicle-name = "{{$item->model_type}}"
+                        data-CarRentalStore-id = "{{$item->vehicle_carrentalstore_id}}"
+                        data-model-type = "{{$item->model_type}}"
+                        data-model-id = "{{$item->model_id}}"
+                        data-description = "{{$item->vehicle_description}}"
+                        data-license-plate = "{{$item->license_plate}}"
+                        data-rental-price-day = "{{$item->rental_price_day}}"
+                        data-vehicle-image-id = "{{$item->vehicle_image_id}}"
                         data-vehicle-status-id = "{{$item->vehicle_status_id}}"
-                        data-engine-type = "{{$item->engine_type}}"
-                        data-color = "{{$item->color}}"
-                        data-year-of-production = "{{$item->year_of_production}}"
-                        data-brand-id = "{{$item->brand_id}}"
-                        data-vehicle-status-id = "{{$item->vehicle_status_id}}"
+                        data-vehicle-image-data-1 = "{{$item->vehicle_image_data_1}}"
+                        data-vehicle-image-data-2 = "{{$item->vehicle_image_data_2}}"
+                        data-vehicle-image-data-3 = "{{$item->vehicle_image_data_3}}"
                     >
                         <i class="fa-regular fa-pen-to-square"></i>
                     </a>
@@ -183,7 +187,8 @@
                         data-toggle = "modal"
                         data-target = "#form_delete_vehicle"
                         data-vehicle-id = "{{$item->vehicle_id}}"
-                        data-vehicle-image-id = "{{$item->vehicle_img_id}}"
+                        data-vehicle-image-id = "{{$item->vehicle_image_id}}"
+                        data-license-plate = "{{$item->license_plate}}"
                     >
                         <i class="fa-regular fa-trash-can"></i>
                     </a>
@@ -243,6 +248,8 @@
                 formData.append('rental_price_day', $('#rental_price_day').val());
                 formData.append('vehicle_status_id', $('#vehicle_status_id').val());
 
+                let license_plate = $('#license_plate').val();
+
 
                 $('.message_error_model_type').append('');
 
@@ -267,7 +274,7 @@
                                 $('.pagination').load(location.href + ' .pagination > *');
                             }
 
-                            Command: toastr["success"](`Thêm thành công xe "<span style="font-weight: bold;">${model_type}</span>"`, "Thêm xe")
+                            Command: toastr["success"](`Thêm thành công xe "<span style="font-weight: bold;">${license_plate}</span>"`, "Thêm xe")
 
                             toastr.options = {
                                 "closeButton": false,
@@ -303,55 +310,71 @@
 
             // Xử lý phần hiển thị modal update vehicle
             $(document).on('click', '.btn-update-vehicle', function(e){
-                // alert('Xin chào');
-                let id = $(this).data('id');
-                let vehicle_status_name = $(this).data('vehicle-name');
-                let engine_type = $(this).data('engine-type');
-                let color = $(this).data('color');
-                let year_of_production = $(this).data('year-of-production');
-                let brand_id = $(this).data('brand-id');
+              
+                let vehicle_id = $(this).data('id');
+                let CarRentalStore_id = $(this).data('carrentalstore-id');
+                let model_id = $(this).data('model-id');
+                let description = $(this).data('description');
+                let license_plate = $(this).data('license-plate');
+                let rental_price_day = $(this).data('rental-price-day');
+                let vehicle_image_id = $(this).data('vehicle-image-id');
                 let vehicle_status_id = $(this).data('vehicle-status-id');
+                let vehicle_image_data_1 = $(this).data("vehicle-image-data-1");
+                let vehicle_image_data_2 = $(this).data("vehicle-image-data-2");
+                let vehicle_image_data_3 = $(this).data("vehicle-image-data-3");
 
+                // console.log(vehicle_id, CarRentalStore_id, model_id, description, license_plate, rental_price_day, vehicle_image_id);
+                
                 //Clear message error exists
                 $('.message_error').empty();
 
-                console.log(year_of_production, brand_id, vehicle_status_id);
+                console.log(vehicle_image_id);
                 
                 // console.log(vehicle_status_id, vehicle_status_name)
-                $('#update_vehicle_id').val(id);
-                $('#update_model_type').val(vehicle_status_name);
-                $('#update_engine_type').val(engine_type);
-                $('#update_color').val(color);
-                $('#update_year_of_production').val(year_of_production);
-                $('#update_brand_id').val(brand_id);
-                // $('#update_vehicle_status').val(vehicle_status_id);
-                $('#update_vehicle_status_id').val(vehicle_status_id);
+                $('#update_vehicle_id').val(vehicle_id);
+                $('#update_vehicle_image_id').val(vehicle_image_id);
+                $('#update-vehicle-CarRentalStore_id').val(CarRentalStore_id);
+                $('#update-vehicle-model_id').val(model_id);
+                $('#update-vehicle-vehicle_description').val(description);
+                $('#update-vehicle-license_plate').val(license_plate);
+                $('#update-vehicle-rental_price_day').val(rental_price_day);
+                $('#update-vehicle-vehicle_status_id').val(vehicle_status_id);
+                $('#update-vehicle-image-data-1').attr('src', vehicle_image_data_1);
+                $('#update-vehicle-image-data-2').attr('src', vehicle_image_data_2);
+                $('#update-vehicle-image-data-3').attr('src', vehicle_image_data_3);
             });
 
             //xử lý sự kiện Update vehicle
             $(document).on('click', '.btn-submit-update-vehicle', function(e) {
                 e.preventDefault();
+                console.log($('#update-vehicle-model_id').val());
 
-                let vehicle_id = $('#update_vehicle_id').val();
-                let model_type = $('#update_model_type').val().trim();
-                let engine_type = $('#update_engine_type').val().trim();
-                let color = $('#update_color').val().trim();
-                let year_of_production = $('#update_year_of_production').val().trim();
-                let brand_id = $('#update_brand_id').val().trim();
-                let vehicle_status_id = $('#update_vehicle_status_id').val().trim();
+                let formData = new FormData();
+                let totalImages = $('input[name="update-vehicle-vehicle_image_name[]"]')[0].files.length; // Số lượng hình
+
+                for (let i = 0; i < totalImages; i++) {
+                    // Thêm từng hình vào formData
+                    formData.append('vehicle_image_name[]', $('input[name="update-vehicle-vehicle_image_name[]"]')[0].files[i]);
+                }
+
+                // Các field dữ liệu khác
+                formData.append('vehicle_id', $('#update_vehicle_id').val());
+                formData.append('model_id', $('#update-vehicle-model_id').val());
+                formData.append('CarRentalStore_id', $('#update-vehicle-CarRentalStore_id').val());
+                formData.append('vehicle_description', $('#update-vehicle-vehicle_description').val());
+                formData.append('license_plate', $('#update-vehicle-license_plate').val());
+                formData.append('rental_price_day', $('#update-vehicle-rental_price_day').val());
+                formData.append('vehicle_status_id', $('#update-vehicle-vehicle_status_id').val());
+                formData.append('vehicle_image_id', $('#update_vehicle_image_id').val());
                 
+                let license_plate  = $('#update-vehicle-license_plate').val();
+
                 $.ajax({
                     url: "{{route('admin.vehicle.update')}}",
                     method: 'POST',
-                    data: { 
-                        vehicle_id : vehicle_id,
-                        model_type: model_type,
-                        engine_type: engine_type,
-                        color: color,
-                        year_of_production: year_of_production,
-                        brand_id: brand_id,
-                        vehicle_status_id : vehicle_status_id,
-                    },
+                    data: formData,
+                    processData: false,  // Ngăn jQuery xử lý dữ liệu
+                    contentType: false,  // Ngăn jQuery thiết lập Content-Type
                     success: function(response) {
                         console.log(response);
                         if(response.status === 'success') {
@@ -364,7 +387,7 @@
                                 $('.pagination').load(location.href + ' .pagination > *');
                             }
 
-                            Command: toastr["success"](`Cập nhật thành công xe "<span style="font-weight: bold;">${model_type}</span>"`, "Cập nhật xe")
+                            Command: toastr["success"](`Cập nhật thành công xe "<span style="font-weight: bold;">${license_plate}</span>"`, "Cập nhật xe")
 
                             toastr.options = {
                                 "closeButton": false,
@@ -406,6 +429,7 @@
                 e.preventDefault();
                 let vehicle_id = $(this).data('vehicle-id');
                 let vehicle_image_id = $(this).data('vehicle-image-id');
+                let license_plate = $(this).data('license-plate');
                 
                 if(confirm(`Bạn có muốn xóa xe ${vehicle_id} không`)) {
                     $.ajax({
@@ -430,7 +454,7 @@
                                 $('.pagination').load(location.href + ' .pagination > *');
                             }
 
-                            Command: toastr["success"](`Xóa thành công xe`, "Xóa xe")
+                            Command: toastr["success"](`Xóa thành công xe có biển số ${license_plate}`, "Xóa xe")
 
                             toastr.options = {
                                 "closeButton": false,

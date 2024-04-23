@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\admins;
 
 use App\Models\Vehicle;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\VehicleImages;
 use Illuminate\Support\Facades\DB;
@@ -25,6 +26,7 @@ class VehicleController extends Controller
                 'vehicles.*',
                 'vehicles.created_at as vehicle_created_at',
                 'vehicles.description as vehicle_description',
+                'vehicles.CarRentalStore_id as vehicle_carrentalstore_id',
                 'carrentalstore.*',
                 'models.*',
                 'vehicleimages.*',
@@ -32,6 +34,7 @@ class VehicleController extends Controller
                 'location.*',
                 DB::raw("CONCAT(models.model_name, ' - ', models.engine_type, ' - ', models.color, ' - ', models.year_of_production) as model_type"),
             )
+            ->orderBy('vehicles.vehicle_id', 'asc')
             ->paginate(2);
 
         // $vehicleList = Vehicle::all();
@@ -44,26 +47,37 @@ class VehicleController extends Controller
     {
         // dd($request->CarRentalStore_id);
 
-
+        $vehicle_image_data_1 = null;
+        $vehicle_image_data_2 = null;
+        $vehicle_image_data_3 = null;
         if ($request->hasfile('vehicle_image_name')) {
             $images = $request->file('vehicle_image_name');
-        
+            
+            // dd($images);
+            $image_arr = [];
             foreach ($images as $index => $image) {
-                // Lưu hình ảnh và lấy đường dẫn
-                $name = $image->getClientOriginalName();
-                $path =env('APP_URL', 'http://127.0.0.1/:8000/') .$image->storeAs('storage/vehicle/images', $name);
+                $fileName = Str::slug($request->license_plate) . '_' . time() . '.' . $image->getClientOriginalName(). '.' . $image->extension();
+    
+                // Store the image and retrieve the path
+                $image->storeAs('vehicle/images', $fileName, 'public');
+                $path = asset('storage/vehicle/images/' . $fileName);
+    
         
-               
-        
-                // Tùy thuộc vào số lượng ảnh và việc lưu chúng vào biến tương ứng
-                // Đoạn code này chỉ là ví dụ, cần được điều chỉnh tùy thuộc vào logic cụ thể của bạn.
-                if ($index === 0) {
+                $image_arr[] = $path;
+            }
+        }
+
+        foreach ($image_arr as $index => $path) {
+            switch ($index) {
+                case 0:
                     $vehicle_image_data_1 = $path;
-                } elseif ($index === 1) {
+                    break;
+                case 1:
                     $vehicle_image_data_2 = $path;
-                } elseif ($index === 2) {
+                    break;
+                case 2:
                     $vehicle_image_data_3 = $path;
-                }
+                    break;
             }
         }
 
@@ -103,31 +117,93 @@ class VehicleController extends Controller
     {
         // return $request->all();
         $rules = [
-            'vehicle_name' => 'required|unique:vehicles,vehicle_name,'.$request->vehicle_id.',vehicle_id',
-            'vehicle_status_id' => 'required',
+            'CarRentalStore_id' => 'required|min:0',
+            'model_id' => 'required|min:0',
+            'vehicle_description' => 'required|string',
+            'license_plate' => 'required|string|regex:/^\d{2}[A-Z]{1,2}-\d{3}\.\d{1,2}$/',
+            'rental_price_day' => 'required|integer|min:0',
+            'vehicle_status_id' => 'required|integer|exists:vehiclestatus,vehicle_status_id',
+            'vehicle_image_name' => 'array|size:3',
+            'vehicle_image_name.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ];
 
         $messages = [
-            'required' => ':attribute không được để trống',
-            'unique' => ':attribute đã tồn tại trong hệ thống',
+            'required' => ':attribute không được bỏ trống',
+            'min' => ':attribute không được nhỏ hơn :min',
+            'integer' => ':attribute phải là số',
+            'regex' => ':attribute không hợp lệ',
+            'size' => ':attribute phải đủ 3 ảnh',
         ];
 
         $attributes = [
-            'vehicle_name' => 'Tên hãng xe',
-            'vehicle_status_id' => 'Trạng thái hãng xe'
+            'CarRentalStore_id' => 'Cửa hàng',
+            'model_id' => 'Mẫu xe',
+            'vehicle_description' => 'Thông tin chi tiết xe',
+            'license_plate' => 'Biển số xe',
+            'rental_price_day' => 'Số tiền thuê',
+            'vehicle_status_id' => 'Trạng thái xe',
+            'vehicle_image_name' => 'Hình ảnh xe',
         ];
         $request->validate($rules, $messages, $attributes);
+
+        $vehicle = null;
+
+        if ($request->hasfile('vehicle_image_name')) {
+            $images = $request->file('vehicle_image_name');
+        
+            foreach ($images as $index => $image) {
+                // Tạo tên file dựa trên thông tin độc nhất của yêu cầu, thêm timestamp để tránh trùng lặp
+                $fileName = Str::slug($request->license_plate) . '_' . time() . '.' . $image->extension();
+    
+                // Store the image and retrieve the path
+                $image->storeAs('vehicle/images', $fileName, 'public');
+                $path = asset('storage/vehicle/images/' . $fileName);
+        
+                // Tùy thuộc vào số lượng ảnh và việc lưu chúng vào biến tương ứng
+                // Đoạn code này chỉ là ví dụ, cần được điều chỉnh tùy thuộc vào logic cụ thể của bạn.
+                if ($index === 0) {
+                    $vehicle_image_data_1 = $path;
+                } elseif ($index === 1) {
+                    $vehicle_image_data_2 = $path;
+                } elseif ($index === 2) {
+                    $vehicle_image_data_3 = $path;
+                }
+            }
+
+            VehicleImages::where('vehicle_img_id', $request->vehicle_image_id)->update([
+                'vehicle_image_data_1' => $vehicle_image_data_1,
+                'vehicle_image_data_2' => $vehicle_image_data_2,
+                'vehicle_image_data_3' => $vehicle_image_data_3,
+            ]);
+            Vehicle::where('vehicle_id', $request->vehicle_id)->update([
+                'CarRentalStore_id' => $request->CarRentalStore_id,
+                'model_id' => $request->model_id,
+                'description' => $request->vehicle_description,
+                'rental_price_day' => $request->rental_price_day,
+                'license_plate' => $request->license_plate,
+                'vehicle_image_id' =>$request->vehicle_image_id,
+                'vehicle_status_id' => $request->vehicle_status_id,
+            ]);
+        }else {
+            Vehicle::where('vehicle_id', $request->vehicle_id)->update([
+                'CarRentalStore_id' => $request->CarRentalStore_id,
+                'model_id' => $request->model_id,
+                'description' => $request->vehicle_description,
+                'rental_price_day' => $request->rental_price_day,
+                'license_plate' => $request->license_plate,
+                'vehicle_status_id' => $request->vehicle_status_id,
+            ]);
+            // dd($request->all());
+        }
 
         // $vehicle_id = $request->vehicle_id;
         // $vehicle = vehicle::findOrFail($vehicle_id);
 
-        Vehicle::where('vehicle_id', $request->vehicle_id)->update([
-            'vehicle_name' => $request->vehicle_name,
-            'vehicle_status_id' => $request->vehicle_status_id
-        ]);
-
+        
+        $vehicle = Vehicle::all();
         return response()->json([
             'status' => 'success',
+            'vehicle' => $vehicle,
         ]);
     }
 
