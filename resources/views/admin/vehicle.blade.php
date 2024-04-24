@@ -417,7 +417,7 @@
                             console.log(field);
                             // console.log(errMesage);
                             console.log($('#error-'+field));
-                            $('#update-error-' + field).append('<span class="text-danger">' + messages.join('<br>') + '</span>');
+                            $('#error-update-vehicle-' + field).append('<span class="text-danger">' + messages.join('<br>') + '</span>');
                         });
                     }
                 });

@@ -120,7 +120,7 @@ class VehicleController extends Controller
             'CarRentalStore_id' => 'required|min:0',
             'model_id' => 'required|min:0',
             'vehicle_description' => 'required|string',
-            'license_plate' => 'required|string|regex:/^\d{2}[A-Z]{1,2}-\d{3}\.\d{1,2}$/',
+            'license_plate' => 'required|string|regex:/^\d{2}[A-Z]{1,2}-\d{3}\.\d{1,2}$/|unique:vehicles,license_plate,' . $request->vehicle_id . ',vehicle_id',
             'rental_price_day' => 'required|integer|min:0',
             'vehicle_status_id' => 'required|integer|exists:vehiclestatus,vehicle_status_id',
             'vehicle_image_name' => 'array|size:3',
@@ -133,6 +133,7 @@ class VehicleController extends Controller
             'integer' => ':attribute phải là số',
             'regex' => ':attribute không hợp lệ',
             'size' => ':attribute phải đủ 3 ảnh',
+            'unique' => ':attribute đã tồn tại',
         ];
 
         $attributes = [

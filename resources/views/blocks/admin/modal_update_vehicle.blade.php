@@ -19,7 +19,7 @@
                             <option value="{{$carrentalstore_item->CarRentalStore_id}}">{{$carrentalstore_item->unique_location}}</option>
                         @endforeach
                     </select>
-                    <div class="message_error" id="error-CarRentalStore_id">
+                    <div class="message_error" id="error-update-vehicle-CarRentalStore_id">
 
                     </div>
                 </div>
@@ -30,14 +30,14 @@
                             <option value="{{$model_item->model_id}}">{{$model_item->model_type}}</option>
                         @endforeach
                     </select>
-                    <div class="message_error" id="error-model_id">
+                    <div class="message_error" id="error-update-vehicle-model_id">
 
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="update-vehicle-vehicle_description">Nhập thông tin chi tiết</label>
                     <textarea class="form-control" name="update-vehicle-vehicle_description" id="update-vehicle-vehicle_description" cols="30" rows="2"></textarea>
-                    <div class="message_error" id="error-vehicle_description">
+                    <div class="message_error" id="error-update-vehicle-vehicle_description">
 
                     </div>
                 </div>
@@ -45,7 +45,7 @@
                 <div class="form-group">
                     <label for="update-vehicle-license_plate">Nhập biển số xe</label>
                     <input type="text" class="form-control" id="update-vehicle-license_plate" name="update-vehicle-license_plate" placeholder="75AF-137.80" value="" required>
-                    <div class="message_error" id="error-license_plate">
+                    <div class="message_error" id="error-update-vehicle-license_plate">
 
                     </div>
                 </div>
@@ -53,7 +53,7 @@
                 <div class="form-group">
                     <label for="update-vehicle-rental_price_day">Nhập số tiền thuê một ngày</label>
                     <input type="number" min="0" class="form-control" id="update-vehicle-rental_price_day" name="update-vehicle-rental_price_day" placeholder="Số tiền thuê mỗi ngày...." required>
-                    <div class="message_error" id="error-rental_price_day">
+                    <div class="message_error" id="error-update-vehicle-rental_price_day">
 
                     </div>
                 </div>
@@ -65,7 +65,7 @@
                             <option value="{{$vehicle_status_item->vehicle_status_id}}">{{$vehicle_status_item->vehicle_status_name}}</option>
                         @endforeach
                     </select>
-                    <div class="message_error" id="error-vehicle_status">
+                    <div class="message_error" id="error-update-vehicle-vehicle_status">
 
                     </div>
                 </div>
@@ -76,7 +76,7 @@
                     <img style="width: 100px; height: 100px; object-fit: cover;" id="update-vehicle-image-data-1" src="" alt="Hình ảnh của xe">
                     <img style="width: 100px; height: 100px; object-fit: cover;" id="update-vehicle-image-data-2" src="" alt="Hình ảnh của xe">
                     <img style="width: 100px; height: 100px; object-fit: cover;" id="update-vehicle-image-data-3" src="" alt="Hình ảnh của xe">
-                    <div class="message_error" id="error-vehicle_image_name">
+                    <div class="message_error" id="error-update-vehicle-vehicle_image_name">
 
                     </div>
                 </div>
