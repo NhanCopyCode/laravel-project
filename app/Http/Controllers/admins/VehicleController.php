@@ -254,15 +254,40 @@ class VehicleController extends Controller
 
     //Search vehicle
     public function searchvehicle(Request $request) {
-        $vehicleList = Vehicle::where('vehicle_name', 'like', '%'.$request->search_string_vehicle.'%')
-            ->orWhere('vehicle_id', 'like', '%'.$request->search_string_vehicle.'%')
-            ->orderBy('vehicle_id', 'asc')
-            ->paginate(5);
-        
-        // dd($request->search_string_vehicle);
-        // dd($vehicleList);
+        $searchString = $request->search_string_vehicle;
 
-        if($vehicleList->count() > 0) {
+        $vehicleList = DB::table('vehicles')
+            ->join('models', 'models.model_id', '=', 'vehicles.model_id')
+            ->join('vehiclestatus', 'vehiclestatus.vehicle_status_id', '=', 'vehicles.vehicle_status_id')
+            ->join('vehicleimages', 'vehicleimages.vehicle_img_id', '=', 'vehicles.vehicle_image_id')
+            ->join('carrentalstore', 'carrentalstore.CarRentalStore_id', '=', 'vehicles.CarRentalStore_id')
+            ->join('location', 'location.location_id', '=', 'carrentalstore.Location_id')
+            ->select(
+                'vehicles.*',
+                'vehicles.created_at as vehicle_created_at',
+                'vehicles.description as vehicle_description',
+                'vehicles.CarRentalStore_id as vehicle_carrentalstore_id',
+                'carrentalstore.*',
+                'models.*',
+                'vehicleimages.*',
+                'vehiclestatus.*',
+                'location.*',
+                DB::raw("CONCAT(models.model_name, ' - ', models.engine_type, ' - ', models.color, ' - ', models.year_of_production) as model_type"),
+            )
+            ->where(function ($query) use ($searchString) {
+                $query->where('vehicles.vehicle_id', 'like', '%'.$searchString.'%')
+                    ->orWhere('vehicles.description', 'like', '%'.$searchString.'%')
+                    ->orWhere('vehicles.license_plate', 'like', '%'.$searchString.'%')
+                    ->orWhere('vehiclestatus.vehicle_status_name', 'like', '%'.$searchString.'%')
+                    // Sửa dòng dưới đây:
+                    ->orWhereRaw("CONCAT(models.model_name, ' - ', models.engine_type, ' - ', models.color, ' - ', models.year_of_production) like ?", ['%'.$searchString.'%'])
+                    ->orWhere('location.unique_location', 'like', '%'. $searchString . '%');
+            })
+            ->orderBy('vehicles.vehicle_id', 'asc')
+            ->paginate(2);
+
+
+        if($vehicleList->isNotEmpty() > 0) {
             return view('blocks.admin.search_vehicle', compact('vehicleList'))->with('i', (request()->input('page', 1) - 1) * 5)->render();
         }else {
             return response()->json([
