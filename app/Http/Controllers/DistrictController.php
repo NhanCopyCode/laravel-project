@@ -9,11 +9,11 @@ class DistrictController extends Controller
     //
     public function getDistrictById(Request $request)
     {
-        $provine_id  = $request->provine_id;
+        $province_id  = $request->province_id;
         $districts = config('districts');
 
-        $districts = array_filter( $districts['data']['data'], function($district) use ($provine_id) {
-            return  $district['parent_code'] === $provine_id;
+        $districts = array_filter( $districts['data']['data'], function($district) use ($province_id) {
+            return  $district['parent_code'] === $province_id;
         });
 
         if($districts)
@@ -25,6 +25,7 @@ class DistrictController extends Controller
         }else {
             return response()->json([
                 'status_code' => 'error',
+                'Lỗi ở file DistrictController' => "error"
             ]);
         }
     }

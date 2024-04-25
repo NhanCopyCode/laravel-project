@@ -17,7 +17,7 @@
             <div class="modal-body">
                 <div class="form-group">
                     <label for="provinceSelect">Chọn Tỉnh/Thành phố</label>
-                    <select class="form-control update-provinceSelectClass" name="province" id="update-provinceSelect">
+                    <select class="form-control update-provinceSelectClass" name="province" id="update-carrentalstore-provinceSelect">
 
                     </select>
                     <div class="message_error_update_carrentalstore message_error_update_province">
@@ -27,7 +27,7 @@
 
                 <div class="form-group">
                     <label for="districtSelect">Chọn Quận/Huyện</label>
-                    <select class="form-control update-districtSelectClass" name="district" id="update-districtSelect">
+                    <select class="form-control update-districtSelectClass" name="district" id="update-carrentalstore-districtSelect">
 
                     </select>
                     <div class="message_error_update_carrentalstore message_error_update_district">
@@ -37,7 +37,7 @@
 
                 <div class="form-group">
                     <label for="wardSelect">Chọn Phường/Xã</label>
-                    <select class="form-control update-wardSelectClass" name="ward" id="update-wardSelect">
+                    <select class="form-control update-wardSelectClass" name="ward" id="update-carrentalstore-wardSelect">
 
                     </select>
                     <div class="message_error_update_carrentalstore message_error_update_ward">
@@ -47,7 +47,7 @@
 
                 <div class="form-group">
                     <label for="unique_location">Địa chỉ cụ thể</label>
-                    <input required type="text" name="unique_location" class="form-control" id="update-unique_location" placeholder="Nhập địa chỉ....">
+                    <input required type="text" name="unique_location" class="form-control" id="update-carrentalstore-unique_location" placeholder="Nhập địa chỉ....">
                     <div class="message_error_update_carrentalstore message_error_update_unique_location">
 
                     </div>
@@ -55,7 +55,7 @@
 
                 <div class="form-group">
                     <label for="phone_number">Số điện thoại liên hệ</label>
-                    <input required type="number" name="phone_number" class="form-control" id="update-phone_number" placeholder="Nhập số điện thoại....">
+                    <input required type="number" name="phone_number" class="form-control" id="update-carrentalstore-phone_number" placeholder="Nhập số điện thoại....">
                     <div class="message_error_update_carrentalstore message_error_update_phone_number">
 
                     </div>
@@ -63,7 +63,7 @@
 
                 <div class="form-group">
                     <label for="avatar">Hình ảnh cửa hàng</label>
-                    <input type="file" id="update-avatar" class="form-control" name="avatar">
+                    <input type="file" id="update-carrentalstore-avatar" class="form-control" name="avatar">
                     <img class="image-preview-carrentalstore"  alt="Ảnh cửa hàng" style="width: 100px; height: 100px;margin-top: 12px;">
                     <div class="message_error_update_carrentalstore message_error_update_avatar">
 
@@ -72,7 +72,7 @@
 
                 <div class="form-group">
                     <label for="avatar">Nhập thêm tiểu sử cửa hàng</label>
-                    <textarea required class="form-control" name="description" id="update-description" cols="30" rows="2"></textarea>
+                    <textarea required class="form-control" name="description" id="update-carrentalstore-description" cols="30" rows="2"></textarea>
                     <div class="message_error_update_carrentalstore message_error_update_avatar">
 
                     </div>
@@ -80,7 +80,7 @@
                 
                 <div class="form-group">
                     <label for="branch_id">Chọn chi nhánh</label>
-                    <select class="form-control" name="branch_id" id="update-branch_id">
+                    <select class="form-control" name="branch_id" id="update-carrentalstore-branch_id">
                         @foreach ($branch_list as $branch)
                             <option value="{{$branch->branch_id}}">{{$branch->branch_name}}</option>
                         @endforeach

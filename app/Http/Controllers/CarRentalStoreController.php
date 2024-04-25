@@ -7,6 +7,9 @@ use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\CarRentalStore;
 use Illuminate\Support\Facades\DB;
+use IlluminateSupportFacadesStorage;
+
+use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\CarRentalStoreRequest;
 
 class CarRentalStoreController extends Controller
@@ -35,8 +38,12 @@ class CarRentalStoreController extends Controller
          // Try to handle file upload
          if ($request->hasFile('avatar') && $request->file('avatar')->isValid()) {
             $fileName = Str::slug($request->input('unique_location')) . '_' . time() . '.' . $request->avatar->extension();
-             // Lưu vào thư mục 'public/storage/uploads/carrentalstores'
+            
+            // Lưu vào thư mục 'public/storage/uploads/carrentalstores'
             $request->avatar->storeAs('uploads/carrentalstores', $fileName, 'public');
+        
+            // Lấy URL chính xác đến file đã lưu
+            $path = env('APP_URL'). Storage::url('uploads/carrentalstores/' . $fileName);
         } else {
             // Handle the error if avatar is not uploaded
             return response()->json([
@@ -60,7 +67,7 @@ class CarRentalStoreController extends Controller
             'phone_number' => $request->input('phone_number'),
             'branch_id' => (int) $request->input('branch_id'),
             // Save the path to your image here
-            'avatar' => 'storage/uploads/carrentalstores/' . $fileName,
+            'avatar' => $path,
         ]);
 
         $carrentalstore->save(); // Store the data
@@ -120,12 +127,16 @@ class CarRentalStoreController extends Controller
         // $carRentalStore_id = $request->carRentalStore_id;
         // $carRentalStore = carRentalStore::findOrFail($carRentalStore_id);
 
-        $fileName = "";
         if ($request->hasFile('avatar') && $request->file('avatar')->isValid()) {
             $fileName = Str::slug($request->input('unique_location')) . '_' . time() . '.' . $request->avatar->extension();
-             // Lưu vào thư mục 'public/storage/uploads/carrentalstores'
+            
+            // Lưu vào thư mục 'public/storage/uploads/carrentalstores'
             $request->avatar->storeAs('uploads/carrentalstores', $fileName, 'public');
-        } 
+        
+            // Lấy URL chính xác đến file đã lưu
+            $path = env('APP_URL'). Storage::url('uploads/carrentalstores/' . $fileName);
+        }
+        // dd($request->all());
 
         Location::where('location_id', $request->location_id)->update([
             'province_id' => $request->province_id,
@@ -144,8 +155,8 @@ class CarRentalStoreController extends Controller
         $carRentalStore->description = $request->description;
         $carRentalStore->phone_number = $request->phone_number;
         $carRentalStore->branch_id = $request->branch_id;
-        if (isset($avatarPath)) {
-            $carRentalStore->avatar = $avatarPath;
+        if (isset($path)) {
+            $carRentalStore->avatar = $path;
         }
         $carRentalStore->updated_at = $current_datetime;
         $carRentalStore->save();
