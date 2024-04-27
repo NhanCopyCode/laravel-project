@@ -56,6 +56,20 @@ class AppServiceProvider extends ServiceProvider
 
             $vehicle_status_list = VehicleStatus::all();
 
+            $location_list = DB::table('carrentalstore')
+                ->join('location', 'location.location_id', '=', 'carrentalstore.location_id')
+                ->select('carrentalstore.*', 'location.*')
+                ->get();
+
+            $vehicle_list = DB::table('vehicles')
+                ->join('carrentalstore', 'carrentalstore.CarRentalStore_id', '=', 'vehicles.CarRentalStore_id')
+                ->join('models', 'models.model_id', '=', 'vehicles.model_id')
+                ->join('vehiclestatus', 'vehiclestatus.vehicle_status_id', '=', 'vehicles.vehicle_status_id')
+                ->join('vehicleimages', 'vehicleimages.vehicle_img_id', '=', 'vehicles.vehicle_image_id')
+                ->select('carrentalstore.*', 'vehicles.*', 'vehicleimages.*', 'models.*','vehiclestatus.*')
+                ->get();
+
+
 
             $view->with(compact(
                 'branch_status_list', 
@@ -66,6 +80,8 @@ class AppServiceProvider extends ServiceProvider
                 'model_list',
                 'carrentalstore_list',
                 'vehicle_status_list',
+                'location_list',
+                'vehicle_list'
             ));
         });
     }

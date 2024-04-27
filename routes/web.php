@@ -6,6 +6,7 @@ use App\Http\Controllers\WardController;
 use Laravel\Socialite\Facades\Socialite;
 use App\Http\Controllers\ModelController;
 
+use App\Http\Controllers\BookingController;
 use App\Http\Controllers\DistrictController;
 use App\Http\Controllers\SwitchModeController;
 use App\Http\Controllers\error\ErrorController;
@@ -14,6 +15,7 @@ use App\Http\Controllers\admins\BrandController;
 use App\Http\Controllers\clients\HomeController;
 use App\Http\Controllers\admins\BranchController;
 use App\Http\Controllers\Auth\ProviderController;
+use App\Http\Controllers\SearchVehicleController;
 use App\Http\Controllers\admins\ProfileController;
 use App\Http\Controllers\admins\VehicleController;
 use App\Http\Controllers\CarRentalStoreController;
@@ -31,6 +33,9 @@ use App\Http\Controllers\CarRentalStoreController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
+Route::get('/test-home', function() {
+    // dd('XIn chào');
+});
 
 Route::prefix('auth')->name('auth.')->group(function () {
     Route::get('/', [UserController::class, 'index'])->name('index');
@@ -82,10 +87,23 @@ Route::prefix('auth')->name('auth.')->group(function () {
 
 //Route clients
 Route::prefix('/user')->name('user.')->middleware('auth')->group(function () {
+    //Vehicle
+    Route::get('/vehicle/{vehicle}', [VehicleController::class, 'showVehicle'])->name('showVehicle');
 
+    //Search vehicle available
+    Route::get('/search', [SearchVehicleController::class, 'search_vehicle'])->name('search_vehicle');
+
+    // Profile
     Route::get('/profile', [UserController::class, 'profile'])->name('profile');
 
-    // Route::post();
+
+    //Booking 
+    Route::get('/booking-history', [BookingController::class, 'showBookingHistory'])->name('booking_history');
+
+    // Xe đăng đặt
+    Route::get('/vehicle-currently-booked', [BookingController::class, 'showBookingHistory'])->name('vehicle_currently_booked');
+
+
 });
 
 // Route admin

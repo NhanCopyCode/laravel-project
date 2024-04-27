@@ -1,11 +1,7 @@
 @extends('layouts.clients.client_layout')
 
-@section('content')
- 
-    @include('blocks.clients.slider')
+@section('content')    
 
-    @include('blocks.clients.category')
-
-    @include('blocks.clients.content')
+   
     
 @endsection

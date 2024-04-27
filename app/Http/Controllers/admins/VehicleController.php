@@ -308,4 +308,9 @@ class VehicleController extends Controller
             }
         }
     }
+
+    public function showVehicle(Vehicle $vehicle)
+    {
+        dd($vehicle);
+    }
 }
