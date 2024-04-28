@@ -61,7 +61,7 @@
                     <h4>{{$vehicle->model_name}}</h4>
                     <h4>{{$vehicle->rental_price_day}} VND</h4>
                 </div>
-                <p>{{$vehicle->description}}</p>
+                <p class="vehicle__description">{{$vehicle->description}}</p>
                 <p>Trạng thái: 
                     @if ($vehicle->vehicle_status_name === 'Hoạt động')
                         <span class="text-success">{{$vehicle->vehicle_status_name}}</span>
