@@ -37,7 +37,7 @@
 
         </div>
         <div class="input-box">
-            <input type="text" class="input-field" placeholder="Email" name="email" autocomplete="off" required value="{{old('password')}}">
+            <input type="text" class="input-field" placeholder="Email" name="email" autocomplete="off" required value="{{old('email')}}">
             @error('email')
                 <span style="color: red;">{{$message}}</span>
             @enderror

@@ -25,9 +25,9 @@ class SearchVehicleClient extends FormRequest
             //
             'location_id' => 'required|integer',
             // 'before_or_equal:end-date' cho phép start-date nhỏ hơn hoặc bằng end-date
-            'start-date' => 'required|date|before_or_equal:end-date',
+            'start_date' => 'required|date|before_or_equal:end_date',
             // 'after_or_equal:start-date' cho phép end-date lớn hơn hoặc bằng start-date
-            'end-date' => 'required|date|after_or_equal:start-date',
+            'end_date' => 'required|date|after_or_equal:start_date',
         ];
     }
 
@@ -45,8 +45,8 @@ class SearchVehicleClient extends FormRequest
     {
         return [
             'location_id' => 'Địa điểm',
-            'start-date' => 'Ngày bắt đầu',
-            'end-date' => 'Ngày kết thúc'
+            'start_date' => 'Ngày bắt đầu',
+            'end_date' => 'Ngày kết thúc'
         ];
     }
 }

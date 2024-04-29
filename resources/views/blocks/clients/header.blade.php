@@ -7,9 +7,9 @@
     <div class="booking__container">
       <form method="GET" action="{{route('user.search_vehicle')}}">
         <div class="form__group">
-          <select class="form-control background-transparent" name="location_id" id="location_client" value="{{old('location_id')}}">
+          <select class="form-control background-transparent" name="location_id" id="location_client" value="{{ request()->location_id}}">
               @foreach ($location_list as $location)
-                  <option value="{{$location->province_id}}">{{$location->province}}</option>
+                  <option value="{{$location->location_id}}">{{$location->province}}</option>
               @endforeach
           </select>
           <p>Chọn nơi muốn thuê</p>
@@ -18,16 +18,16 @@
           @enderror
         </div>
         <div class="form__group">
-          <input class="form-control background-transparent" type="date" id="start-date" name="start-date" value="{{old('start-date')}}">
+          <input class="form-control background-transparent" type="date" id="start-date" name="start_date" value="{{ request()->start_date}}">
           <p>Ngày bắt đầu</p>
-          @error('start-date')
+          @error('start_date')
               <span class="text-danger">{{$message}}</span>
           @enderror
         </div>
         <div class="form__group">
-          <input class="form-control background-transparent" type="date" id="end-date" name="end-date" value="{{old('end-date')}}">
+          <input class="form-control background-transparent" type="date" id="end-date" name="end_date" value="{{ request()->end_date}}">
           <p>Ngày kết thúc</p>
-          @error('end-date')
+          @error('end_date')
               <span class="text-danger">{{$message}}</span>
           @enderror
         </div>
