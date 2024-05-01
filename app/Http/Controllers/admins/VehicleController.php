@@ -309,8 +309,9 @@ class VehicleController extends Controller
         }
     }
 
-    public function showVehicle(Vehicle $vehicle)
+    public function showVehicle(Vehicle $vehicle, Request $request)
     {
-        dd($vehicle);
+
+        return view('clients.vehicle.detail', compact('vehicle'));
     }
 }

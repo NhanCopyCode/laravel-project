@@ -33,85 +33,17 @@
     @include('blocks.clients.header')
    
     
-    <section class="section__container vehicle__container">
-        <h2 class="section__header">Xe máy</h2>
-        <div class="vehicle__grid">
-        <div class="vehicle__card">
-            <img src="assets/hotel-1.jpg" alt="vehicle" />
-            <div class="vehicle__content">
-            <div class="vehicle__card__header">
-                <h4>The Plaza Hotel</h4>
-                <h4>$499</h4>
-            </div>
-            <p>New York City, USA</p>
-            </div>
-        </div>
-        @foreach ($vehicle_list as $index => $vehicle)
-            <a href="{{route('user.showVehicle', $vehicle->vehicle_id)}}" class="vehicle__card">
-                <div class="swiper-container mySwiper{{$index}}">
-                    <div class="swiper-wrapper vehicle-img__container">
-                        <img class="swiper-slide" src="{{$vehicle->vehicle_image_data_1}}" alt="Ảnh xe" />
-                        <img class="swiper-slide" src="{{$vehicle->vehicle_image_data_2}}" alt="Ảnh xe" />
-                        <img class="swiper-slide" src="{{$vehicle->vehicle_image_data_3}}" alt="Ảnh xe" />
-                    </div>
-                </div>
-                <div class="swiper-pagination{{$index}} swiper-pagination"></div>
-                <div class="vehicle__content">
-                <div class="vehicle__card__header">
-                    <h4>{{$vehicle->model_name}}</h4>
-                    <h4>{{$vehicle->rental_price_day}} VND</h4>
-                </div>
-                <p class="vehicle__description">{{$vehicle->description}}</p>
-                <p>Trạng thái: 
-                    @if ($vehicle->vehicle_status_name === 'Hoạt động')
-                        <span class="text-success">{{$vehicle->vehicle_status_name}}</span>
-                    @else 
-                        <span class="text-danger">{{$vehicle->vehicle_status_name}}</span>
+ 
 
-                    @endif
-                </p>
-                </div>
-            </a>
-        @endforeach
-        </div>
-    </section>
+   
 
-    <section class="client">
-        <div class="section__container client__container">
-        <h2 class="section__header">What our client say</h2>
-        <div class="client__grid">
-            <div class="client__card">
-            <img src="assets/client-1.jpg" alt="client" />
-            <p>
-                The booking process was seamless, and the confirmation was
-                instant. I highly recommend WDM&Co for hassle-free hotel bookings.
-            </p>
-            </div>
-            <div class="client__card">
-            <img src="assets/client-2.jpg" alt="client" />
-            <p>
-                The website provided detailed information about hotel, including
-                amenities, photos, which helped me make an informed decision.
-            </p>
-            </div>
-            <div class="client__card">
-            <img src="assets/client-3.jpg" alt="client" />
-            <p>
-                I was able to book a room within minutes, and the hotel exceeded
-                my expectations. I appreciate WDM&Co's efficiency and reliability.
-            </p>
-            </div>
-        </div>
-        </div>
-    </section>
-
-    <section class="section__container">
+    {{-- <section class="section__container">
         <div class="reward__container">
         <p>100+ discount codes</p>
         <h4>Join rewards and discover amazing discounts on your booking</h4>
         <button class="reward__btn">Join Rewards</button>
         </div>
-    </section>
+    </section> --}}
 
    
     @yield('content')
