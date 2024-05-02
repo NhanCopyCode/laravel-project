@@ -311,6 +311,17 @@ class VehicleController extends Controller
 
     public function showVehicle(Vehicle $vehicle, Request $request)
     {
+        $vehicle_information = DB::table('vehicles')
+        ->join('vehicleimages', 'vehicles.vehicle_image_id' , '=', 'vehicleimages.vehicle_img_id')
+        ->join('vehiclestatus', 'vehiclestatus.vehicle_status_id' , '=', 'vehicles.vehicle_status_id')
+        ->join('models', 'models.model_id' , '=', 'vehicles.model_id')
+        ->join('carrentalstore as crs1', 'crs1.CarRentalStore_id' , '=', 'vehicles.CarRentalStore_id')
+        ->join('location', 'location.location_id' , '=', 'crs1.location_id')
+        ->where('vehicle_id', $vehicle->vehicle_id)
+        ->select('vehicleimages.*', 'models.*', 'crs1.*', 'vehiclestatus.*', 'vehicles.*', 'location.*')
+        ->get();
+
+        $vehicle = $vehicle_information[0];
 
         return view('clients.vehicle.detail', compact('vehicle'));
     }

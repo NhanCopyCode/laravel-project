@@ -559,3 +559,37 @@ nav {
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+/* vehicle detail css */
+.vehicle-detail__group-img {
+  display: flex;
+  width: 100%;
+  display: flex;
+}
+
+.vehicle-detail__group-img > img {
+  width: 60%;
+  object-fit: cover;
+}
+
+.vehicle-detail__container {
+  display: flex;
+}
+
+.vehicle-detail__container-left {
+  width: 50%;
+}
+
+.vehicle-detail__container-right {
+  width: 50%;
+  padding-top: 50px;
+  padding-left: 12px;
+}
+.vehicle-detail__container-right__group-input {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group {
+  margin-bottom: 16px;
+}

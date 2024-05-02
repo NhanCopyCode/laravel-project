@@ -7,6 +7,7 @@ use App\Models\Branch;
 use App\Models\BrandStatus;
 use App\Models\ModelStatus;
 use App\Models\BranchStatus;
+use App\Models\PaymentMethod;
 use App\Models\VehicleStatus;
 use App\Models\CarRentalStore;
 use Illuminate\Support\Facades\DB;
@@ -61,8 +62,8 @@ class AppServiceProvider extends ServiceProvider
                 ->select('carrentalstore.*', 'location.*')
                 ->get();
 
-           
-
+            $payment_method_list = PaymentMethod::all();
+            
 
 
             $view->with(compact(
@@ -75,6 +76,7 @@ class AppServiceProvider extends ServiceProvider
                 'carrentalstore_list',
                 'vehicle_status_list',
                 'location_list',
+                'payment_method_list',
             ));
         });
     }

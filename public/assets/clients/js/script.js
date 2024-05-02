@@ -36,8 +36,6 @@ const mobileMenu = document.querySelectorAll('[data-mobile-menu]');
 const mobileMenuCloseBtn = document.querySelectorAll('[data-mobile-menu-close-btn]');
 const overlay = document.querySelector('[data-overlay]');
 
-console.log('nút close')
-console.log(mobileMenuCloseBtn);
 
 for (let i = 0; i < mobileMenuOpenBtn.length; i++) {
   console.log(mobileMenuOpenBtn[i]);
@@ -172,4 +170,17 @@ function off() {
   document.getElementById("overlay").style.display = "none";
 }
 
+document.addEventListener('DOMContentLoaded', function() {
+  function formatCash(str) {
+    return str.split('').reverse().reduce((prev, next, index) => {
+      return ((index % 3) ? next : (next + '.')) + prev
+    })
+  }
 
+  let VND_elements = document.querySelectorAll('.vnd_format');
+  VND_elements.forEach(e => {
+      e.textContent = formatCash(e.textContent);
+  });
+
+
+});
