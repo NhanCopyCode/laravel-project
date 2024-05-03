@@ -1,4 +1,5 @@
 <div class="section__container">
+  
    <div class="vehicle-detail__container">
         <div class="vehicle-detail__container-left">
             <div class="vehicle-detail__header">
@@ -31,27 +32,46 @@
                
                 <p>Giá thuê một ngày: <span class="vnd_format">{{$vehicle->rental_price_day}}</span> VND</p>
             </div>
-            <form action="" method="POST" class="vehicle-detail__container-right__group-input">
-                <div class="form-group">
+            <form action="{{route('user.booking.vehicle')}}" method="POST" class="vehicle-detail__container-right__group-input">
+                @csrf
+                <input type="hidden" name="vehicle_id" value="{{$vehicle->vehicle_id}}">
+                <input type="hidden" name="booking_rental_price_day" value="{{$vehicle->rental_price_day}}">
+                {{-- <div class="form-group">
                     <label for="paymentmethod">Chọn phương thức thanh toán</label>
-                    <select class="form-control" name="payment_method" id="paymentmethod">
-                        @foreach ($payment_method_list as $payment_method_item)
-                            <option value="{{$payment_method_item->payment_method_id}}">{{$payment_method_item->payment_method_name}}</option>
-                        @endforeach
-                    </select>
-               </div>
+                    @foreach ($payment_method_list as $payment_method_item)
+                        <div class="form-check">
+                            <input type="radio" name="payment_method_id" id="payment_method_{{$payment_method_item->payment_method_id}}" class="form-check-input" value="{{$payment_method_item->payment_method_id}}">
+                            <label for="payment_method_{{$payment_method_item->payment_method_id}}" class="form-check-label">
+                                {{$payment_method_item->payment_method_name}}
+                            </label>
+                        </div>
+                    @endforeach
+                    @error('payment_method')
+                        <span class="text-danger">{{$message}}</span>
+                    @enderror
+               </div> --}}
                <div class="form-group">
                     <label for="start_date">Ngày bắt đầu</label>
-                    <input class="form-control" type="date" name="start_date" id="start_date">
+                    <input class="form-control" type="date" name="booking_start_date" id="booking_start_date">
+                    @error('booking_start_date')
+                        <span class="text-danger">{{$message}}</span>
+                    @enderror
                </div>
                <div  class="form-group">
                     <label for="end_date">Ngày kết thúc</label>
-                    <input class="form-control" type="date" name="end_date" id="end_date">
+                    <input class="form-control" type="date" name="booking_end_date" id="booking_end_date">
+                    @error('booking_end_date')
+                        <span class="text-danger">{{$message}}</span>
+                    @enderror
                 </div>
 
-
-
-                <button style="margin-top: 24px;" class="btn btn-primary" type="submit">Đặt xe</button>
+                <p>Số tiền phải trả: <span id="booking_vehicle_price"></span></p>
+                <input type="hidden" id="booking_total_price" name="booking_total_price" value="">
+                <button style="margin-top: 24px;" name="form_booking_vehicle" class="btn btn-primary" type="submit">Đặt xe</button>
+            </form>
+            <form action="{{route('vnpay.payment')}}" method="POST">
+                @csrf
+            <button id="button_vnpay_payment" class="btn btn-outline-dark" name="redirect" type="submit"><ion-icon name="card-outline"></ion-icon>Thanh toán VNPAY</button>
             </form>
         </div>
    </div>

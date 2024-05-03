@@ -593,3 +593,25 @@ nav {
 .form-group {
   margin-bottom: 16px;
 }
+
+/* Responsive vehicle detail site */
+@media (max-width: 768px) {
+  
+  .vehicle-detail__container {
+      flex-direction: column;
+  }
+
+  .vehicle-detail__container-left {
+    width: 100%;
+
+  }
+  .vehicle-detail__container-right {
+    width: 100%;
+  }
+}
+
+/* Style button vnpay */
+#button_vnpay_payment {
+  width: 100%;
+  margin-top: 24px;
+}

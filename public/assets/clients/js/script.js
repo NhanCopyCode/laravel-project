@@ -170,7 +170,10 @@ function off() {
   document.getElementById("overlay").style.display = "none";
 }
 
+// Đoạn code này dùng để format tiền
 document.addEventListener('DOMContentLoaded', function() {
+  
+  //Format tiền
   function formatCash(str) {
     return str.split('').reverse().reduce((prev, next, index) => {
       return ((index % 3) ? next : (next + '.')) + prev
@@ -182,5 +185,60 @@ document.addEventListener('DOMContentLoaded', function() {
       e.textContent = formatCash(e.textContent);
   });
 
+  //Ngăn chặn hành vi mặc định
+  const button_search_vehicle_available = document.querySelector("button[name='form_search_vehicle_available']");
+  const button_booking_vehicle = document.querySelector("button[name='form_booking_vehicle']");
 
+  if(button_search_vehicle_available)
+  {
+    button_search_vehicle_available.addEventListener('click', function(e) {
+      e.preventDefault();
+      this.form.submit();
+    })
+  }
+
+  if(button_booking_vehicle)
+  {
+    button_booking_vehicle.addEventListener('click', function(e) {
+      e.preventDefault();
+      // this.form.submit();
+      this.form.submit();
+  
+    })
+
+  }
+
+});
+
+window.addEventListener('load', function() {
+
+  const startDateInput = document.getElementById('booking_start_date');
+  const endDateInput = document.getElementById('booking_end_date');
+  const priceDisplay = document.getElementById('booking_vehicle_price');
+  const rentalPriceDay = document.querySelector('input[name="booking_rental_price_day"');
+  const bookingTotalPrice = document.getElementById('booking_total_price');
+
+
+  if(startDateInput && endDateInput && priceDisplay && rentalPriceDay && bookingTotalPrice) {
+    function calculatePrice() {
+      const startDate = new Date(startDateInput.value);
+      const endDate = new Date(endDateInput.value);
+      const timeDifference = endDate - startDate;
+      const daysDifference = timeDifference / (1000 * 60 * 60 * 24); // chuyển từ milliseconds sang ngày
+      console.log(startDate, endDate, timeDifference, daysDifference);
+      const pricePerDay = rentalPriceDay.value; // giá mỗi ngày
+      if (endDate > startDate) {
+        const totalPrice = daysDifference * pricePerDay;
+        priceDisplay.textContent = new Intl.NumberFormat().format(totalPrice); // format số tiền theo định dạng locale\
+        bookingTotalPrice.value = totalPrice; 
+      } else {
+        priceDisplay.textContent = '';
+      }
+    }
+  
+    // Thêm sự kiện khi giá trị ngày bắt đầu hoặc ngày kết thúc thay đổi
+    startDateInput.addEventListener('change', calculatePrice);
+    endDateInput.addEventListener('change', calculatePrice);
+  }
+  
 });

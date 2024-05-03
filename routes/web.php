@@ -19,6 +19,7 @@ use App\Http\Controllers\SearchVehicleController;
 use App\Http\Controllers\admins\ProfileController;
 use App\Http\Controllers\admins\VehicleController;
 use App\Http\Controllers\CarRentalStoreController;
+use App\Http\Controllers\VNPayPaymentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -90,8 +91,10 @@ Route::prefix('/user')->name('user.')->middleware('auth')->group(function () {
     //Vehicle
     Route::get('/vehicle/{vehicle}', [VehicleController::class, 'showVehicle'])->name('showVehicle');
 
+    Route::post('/vechile/booking', [BookingController::class, 'bookingVehicle'])->name('booking.vehicle');
+
     //Search vehicle available
-    Route::get('/search', [SearchVehicleController::class, 'search_vehicle'])->name('search_vehicle');
+    Route::get('/search', [SearchVehicleController::class, 'searchVehicle'])->name('search_vehicle');
 
     // Profile
     Route::get('/profile', [UserController::class, 'profile'])->name('profile');
@@ -206,6 +209,9 @@ Route::prefix('/admin')->middleware('permission.checker:admin|Manager')->name('a
     Route::post('/logout', [AdminController::class, 'logout'])->name('logout');
 
 });
+
+//Route VNPAY
+Route::post('/vnpay_payment', [VNPayPaymentController::class, 'vnpayPayment'])->name('vnpay.payment');
 
 
 //Route errors

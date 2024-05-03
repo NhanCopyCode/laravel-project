@@ -32,7 +32,7 @@
           @enderror
         </div>
         
-        <button type="submit" class="btn"><i class="ri-search-line"></i></button>
+        <button type="submit" name="form_search_vehicle_available" class="btn"><i class="ri-search-line"></i></button>
       </form>
     </div>
   </div>
