@@ -1,5 +1,15 @@
 <div class="section__container">
   
+    @if (session('msg--success'))
+        <div class="alert alert-success">
+            {!! session('msg--success') !!}
+        </div>
+    @endif
+    @if (session('msg--success-vnpay'))
+        <div class="alert alert-success">
+            {!! session('msg--success-vnpay') !!}
+        </div>
+    @endif
    <div class="vehicle-detail__container">
         <div class="vehicle-detail__container-left">
             <div class="vehicle-detail__header">
@@ -50,7 +60,7 @@
                         <span class="text-danger">{{$message}}</span>
                     @enderror
                </div> --}}
-               <div class="form-group">
+               {{-- <div class="form-group">
                     <label for="start_date">Ngày bắt đầu</label>
                     <input class="form-control" type="date" name="booking_start_date" id="booking_start_date">
                     @error('booking_start_date')
@@ -63,17 +73,59 @@
                     @error('booking_end_date')
                         <span class="text-danger">{{$message}}</span>
                     @enderror
-                </div>
+                </div> --}}
 
+                <div class="form-group">
+                    <label for="booking_daterange">Chọn ngày thuê</label>
+                    <input class="form-control" required  type="text" id="booking_daterange" name="booking_daterange" />
+                    @error('booking_daterange')
+                        <span class="text-danger">{{$message}}</span>
+                    @enderror
+                </div>
+                {{-- Tiếng việt --}}
+                <input type="hidden" id="language"  name="language" value="vn">
+                <input type="hidden" name="payment_method_id" value="1">
+
+                
                 <p>Số tiền phải trả: <span id="booking_vehicle_price"></span></p>
                 <input type="hidden" id="booking_total_price" name="booking_total_price" value="">
-                <button style="margin-top: 24px;" name="form_booking_vehicle" class="btn btn-primary" type="submit">Đặt xe</button>
+                <button style="margin-top: 24px;" name="form_booking_vehicle" class="btn btn-primary" type="submit">Thanh toán bằng tiền mặt</button>
+                <button id="button_vnpay_payment" class="btn btn-outline-dark" name="redirect" value="vnpay_payment" type="submit"><ion-icon name="card-outline"></ion-icon>Thanh toán VNPAY</button>
             </form>
-            <form action="{{route('vnpay.payment')}}" method="POST">
+            {{-- <form action="{{route('vnpay.payment')}}" method="POST">
                 @csrf
             <button id="button_vnpay_payment" class="btn btn-outline-dark" name="redirect" type="submit"><ion-icon name="card-outline"></ion-icon>Thanh toán VNPAY</button>
-            </form>
+            </form> --}}
+            {{-- Button VNPAY --}}
+            
         </div>
    </div>
 
 </div>
+
+<script>
+    $(function() {
+        const list_rental_time = @json($list_rental_time);
+        console.log(list_rental_time);
+        // Hàm kiểm tra xem ngày đã có trong danh sách không
+        function isInvalidDate(date) {
+            return list_rental_time.some(function (rental) {
+                // Sử dụng 'rental_start_date' và 'rental_end_date' từ object
+                const start = moment(rental.rental_start_date);
+                const end = moment(rental.rental_end_date);
+                // Kiểm tra xem 'date' có nằm trong khoảng thời gian không khả dụng đó không
+                // So sánh ở cấp độ ngày để bỏ qua giờ
+                return date.isBetween(start, end, 'day', '[]');
+            });
+        }
+        $('input[name="booking_daterange"]').daterangepicker(
+            {
+                opens: 'left',
+                minDate: new Date(),
+                isInvalidDate: isInvalidDate  // Sử dụng hàm để xác định các ngày không khả dụng
+            }, 
+            function(start, end, label) {
+                console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
+        });
+    });
+</script>

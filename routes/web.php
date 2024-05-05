@@ -213,6 +213,8 @@ Route::prefix('/admin')->middleware('permission.checker:admin|Manager')->name('a
 //Route VNPAY
 Route::post('/vnpay_payment', [VNPayPaymentController::class, 'vnpayPayment'])->name('vnpay.payment');
 
+Route::get('/vnpay_return', [VNPayPaymentController::class, 'vnpayReturn'])->name('vnpay.return');
+
 
 //Route errors
 

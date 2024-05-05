@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\admins;
 
+use App\Models\Rental;
 use App\Models\Vehicle;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
@@ -321,8 +322,13 @@ class VehicleController extends Controller
         ->select('vehicleimages.*', 'models.*', 'crs1.*', 'vehiclestatus.*', 'vehicles.*', 'location.*')
         ->get();
 
+        $list_rental_time = Rental::where('vehicle_id', $vehicle->vehicle_id)
+        ->select('rental_start_date', 'rental_end_date') // Chọn ra các cột liên quan đến thời gian đặt thuê
+        ->get();
+        // dd($list_rental_time);
+
         $vehicle = $vehicle_information[0];
 
-        return view('clients.vehicle.detail', compact('vehicle'));
+        return view('clients.vehicle.detail', compact('vehicle', 'list_rental_time'));
     }
 }

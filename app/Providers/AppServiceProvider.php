@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Models\Brand;
 use App\Models\Branch;
+use App\Models\Rental;
 use App\Models\BrandStatus;
 use App\Models\ModelStatus;
 use App\Models\BranchStatus;
@@ -14,6 +15,7 @@ use Illuminate\Support\Facades\DB;
 use App\Models\admins\ModelVehicle;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\Validator;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -78,6 +80,25 @@ class AppServiceProvider extends ServiceProvider
                 'location_list',
                 'payment_method_list',
             ));
+
+
+            // Validator::extend('booking_overlap', function ($attribute, $value, $parameters, $validator) {
+            //     // Chỉ cần lấy request một lần cho mỗi trường
+            //     $start_date = request('booking_start_date');
+            //     $end_date = request('booking_end_date');
+            
+            //     // Thực hiện truy vấn để kiểm tra sự xung đột của khoảng thời gian
+            //     return !Rental::where(function ($query) use ($start_date, $end_date) {
+            //         $query->where('rental_start_date', '<', $end_date)
+            //               ->where('rental_end_date', '>', $start_date);
+            //     })->exists();
+            // });
+            
+            // Validator::replacer('booking_overlap', function ($message, $attribute, $rule, $parameters) {
+            //     // Thay thế placeholder :attribute bằng tên thực tế của attribute
+            //     return str_replace(':attribute', $attribute, "Thời gian cho $attribute đã bị trùng.");
+            // });
+            
         });
     }
 }

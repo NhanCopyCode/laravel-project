@@ -2,6 +2,9 @@
 
 namespace App\Http\Requests;
 
+use Carbon\Carbon;
+use App\Models\Rental;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Foundation\Http\FormRequest;
 
 class BookingVehicleRequest extends FormRequest
@@ -22,10 +25,31 @@ class BookingVehicleRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
             'payment_method_id' => 'required|exists:paymentmethod,payment_method_id',
-            'booking_start_date' => 'required|date|before_or_equal:booking_end_date',
-            'booking_end_date' => 'required|date|after_or_equal:booking_start_date'
+            'booking_daterange' => [
+                'required',
+                function ($attribute, $value, $fail) {
+                    // Phân tích $value để lấy ngày bắt đầu và kết thúc
+                    [$start_date, $end_date] = explode(' - ', $value);
+                    
+                    // Định dạng lại ngày tháng nếu cần
+                    $start_date = Carbon::createFromFormat('m/d/Y', $start_date)->format('Y-m-d');
+                    $end_date = Carbon::createFromFormat('m/d/Y', $end_date)->format('Y-m-d');
+                    
+                    // Thực hiện truy vấn để kiểm tra xem khoảng thời gian đã tồn tại trong DB hay chưa
+                    $exists = DB::table('rental') // Thay 'bookings' bằng tên bảng đúng của bạn
+                                ->where(function($query) use ($start_date, $end_date) {
+                                    $query->where('rental_start_date', '<', $end_date)
+                                          ->where('rental_end_date', '>', $start_date);
+                                })
+                                ->exists();
+    
+                    // Nếu tồn tại, trả về lỗi
+                    if ($exists) {
+                        $fail('Xe đã được đặt trong thời gian này!!');
+                    }
+                },
+            ],
         ];
     }
 
@@ -33,12 +57,8 @@ class BookingVehicleRequest extends FormRequest
     {
         return [
             'required' => ':attribute không được bỏ trống',
-            'payment_method.min' => 'Phương thức thanh toán không hợp lệ',
-            'payment_method.max' => 'Phương thức thanh toán không hợp lệ',
-            'date' => ':attribute không hợp lệ',
-            'booking_start_date.before_or_equal' => 'Ngày bắt đầu phải trước hoặc cùng ngày với ngày kết thúc.',
-            'booking_end_date.after_or_equal' => 'Ngày kết thúc phải sau hoặc cùng ngày với ngày bắt đầu.',
-            'exists' => ':attribute không tồn tại',
+            'payment_method_id.exists' => 'Phương thức thanh toán không hợp lệ',
+            
         ];
     }
 
@@ -46,8 +66,7 @@ class BookingVehicleRequest extends FormRequest
     {
         return [
             'payment_method' => 'Phương thức thanh toán',
-            'booking_start_date' => 'Ngày bắt đầu',
-            'booking_end_date' => 'Ngày kết thúc',
+            'booking_daterange' => 'Thời gian đặt xe',
         ];
     }
 }
