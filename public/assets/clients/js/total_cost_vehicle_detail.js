@@ -16,7 +16,7 @@ $(function() {
         const timeDiff = endDate - startDate;
 
         // Chia cho số milliseconds trong một ngày
-        const daysDiff = timeDiff / (1000 * 60 * 60 * 24);
+        const daysDiff = timeDiff / (1000 * 60 * 60 * 24) + 1;
       
         let totalPrice = daysDiff * rental_price_date;
 
