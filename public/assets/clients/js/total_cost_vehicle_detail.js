@@ -11,7 +11,6 @@ $(function() {
         const startDate = new Date(dates[0]);
         const endDate = new Date(dates[1]);
 
-        console.log(startDate, endDate);
 
         // Tính số ngày chênh lệch
         const timeDiff = endDate - startDate;
@@ -20,8 +19,14 @@ $(function() {
         const daysDiff = timeDiff / (1000 * 60 * 60 * 24);
       
         let totalPrice = daysDiff * rental_price_date;
+
+        // Set tiền vào cho input booking vehicle price 
+        $('#booking_total_price').val(totalPrice);
+
+
         totalPrice = formatCash(totalPrice.toString());
         $('#booking_vehicle_price').text(totalPrice);
+
        
    });
 

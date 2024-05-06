@@ -39,13 +39,13 @@ class BookingVehicleRequest extends FormRequest
                     // Thực hiện truy vấn để kiểm tra xem khoảng thời gian đã tồn tại trong DB hay chưa
                     $exists = DB::table('rental') // Thay 'rental' bằng tên bảng đúng của bạn
                                 ->where(function($query) use ($start_date, $end_date) {
-                                    $query->where('rental_start_date', '<=', $end_date)
-                                          ->where('rental_end_date', '>=', $start_date);
+                                    $query->whereBetween('rental_start_date',[$start_date, $end_date])
+                                          ->whereBetween('rental_end_date',[$start_date, $end_date]);
                                 })
-                                ->exists();
+                                ->get();
     
                     // Nếu tồn tại, trả về lỗi
-                    if ($exists) {
+                    if (!$exists->isEmpty()) {
                         $fail('Xe đã được đặt trong thời gian này!!');
                     }
                 },
