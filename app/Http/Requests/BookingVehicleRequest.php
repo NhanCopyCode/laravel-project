@@ -32,15 +32,15 @@ class BookingVehicleRequest extends FormRequest
                     // Phân tích $value để lấy ngày bắt đầu và kết thúc
                     [$start_date, $end_date] = explode(' - ', $value);
                     
-                    // Định dạng lại ngày tháng nếu cần
-                    $start_date = Carbon::createFromFormat('m/d/Y', $start_date)->format('Y-m-d');
-                    $end_date = Carbon::createFromFormat('m/d/Y', $end_date)->format('Y-m-d');
+                    // Định dạng lại ngày tháng cho đúng với dữ liệu nhận được
+                    $start_date = Carbon::createFromFormat('Y-m-d', trim($start_date))->format('Y-m-d');
+                    $end_date = Carbon::createFromFormat('Y-m-d', trim($end_date))->format('Y-m-d');
                     
                     // Thực hiện truy vấn để kiểm tra xem khoảng thời gian đã tồn tại trong DB hay chưa
-                    $exists = DB::table('rental') // Thay 'bookings' bằng tên bảng đúng của bạn
+                    $exists = DB::table('rental') // Thay 'rental' bằng tên bảng đúng của bạn
                                 ->where(function($query) use ($start_date, $end_date) {
-                                    $query->where('rental_start_date', '<', $end_date)
-                                          ->where('rental_end_date', '>', $start_date);
+                                    $query->where('rental_start_date', '<=', $end_date)
+                                          ->where('rental_end_date', '>=', $start_date);
                                 })
                                 ->exists();
     

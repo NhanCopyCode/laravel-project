@@ -19,11 +19,11 @@ class BookingController extends Controller
 
     public function  bookingVehicle(BookingVehicleRequest $request)
     {
-        $booking_start_date = explode(' - ', $request->booking_daterange)[0];
-        $booking_end_date = explode(' - ', $request->booking_daterange)[1];
-        dd($booking_start_date, $booking_end_date);
+        $booking_start_date =  explode(' - ', $request->booking_daterange)[0];
+        $booking_end_date = str_replace(' / ', ' - ', explode(' - ', $request->booking_daterange)[1]);
 
-    
+        // dd($booking_start_date, $booking_end_date);
+
         // Check user login và payment method === Thanh toán tiền mặt
         if(Auth::check() && $request->redirect != null) {
             $this->VNPAYpayment($request);
@@ -45,8 +45,8 @@ class BookingController extends Controller
             $rental = new Rental;
             $rental->user_id = $user_id;
             $rental->vehicle_id = $request->vehicle_id;
-            $rental->rental_start_date = $request->booking_start_date;
-            $rental->rental_end_date = $request->booking_end_date;
+            $rental->rental_start_date = $booking_start_date;
+            $rental->rental_end_date = $booking_end_date;
             $rental->total_cost = $request->booking_total_price;
             // status === 1 đồng nghĩa với việc chưa thanh toán
             $rental->rental_status_id = 1;

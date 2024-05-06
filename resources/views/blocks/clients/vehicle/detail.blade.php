@@ -40,7 +40,7 @@
                     <p >Trạng thái: <span class="text-danger">{{$vehicle->vehicle_status_name}}</span></p>
                 @endif
                
-                <p>Giá thuê một ngày: <span class="vnd_format">{{$vehicle->rental_price_day}}</span> VND</p>
+                <p>Giá thuê một ngày: <span  class="vnd_format">{{$vehicle->rental_price_day}}</span> VND</p>
             </div>
             <form action="{{route('user.booking.vehicle')}}" method="POST" class="vehicle-detail__container-right__group-input">
                 @csrf
@@ -77,7 +77,7 @@
 
                 <div class="form-group">
                     <label for="booking_daterange">Chọn ngày thuê</label>
-                    <input class="form-control" required  type="text" id="booking_daterange" name="booking_daterange" />
+                    <input class="form-control" required  type="text" id="booking_daterange" name="booking_daterange" value="{{old('booking_daterange')}}"/>
                     @error('booking_daterange')
                         <span class="text-danger">{{$message}}</span>
                     @enderror
@@ -87,7 +87,7 @@
                 <input type="hidden" name="payment_method_id" value="1">
 
                 
-                <p>Số tiền phải trả: <span id="booking_vehicle_price"></span></p>
+                <p>Số tiền phải trả: <span id="booking_vehicle_price" class="vnd_format"></span></p>
                 <input type="hidden" id="booking_total_price" name="booking_total_price" value="">
                 <button style="margin-top: 24px;" name="form_booking_vehicle" class="btn btn-primary" type="submit">Thanh toán bằng tiền mặt</button>
                 <button id="button_vnpay_payment" class="btn btn-outline-dark" name="redirect" value="vnpay_payment" type="submit"><ion-icon name="card-outline"></ion-icon>Thanh toán VNPAY</button>
@@ -122,10 +122,14 @@
             {
                 opens: 'left',
                 minDate: new Date(),
-                isInvalidDate: isInvalidDate  // Sử dụng hàm để xác định các ngày không khả dụng
+                isInvalidDate: isInvalidDate ,// Sử dụng hàm để xác định các ngày không khả dụng
+                locale: {
+                    format: 'YYYY-MM-DD'
+                }
             }, 
             function(start, end, label) {
                 console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
         });
     });
 </script>
+<script defer src="{{asset('assets/clients/js/total_cost_vehicle_detail.js')}}"></script>

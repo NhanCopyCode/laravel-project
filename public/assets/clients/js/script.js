@@ -175,13 +175,25 @@ document.addEventListener('DOMContentLoaded', function() {
   
   //Format tiền
   function formatCash(str) {
+    if (str === '') return str;
     return str.split('').reverse().reduce((prev, next, index) => {
       return ((index % 3) ? next : (next + '.')) + prev
     })
   }
 
-  let VND_elements = document.querySelectorAll('.vnd_format');
+  const bookingVehicleDateRange = document.getElementById('booking_daterange');
+  bookingVehicleDateRange.addEventListener('change', function(e) {
+    const VND_elements = document.querySelectorAll('.vnd_format');
+    VND_elements.forEach(e => {
+        console.log(e.innerHTML);
+
+
+        e.textContent = formatCash(e.textContent);
+    });
+  });
+  const VND_elements = document.querySelectorAll('.vnd_format');
   VND_elements.forEach(e => {
+      console.log(e.innerHTML);
       e.textContent = formatCash(e.textContent);
   });
 
