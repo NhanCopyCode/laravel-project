@@ -26,6 +26,21 @@
                     @endforeach
                 </select>
             </div>
+
+            <div class="form-group">
+                <label for="admin_payment_is_deleted">Trạng thái thanh toán</label>
+                <select class="form-control" name="is_deleted" id="admin_payment_is_deleted">
+                    
+                    @foreach ($is_deleted_list as $value)
+                    
+                        @if ($value === 0)
+                            <option value="{{$value}}">Còn hiệu lực</option>
+                        @elseif($value === 1)
+                            <option value="{{$value}}" >Hết hiệu lực</option>
+                        @endif
+                    @endforeach
+                </select>
+            </div>
         </div>
         <div class="modal-footer">
         <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>

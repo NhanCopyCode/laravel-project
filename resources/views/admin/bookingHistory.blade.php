@@ -66,7 +66,8 @@
                 {{-- Phương thức thanh toán --}}
                 <td class="text-center">{{$item->payment_method_name}}</td>
                 {{-- Trạng thái giao dịch --}}
-                @if ($item->payment_is_deleted === null || $item->payment_is_deleted === false)
+                
+                @if ($item->payment_is_deleted === 0 || $item->payment_is_deleted === null)
                     <td class="text-success">Vẫn còn hiệu lực</td>
                 @else 
                     <td class="text-danger">Không còn hiệu lực</td>
@@ -80,6 +81,7 @@
                         data-rental-status-id = "{{$item->rental_status_id}}"
                         data-rental-status-name = "{{$item->rental_status_name}}"
                         data-rental-id = "{{$item->rental_id}}"
+                        data-payment-is-deleted = "{{$item->payment_is_deleted}}"
                     >
                         <i class="fa-regular fa-pen-to-square"></i>
                     </a>
@@ -143,7 +145,8 @@
                 let rental_id = $(this).data('rental-id');
                 let rental_status_id = $(this).data('rental-status-id');
                 let rental_status_name = $(this).data('rental-status-name');
-
+                let payment_is_deleted = $(this).data('payment-is-deleted');
+                console.log(payment_is_deleted);
                 //Clear message error exists
                 $('.message_error').empty();
 
@@ -153,6 +156,7 @@
                 $('#update_payment_id').val(payment_id);
                 $('#update_payment_status').val(rental_status_id);
                 $('#booking_history_rental_id').val(rental_id);
+                $('#admin_payment_is_deleted').val(payment_is_deleted);
                
             });
 
@@ -160,8 +164,7 @@
             $(document).on('click', '.btn-submit-update-payment', function(e) {
                 e.preventDefault();
 
-                
-
+                let is_deleted = $("#admin_payment_is_deleted").val();
                 let payment_id = $("#update_payment_id").val();
                 let rental_status_id = $('#update_payment_status').val();
                 let rental_id = $('#booking_history_rental_id').val();
@@ -174,6 +177,7 @@
                         payment_id : payment_id,
                         rental_id: rental_id,
                         rental_status_id : rental_status_id,
+                        is_deleted: is_deleted,
                     },
                     success: function(response) {
                         console.log(response);

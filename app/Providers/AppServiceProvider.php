@@ -70,6 +70,10 @@ class AppServiceProvider extends ServiceProvider
             // Trạng thái thanh toán
             $rental_status_list = RentalStatus::all();
 
+            $is_deleted_list = [
+                0, 1
+            ];
+
 
             $view->with(compact(
                 'branch_status_list', 
@@ -83,6 +87,7 @@ class AppServiceProvider extends ServiceProvider
                 'location_list',
                 'payment_method_list',
                 'rental_status_list',
+                'is_deleted_list',
             ));
 
 

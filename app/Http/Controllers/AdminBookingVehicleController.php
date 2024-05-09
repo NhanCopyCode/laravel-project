@@ -27,6 +27,7 @@ class AdminBookingVehicleController extends Controller
             )
             ->orderBy('payment.payment_id', 'asc')
             ->paginate(5);
+            // dd($list_booking_vehicle);
         return view('admin.bookingHistory', compact('list_booking_vehicle'))->with('i', (request()->input('page', 1) - 1) * 5);
         // return view('admin.model', compact('modelList'));
     }
@@ -72,7 +73,10 @@ class AdminBookingVehicleController extends Controller
                 'payment_date' => null
             ]);
         }
-       
+
+       Payment::where('payment_id', $request->payment_id)->update([
+            'is_deleted' => $request->is_deleted,
+       ]);
 
 
         return response()->json([
