@@ -15,6 +15,12 @@
             </a>
         </li>
         <li class="sidebar-item">
+            <a href="{{route('admin.booking.vehicle.index')}}" class="sidebar-link">
+                <i class="fa-solid fa-calendar-days"></i>
+                <span>Quản lý thuê xe</span>
+            </a>
+        </li>
+        <li class="sidebar-item">
             <a href="{{route('admin.branch.index')}}" class="sidebar-link">
                 <i class="fa-solid fa-code-branch"></i>
                 <span>Quản lý chi nhánh</span>

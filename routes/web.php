@@ -13,13 +13,14 @@ use App\Http\Controllers\error\ErrorController;
 use App\Http\Controllers\admins\AdminController;
 use App\Http\Controllers\admins\BrandController;
 use App\Http\Controllers\clients\HomeController;
+use App\Http\Controllers\VNPayPaymentController;
 use App\Http\Controllers\admins\BranchController;
 use App\Http\Controllers\Auth\ProviderController;
 use App\Http\Controllers\SearchVehicleController;
 use App\Http\Controllers\admins\ProfileController;
 use App\Http\Controllers\admins\VehicleController;
 use App\Http\Controllers\CarRentalStoreController;
-use App\Http\Controllers\VNPayPaymentController;
+use App\Http\Controllers\AdminBookingVehicleController;
 
 /*
 |--------------------------------------------------------------------------
@@ -101,7 +102,7 @@ Route::prefix('/user')->name('user.')->middleware('auth')->group(function () {
 
 
     //Booking 
-    Route::get('/booking-history', [BookingController::class, 'showBookingHistory'])->name('booking_history');
+    Route::get('/booking-history', [BookingController::class, 'showBookingHistory'])->name('booking.history');
 
     // Xe đăng đặt
     Route::get('/vehicle-currently-booked', [BookingController::class, 'showBookingHistory'])->name('vehicle_currently_booked');
@@ -117,6 +118,16 @@ Route::get('/admin/login_error', [AdminController::class, 'login_error'])->name(
 Route::prefix('/admin')->middleware('permission.checker:admin|Manager')->name('admin.')->group(function () {
 
     Route::get('/', [AdminController::class, 'index'])->name('index');
+
+    //Booking Vehicle 
+    Route::get('/booking/vehicle', [AdminBookingVehicleController::class, 'index'])->name('booking.vehicle.index');
+
+    Route::post('/booking/vehicle/update', [AdminBookingVehicleController::class, 'updateBookingVehicleHistory'])->name('booking.vehicle.update');
+    
+    Route::post('/booking/vehicle/delete', [AdminBookingVehicleController::class, 'deleteBoookingVehicleHistory'])->name('booking.vehicle.delete');
+    
+    Route::get('/booking/vehicle/search', [AdminBookingVehicleController::class, 'searchBookingVehicleHistory'])->name('booking.vehicle.search');
+
 
     // Profile
 
@@ -213,7 +224,7 @@ Route::prefix('/admin')->middleware('permission.checker:admin|Manager')->name('a
 //Route VNPAY
 Route::post('/vnpay_payment', [VNPayPaymentController::class, 'vnpayPayment'])->name('vnpay.payment');
 
-Route::get('/vnpay_return', [VNPayPaymentController::class, 'vnpayReturn'])->name('vnpay.return');
+Route::get('/vnpay_return', [BookingController::class, 'vnpayReturn'])->name('vnpay.return');
 
 
 //Route errors

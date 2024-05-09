@@ -8,6 +8,7 @@ use App\Models\Rental;
 use App\Models\BrandStatus;
 use App\Models\ModelStatus;
 use App\Models\BranchStatus;
+use App\Models\RentalStatus;
 use App\Models\PaymentMethod;
 use App\Models\VehicleStatus;
 use App\Models\CarRentalStore;
@@ -66,6 +67,8 @@ class AppServiceProvider extends ServiceProvider
 
             $payment_method_list = PaymentMethod::all();
             
+            // Trạng thái thanh toán
+            $rental_status_list = RentalStatus::all();
 
 
             $view->with(compact(
@@ -79,6 +82,7 @@ class AppServiceProvider extends ServiceProvider
                 'vehicle_status_list',
                 'location_list',
                 'payment_method_list',
+                'rental_status_list',
             ));
 
 

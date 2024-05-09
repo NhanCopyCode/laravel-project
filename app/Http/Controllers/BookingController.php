@@ -2,11 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use App\Http\Requests\BookingVehicleRequest;
-use App\Models\Payment;
+use Carbon\Carbon;
+use App\Models\VNPAY;
 use App\Models\Rental;
+use App\Models\Payment;
+use App\Models\Vehicle;
+use Carbon\CarbonInterval;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
+use App\Http\Requests\BookingVehicleRequest;
 
 class BookingController extends Controller
 {
@@ -14,23 +20,71 @@ class BookingController extends Controller
 
     public function showBookingHistory()
     {
-        
+        $list_booking_vehicle = DB::table('payment')
+        ->join('rental', 'payment.rental_id', '=', 'rental.rental_id')
+        ->join('rentalstatus', 'rental.rental_status_id', '=', 'rentalstatus.rental_status_id')
+        ->join('vehicles', 'vehicles.vehicle_id', '=', 'rental.vehicle_id' )
+        ->join('vehicleimages', 'vehicleimages.vehicle_img_id', '=', 'vehicles.vehicle_image_id')
+        ->join('models', 'models.model_id', '=', 'vehicles.model_id')
+        ->where('rental.user_id', '=', Auth::user()->user_id)
+        ->select('*')
+        ->paginate(5);
+
+        // dd($list_booking_vehicle);
+
+        return view('clients.vehicle.booking_history', compact('list_booking_vehicle'));
+
     }
 
     public function  bookingVehicle(BookingVehicleRequest $request)
     {
+        $validatedData = $request->validated(); 
+
         $booking_start_date =  explode(' - ', $request->booking_daterange)[0];
         $booking_end_date = str_replace(' / ', ' - ', explode(' - ', $request->booking_daterange)[1]);
 
         // dd($booking_start_date, $booking_end_date);
 
         // Check user login và payment method === Thanh toán tiền mặt
-        if(Auth::check() && $request->redirect != null) {
-            $this->VNPAYpayment($request);
+        if(Auth::check() && $request->redirect === 'vnpay_payment') {
+            
+            // dd(Carbon::now());
+            $user_id = Auth::user()->user_id;
+
+            $rental = new Rental;
+            $rental->user_id = $user_id;
+            $rental->vehicle_id = $request->vehicle_id;
+            $rental->rental_start_date = $booking_start_date;
+            $rental->rental_end_date = $booking_end_date;
+            $rental->total_cost = $request->booking_total_price;
+            // status === 1 đồng nghĩa với việc chưa thanh toán
+            $rental->rental_status_id = 1;
+
+            $rental->save();
+
+            $rental_id = $rental->rental_id;
+            if($rental_id) {
+                $payment = new Payment;
+                $payment->rental_id = $rental_id;
+                $payment->payment_date = Carbon::now();
+                $payment->amount = $request->booking_total_price;
+                $payment->payment_method_id = 2;
+                $payment->save();
+            }
+            
+            $payment_id = $payment->payment_id;
+          
+               // Lưu vào cache
+            Cache::put('rental_id', $rental_id, now()->addMinutes(30));
+            Cache::put('payment_id', $payment_id, now()->addMinutes(30));
+   
+
+
+            $this->VNPAYpayment($request, $rental_id, $payment_id);
+            // $this->vnpayReturn();
         }
         elseif(Auth::check() && $request->payment_method_id == 1) 
         {
-            $validatedData = $request->validated(); 
             $user_id = Auth::user()->user_id;
 
             // $payment = Rental::created([
@@ -57,19 +111,20 @@ class BookingController extends Controller
             if($rental_id) {
                 $payment = new Payment;
                 $payment->rental_id = $rental_id;
+                $payment->payment_date = Carbon::now();
                 $payment->amount = $request->booking_total_price;
                 $payment->payment_method_id = $request->payment_method_id;
                 $payment->save();
             }
 
-            return back()->with('msg--success', 'Đặt xe thành công vui lòng vào <a href="">Lịch sử đặt xe</a> để kiểm tra');
+            return back()->with('msg--success', 'Đặt xe thành công vui lòng vào <a href="{{route('. 'user.booking.history'.')}}">Lịch sử đặt xe</a> để kiểm tra');
 
         }else {
             return redirect()->route('home');
         }
     }
 
-    public function VNPAYpayment(Request $request)
+    public function VNPAYpayment(Request $request, $rental_id, $payment_id)
     {
         // dd($request->all());
         $vnp_Url = env('vnp_Url');
@@ -98,6 +153,7 @@ class BookingController extends Controller
             "vnp_OrderType" => $vnp_OrderType,
             "vnp_ReturnUrl" => $vnp_Returnurl,
             "vnp_TxnRef" => $vnp_TxnRef,
+          
             
         );
         
@@ -143,6 +199,59 @@ class BookingController extends Controller
 
         
     }
+    public function vnpayReturn(Request $request)
+    {
+        if(isset($_GET['vnp_Amount'])) {
+            
+           
+            // Lấy từ cache
+            $rental_id = Cache::get('rental_id');
+            $payment_id = Cache::get('payment_id');
+   
+
+
+            $vnp_Amount = $_GET['vnp_Amount'];
+            $vnp_BankCode = $_GET['vnp_BankCode'];
+            $vnp_BankTranNo = $_GET['vnp_BankTranNo'];
+            $vnp_CardType = $_GET['vnp_CardType'];
+            $vnp_OrderInfo = $_GET['vnp_OrderInfo'];
+            $vnp_TransactionNo = $_GET['vnp_TransactionNo'];
+            $vnp_TmnCode = $_GET['vnp_TmnCode'];
+            $vnp_ResponseCode = $_GET['vnp_ResponseCode'];
+            $vnp_PayDate = $_GET['vnp_PayDate'];
+            $vnp_TransactionStatus = $_GET['vnp_TransactionStatus'];
+            $vnp_TxnRef = $_GET['vnp_TxnRef'];
+            $vnp_SecureHash = $_GET['vnp_SecureHash'];
+
+            VNPAY::create([
+                'vnp_Amount' => $vnp_Amount,
+                //Thiếu payment id
+                'payment_payment_id' => $payment_id,
+                'vnp_BankCode' => $vnp_BankCode,
+                'vnp_BankTranNo' => $vnp_BankTranNo,
+                'vnp_OrderInfo' => $vnp_OrderInfo,
+                'vnp_CardType' => $vnp_CardType,
+                'vnp_TransactionNo' => $vnp_TransactionNo,
+                'vnp_TmnCode' => $vnp_TmnCode,
+                'vnp_ResponseCode' => $vnp_ResponseCode,
+                'vnp_PayDate' => $vnp_PayDate,
+                'vnp_TransactionStatus' => $vnp_TransactionStatus,
+                'vnp_TxnRef' => $vnp_TxnRef,
+                'vnp_SecureHash' => $vnp_SecureHash,
+
+            ]);
+
+            $rental = Rental::find($rental_id);
+
+            $rental->rental_status_id = 2;
+            $rental->save();
+
+
+        }
+        return view('clients.vnpay.vnpay_return');
+    }
+
+  
     
 }
 

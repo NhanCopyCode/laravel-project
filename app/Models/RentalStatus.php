@@ -5,18 +5,16 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Payment extends Model
+class RentalStatus extends Model
 {
     use HasFactory;
-    protected $table = 'payment';
+    protected $table = 'rentalstatus';
 
     protected $fillable = [
-        'rental_id',
-        'payment_date',
-        'amount',
-        'payment_method_id',
+        'rental_status_name',
     ];
 
-    public $primaryKey = 'payment_id';
+    public $primaryKey = 'rental_status_id';
     public $timestamps = false;
+
 }

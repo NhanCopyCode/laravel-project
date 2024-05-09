@@ -33,7 +33,7 @@
 
     @include('blocks.clients.navbar')
 
-    @include('blocks.clients.header')
+    @yield('header')
    
     
  

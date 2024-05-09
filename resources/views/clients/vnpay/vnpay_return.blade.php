@@ -55,7 +55,11 @@
                 <div class="form-group">
 
                     <label >Số tiền:</label>
-                    <label><?php echo $_GET['vnp_Amount'] ?></label>
+                    <label >
+                        <span class="vnd_format">
+                            <?php echo $_GET['vnp_Amount'] ?>
+                        </span>
+                    </label>
                 </div>  
                 <div class="form-group">
                     <label >Nội dung thanh toán:</label>
@@ -97,7 +101,7 @@
             </div>
             <div class="mt-5">
                 <a  href="{{route('home')}}" class="btn btn-success ">Quay trở về trang chủ</a>
-                <a href="" class="btn btn-outline-dark">Xe lịch sử đặt xe</a>
+                <a href="" class="btn btn-outline-dark">Xem lịch sử đặt xe</a>
             </div>
             <p>
                 &nbsp;

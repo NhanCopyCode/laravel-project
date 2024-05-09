@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\VNPAY;
 use Illuminate\Http\Request;
 
 class VNPayPaymentController extends Controller
@@ -79,6 +80,56 @@ class VNPayPaymentController extends Controller
 
     public function vnpayReturn()
     {
+        if(isset($_GET['vnp_Amount'])) {
+            
+
+            $vnp_Amount = $_GET['vnp_Amount'];
+            $vnp_BankCode = $_GET['vnp_BankCode'];
+            $vnp_BankTranNo = $_GET['vnp_BankTranNo'];
+            $vnp_CardType = $_GET['vnp_CardType'];
+            $vnp_OrderInfo = $_GET['vnp_OrderInfo'];
+            $vnp_TransactionNo = $_GET['vnp_TransactionNo'];
+            $vnp_TmnCode = $_GET['vnp_TmnCode'];
+            $vnp_ResponseCode = $_GET['vnp_ResponseCode'];
+            $vnp_PayDate = $_GET['vnp_PayDate'];
+            $vnp_TransactionStatus = $_GET['vnp_TransactionStatus'];
+            $vnp_TxnRef = $_GET['vnp_TxnRef'];
+            $vnp_SecureHash = $_GET['vnp_SecureHash'];
+
+            VNPAY::create([
+                'vnp_Amount' => $vnp_Amount,
+                //Thiếu payment id
+                'vnp_BankCode' => $vnp_BankCode,
+                'vnp_BankTranNo' => $vnp_BankTranNo,
+                'vnp_OrderInfo' => $vnp_OrderInfo,
+                'vnp_CardType' => $vnp_CardType,
+                'vnp_TransactionNo' => $vnp_TransactionNo,
+                'vnp_TmnCode' => $vnp_TmnCode,
+                'vnp_ResponseCode' => $vnp_ResponseCode,
+                'vnp_PayDate' => $vnp_PayDate,
+                'vnp_TransactionStatus' => $vnp_TransactionStatus,
+                'vnp_TxnRef' => $vnp_TxnRef,
+                'vnp_SecureHash' => $vnp_SecureHash,
+
+            ]);
+        }
         return view('clients.vnpay.vnpay_return');
     }
 }
+
+/*
+http://127.0.0.1:8000/vnpay_return?
+vnp_Amount=3000000&
+vnp_BankCode=NCB&
+vnp_BankTranNo=VNP14403806&
+vnp_CardType=ATM&
+vnp_OrderInfo=Thanh+toan+GD%3A+7890&
+vnp_PayDate=20240506155257&
+vnp_ResponseCode=00&
+vnp_TmnCode=JY3C3HGY&
+vnp_TransactionNo=14403806&
+vnp_TransactionStatus=00&
+vnp_TxnRef=7890&
+vnp_SecureHash=64637a8a15e2591aba10441815517fce90912a70995b7f72b161e3ac288a41eec11bb48f14ae639e8c89d9559baf5c63e2108414484c808fd163333d08e0ada7
+
+*/
