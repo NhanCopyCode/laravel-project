@@ -21,11 +21,11 @@ class PermissionChecker
         $allowRoles = array_map('strtolower', explode('|', $role)); 
         $userRole = null;
         $adminRole = null;
-        if(Auth::guard('admin')->user()) {
+        if(Auth::guard('admin')->check()) {
             $adminRole = strtolower($this->getUserType(Auth::guard('admin')->user()->role_id));
         }
 
-        if(Auth::guard('web')->user()) {
+        if(Auth::guard('web')->check()) {
             $userRole = strtolower($this->getUserType(Auth::guard('web')->user()->role_id));
         }
         if(in_array($userRole, $allowRoles) || in_array($adminRole, $allowRoles)) {

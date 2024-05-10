@@ -121,7 +121,45 @@ class AdminBookingVehicleController extends Controller
 
     public function searchBookingVehicleHistory(Request $request)
     {
-        dd($request->all());
+
+        
+        
+        $list_booking_vehicle = DB::table('payment')
+        ->join('rental', 'payment.rental_id', '=', 'rental.rental_id')
+        ->join('paymentmethod', 'paymentmethod.payment_method_id', '=', 'payment.payment_method_id')
+        ->join('rentalstatus', 'rental.rental_status_id', '=', 'rentalstatus.rental_status_id')
+        ->join('vehicles', 'vehicles.vehicle_id', '=', 'rental.vehicle_id' )
+        ->join('vehicleimages', 'vehicleimages.vehicle_img_id', '=', 'vehicles.vehicle_image_id')
+        ->join('models', 'models.model_id', '=', 'vehicles.model_id')
+        ->select(
+            '*',
+            'payment.is_deleted as payment_is_deleted',
+            'rental.is_deleted as rental_is_deleted',
+        )
+        ->where('payment_id', 'like', '%'.$request->search_string_payment.'%')
+        ->orWhere('model_name', 'like', '%'.$request->search_string_payment.'%')
+        ->orWhere('amount', 'like', '%'.$request->search_string_payment.'%')
+        ->orWhere('rental_start_date', 'like', '%'.$request->search_string_payment.'%')
+        ->orWhere('rental_end_date', 'like', '%'.$request->search_string_payment.'%')
+        ->orWhere('rental_status_name', 'like', '%'.$request->search_string_payment.'%')
+        ->orWhere('payment_date', 'like', '%'.$request->search_string_payment.'%')
+        ->orWhere('payment_method_name', 'like', '%'.$request->search_string_payment.'%')
+        // ->orWhere('payment.payment_is_deleted', 'like', '%'.$request->search_string_payment.'%')
+        ->orderBy('payment.payment_id', 'asc')
+        ->paginate(5);
+        // dd($request->search_string_brand);
+        // dd($brandList);
+            
+        // dd($list_booking_vehicle);
+        if($list_booking_vehicle->count() > 0) {
+            return view('blocks.admin.search_admin_booking_vehicle', compact('list_booking_vehicle'))->with('i', (request()->input('page', 1) - 1) * 5)->render();
+        }else {
+            return response()->json([
+                'status' => 'not found',
+                'message' => 'Không tìm thấy giao dịch'
+            ]);
+        }
+    
     }
 
 }

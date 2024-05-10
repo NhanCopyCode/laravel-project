@@ -10,7 +10,7 @@
      <input type="text" class="form-control mb-3 mt-3" id="search-payment" name="search-payment" placeholder="Tìm kiếm...">
  
 
-    <table class="table table-bordered table-admin-item-booking-vehicle" style="margin-top: 24px; min-width: 400px;">
+    <table class="table table-bordered table-admin-item-booking-vehicle table-payment" style="margin-top: 24px; min-width: 400px;">
         <thead>
             <tr>
                 <th class="text-center">STT</th>
@@ -92,14 +92,7 @@
                             <i class="fa-regular fa-trash-can"></i>
                         </button>
                     </form> --}}
-                    <a  href=""
-                        class="btn btn-danger btn-delete btn-delete-payment" 
-                        data-toggle = "modal"
-                        data-target = "#form_delete_payment"
-                        data-payment-id = "{{$item->payment_id}}"
-                    >
-                        <i class="fa-regular fa-trash-can"></i>
-                    </a>
+                   
                 </td>
             </tr>
             @endforeach
@@ -146,11 +139,9 @@
                 let rental_status_id = $(this).data('rental-status-id');
                 let rental_status_name = $(this).data('rental-status-name');
                 let payment_is_deleted = $(this).data('payment-is-deleted');
-                console.log(payment_is_deleted);
                 //Clear message error exists
                 $('.message_error').empty();
 
-                console.log(payment_id, rental_status_id, rental_status_name);
                 
                 // console.log(payment_status_id, payment_status_name)
                 $('#update_payment_id').val(payment_id);
@@ -288,7 +279,7 @@
                 }
             });
 
-           // Seach brand realtime
+           // Seach payment realtime
             var timeout = null;
     
             $(document).on('keyup', '#search-payment', function(e) {
