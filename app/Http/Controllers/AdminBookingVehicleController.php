@@ -25,7 +25,7 @@ class AdminBookingVehicleController extends Controller
                 'payment.is_deleted as payment_is_deleted',
                 'rental.is_deleted as rental_is_deleted',
             )
-            ->orderBy('payment.payment_id', 'asc')
+            ->orderBy('payment.created_at', 'desc') 
             ->paginate(5);
             // dd($list_booking_vehicle);
         return view('admin.bookingHistory', compact('list_booking_vehicle'))->with('i', (request()->input('page', 1) - 1) * 5);
@@ -145,7 +145,7 @@ class AdminBookingVehicleController extends Controller
         ->orWhere('payment_date', 'like', '%'.$request->search_string_payment.'%')
         ->orWhere('payment_method_name', 'like', '%'.$request->search_string_payment.'%')
         // ->orWhere('payment.payment_is_deleted', 'like', '%'.$request->search_string_payment.'%')
-        ->orderBy('payment.payment_id', 'asc')
+        ->orderBy('payment.created_at', 'desc')
         ->paginate(5);
         // dd($request->search_string_brand);
         // dd($brandList);

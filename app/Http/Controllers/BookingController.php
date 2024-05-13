@@ -17,6 +17,11 @@ use App\Http\Requests\BookingVehicleRequest;
 class BookingController extends Controller
 {
     //
+    public function index()
+    {
+        return view();
+        dd('Xin chào đây là booking');
+    }
 
     public function showBookingHistory()
     {
@@ -26,8 +31,11 @@ class BookingController extends Controller
         ->join('vehicles', 'vehicles.vehicle_id', '=', 'rental.vehicle_id' )
         ->join('vehicleimages', 'vehicleimages.vehicle_img_id', '=', 'vehicles.vehicle_image_id')
         ->join('models', 'models.model_id', '=', 'vehicles.model_id')
+        ->join('paymentmethod', 'paymentmethod.payment_method_id', '=', 'payment.payment_method_id')
         ->where('rental.user_id', '=', Auth::user()->user_id)
+        ->where('payment.is_deleted', '=', false)
         ->select('*')
+        ->orderBy('payment.created_at', 'desc')
         ->paginate(5);
 
         // dd($list_booking_vehicle);
@@ -117,7 +125,7 @@ class BookingController extends Controller
                 $payment->save();
             }
 
-            return back()->with('msg--success', 'Đặt xe thành công vui lòng vào <a href="{{route('. 'user.booking.history'.')}}">Lịch sử đặt xe</a> để kiểm tra');
+            return back()->with('msg--success', 'Đặt xe thành công vui lòng vào <a href="'.route('user.booking.history').'">Lịch sử đặt xe</a> để kiểm tra');
 
         }else {
             return redirect()->route('home');

@@ -118,24 +118,24 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 // Xử lý phần min date của form booking
-document.addEventListener('DOMContentLoaded', function(){
-    const today = new Date().toISOString().slice(0, 10); // Lấy ngày hiện tại và chuyển định dạng sang YYYY-MM-DD
-    const startDateInput = document.getElementById('start-date');
-    const endDateInput = document.getElementById('end-date');
+// document.addEventListener('DOMContentLoaded', function(){
+//     const today = new Date().toISOString().slice(0, 10); // Lấy ngày hiện tại và chuyển định dạng sang YYYY-MM-DD
+//     const startDateInput = document.getElementById('start-date');
+//     const endDateInput = document.getElementById('end-date');
 
-    // Thiết lập ngày tối thiểu cho cả start và end date tương ứng với ngày hiện tại
-    startDateInput.setAttribute('min', today);
-    endDateInput.setAttribute('min', today);
+//     // Thiết lập ngày tối thiểu cho cả start và end date tương ứng với ngày hiện tại
+//     startDateInput.setAttribute('min', today);
+//     endDateInput.setAttribute('min', today);
 
-    // Xử lý phần toggle navbar
-    // ...
+//     // Xử lý phần toggle navbar
+//     // ...
 
-    // Thêm event listener cho sự kiện 'change' của start-date
-    startDateInput.addEventListener('change', function() {
-      // Cập nhật giá trị 'min' của end-date dựa vào giá trị của start-date
-      endDateInput.setAttribute('min', startDateInput.value);
-    });
-});
+//     // Thêm event listener cho sự kiện 'change' của start-date
+//     startDateInput.addEventListener('change', function() {
+//       // Cập nhật giá trị 'min' của end-date dựa vào giá trị của start-date
+//       endDateInput.setAttribute('min', startDateInput.value);
+//     });
+// });
 
 function toggleNavbar() {
   const navbarMenu = document.querySelector('.nav__links');
@@ -182,18 +182,20 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   const bookingVehicleDateRange = document.getElementById('booking_daterange');
-  bookingVehicleDateRange.addEventListener('change', function(e) {
-    const VND_elements = document.querySelectorAll('.vnd_format');
-    VND_elements.forEach(e => {
-        console.log(e.innerHTML);
-
-
-        e.textContent = formatCash(e.textContent);
+  if(bookingVehicleDateRange)
+  {
+    bookingVehicleDateRange.addEventListener('change', function(e) {
+      const VND_elements = document.querySelectorAll('.vnd_format');
+      VND_elements.forEach(e => {
+  
+          e.textContent = formatCash(e.textContent);
+      });
     });
-  });
+
+  }
   const VND_elements = document.querySelectorAll('.vnd_format');
   VND_elements.forEach(e => {
-      console.log(e.innerHTML);
+      
       e.textContent = formatCash(e.textContent);
   });
 

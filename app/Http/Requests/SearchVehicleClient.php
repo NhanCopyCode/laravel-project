@@ -23,11 +23,12 @@ class SearchVehicleClient extends FormRequest
     {
         return [
             //
-            'location_id' => 'required|integer',
+            'location_id' => 'required|exists:location,location_id', // Nếu "id" là tên cột trong bảng "locations"
+            'search_vehicle_daterange' => 'required',
             // 'before_or_equal:end-date' cho phép start-date nhỏ hơn hoặc bằng end-date
-            'start_date' => 'required|date|before_or_equal:end_date',
+            // 'start_date' => 'required|date|before_or_equal:end_date',
             // 'after_or_equal:start-date' cho phép end-date lớn hơn hoặc bằng start-date
-            'end_date' => 'required|date|after_or_equal:start_date',
+            // 'end_date' => 'required|date|after_or_equal:start_date',
         ];
     }
 

@@ -106,7 +106,6 @@
 <script>
     $(function() {
         const list_rental_time = @json($list_rental_time);
-        console.log(list_rental_time);
         // Hàm kiểm tra xem ngày đã có trong danh sách không
         function isInvalidDate(date) {
             return list_rental_time.some(function (rental) {

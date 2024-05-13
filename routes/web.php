@@ -102,6 +102,8 @@ Route::prefix('/user')->name('user.')->middleware('auth')->group(function () {
 
 
     //Booking 
+    Route::get('/booking', [BookingController::class, 'index'])->name('booking.index');
+    
     Route::get('/booking-history', [BookingController::class, 'showBookingHistory'])->name('booking.history');
 
     // Xe đăng đặt

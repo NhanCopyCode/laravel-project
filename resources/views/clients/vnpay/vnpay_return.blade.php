@@ -101,7 +101,7 @@
             </div>
             <div class="mt-5">
                 <a  href="{{route('home')}}" class="btn btn-success ">Quay trở về trang chủ</a>
-                <a href="" class="btn btn-outline-dark">Xem lịch sử đặt xe</a>
+                <a href="{{route('user.booking.history')}}" class="btn btn-outline-dark">Xem lịch sử đặt xe</a>
             </div>
             <p>
                 &nbsp;
