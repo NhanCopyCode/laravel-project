@@ -565,11 +565,21 @@ nav {
   display: flex;
   width: 100%;
   display: flex;
+  border-radius: 4px;
+  overflow: hidden;
 }
 
-.vehicle-detail__group-img > img {
+.vehicle-detail__group-img  .vehicle-detail__main-image {
   width: 60%;
-  object-fit: cover;
+  object-fit: contain;
+}
+
+.vehicle-detail__group-img__footer {
+  width: 40%;
+}
+
+.vehicle-detail__group-img img {
+    padding: 4px;
 }
 
 .vehicle-detail__container {

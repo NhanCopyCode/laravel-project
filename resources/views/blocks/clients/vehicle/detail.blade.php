@@ -18,12 +18,19 @@
                 </h1>
             </div>
             <div class="vehicle-detail__group-img">
-                <img src="{{$vehicle->vehicle_image_data_1}}" alt="Ảnh xe">
-                <div class="vehicle-detail__group-img__footer">
+                <a class="vehicle-detail__main-image" href="{{$vehicle->vehicle_image_data_1}}" data-lightbox="vehicle_images">
                     <img src="{{$vehicle->vehicle_image_data_1}}" alt="Ảnh xe">
-                    <img src="{{$vehicle->vehicle_image_data_2}}" alt="Ảnh xe">
-                    <img src="{{$vehicle->vehicle_image_data_3}}" alt="Ảnh xe">
-    
+                </a>
+                <div class="vehicle-detail__group-img__footer">
+                    <a href="{{$vehicle->vehicle_image_data_1}}" data-lightbox="vehicle_images">
+                        <img src="{{$vehicle->vehicle_image_data_1}}" alt="Ảnh xe">
+                    </a>
+                    <a href="{{$vehicle->vehicle_image_data_2}}" data-lightbox="vehicle_images">
+                        <img src="{{$vehicle->vehicle_image_data_2}}" alt="Ảnh xe">
+                    </a>
+                    <a href="{{$vehicle->vehicle_image_data_3}}" data-lightbox="vehicle_images">
+                        <img src="{{$vehicle->vehicle_image_data_3}}" alt="Ảnh xe">
+                    </a>
                 </div>
             </div>
         </div>
@@ -40,40 +47,13 @@
                     <p >Trạng thái: <span class="text-danger">{{$vehicle->vehicle_status_name}}</span></p>
                 @endif
                
-                <p>Giá thuê một ngày: <span  class="vnd_format">{{$vehicle->rental_price_day}}</span> VND</p>
+                <p id="rental_price_day_detail">Giá thuê một ngày: <span  class="vnd_format">{{$vehicle->rental_price_day}}</span> VND</p>
             </div>
-            <form action="{{route('user.booking.vehicle')}}" method="POST" class="vehicle-detail__container-right__group-input">
+            <form action="{{route('user.booking.vehicle')}}" method="POST" class="vehicle-detail__container-right__group-input" id="form_booking_vehicle_detail">
                 @csrf
                 <input type="hidden" name="vehicle_id" value="{{$vehicle->vehicle_id}}">
                 <input type="hidden" name="booking_rental_price_day" value="{{$vehicle->rental_price_day}}">
-                {{-- <div class="form-group">
-                    <label for="paymentmethod">Chọn phương thức thanh toán</label>
-                    @foreach ($payment_method_list as $payment_method_item)
-                        <div class="form-check">
-                            <input type="radio" name="payment_method_id" id="payment_method_{{$payment_method_item->payment_method_id}}" class="form-check-input" value="{{$payment_method_item->payment_method_id}}">
-                            <label for="payment_method_{{$payment_method_item->payment_method_id}}" class="form-check-label">
-                                {{$payment_method_item->payment_method_name}}
-                            </label>
-                        </div>
-                    @endforeach
-                    @error('payment_method')
-                        <span class="text-danger">{{$message}}</span>
-                    @enderror
-               </div> --}}
-               {{-- <div class="form-group">
-                    <label for="start_date">Ngày bắt đầu</label>
-                    <input class="form-control" type="date" name="booking_start_date" id="booking_start_date">
-                    @error('booking_start_date')
-                        <span class="text-danger">{{$message}}</span>
-                    @enderror
-               </div>
-               <div  class="form-group">
-                    <label for="end_date">Ngày kết thúc</label>
-                    <input class="form-control" type="date" name="booking_end_date" id="booking_end_date">
-                    @error('booking_end_date')
-                        <span class="text-danger">{{$message}}</span>
-                    @enderror
-                </div> --}}
+                
                 <div class="form-group">
                     <label style="font-weight: bold;" class="font-weight-bold" for="booking_daterange">Chọn ngày thuê</label>
                     <input class="form-control" required  type="text" id="booking_daterange" name="booking_daterange" value="{{old('booking_daterange')}}"/>
@@ -92,9 +72,10 @@
                 <p>Số tiền phải trả: <span id="booking_vehicle_price" class="vnd_format"></span></p>
                
                 <input type="hidden" id="booking_total_price" name="booking_total_price" value="" >
-                <button style="margin-top: 24px;" name="form_booking_vehicle" class="btn btn-primary" type="submit">Thanh toán bằng tiền mặt</button>
                 <button id="button_vnpay_payment" class="btn btn-outline-dark" name="redirect" value="vnpay_payment" type="submit"><ion-icon name="card-outline"></ion-icon>Thanh toán VNPAY</button>
+                <button style="margin-top: 24px;" name="form_booking_vehicle" id="booking_vehicle_button" class="btn btn-primary" type="button" data-toggle="modal" data-target="#bookingModal">Thanh toán bằng tiền mặt</button>
             </form>
+
             {{-- <form action="{{route('vnpay.payment')}}" method="POST">
                 @csrf
             <button id="button_vnpay_payment" class="btn btn-outline-dark" name="redirect" type="submit"><ion-icon name="card-outline"></ion-icon>Thanh toán VNPAY</button>
@@ -106,6 +87,32 @@
 
 </div>
 
+<script defer>
+    // document.addEventListener('DOMContentLoaded', function(e) {
+
+    //     const formBookingVehicle = document.getElementById('form_booking_vehicle_detail');
+    //     const bookingButton = document.getElementById('booking_vehicle_button');
+        
+    //     console.log(formBookingVehicle);
+    //     formBookingVehicle.addEventListener('submit', function(e) {
+    //         e.preventDefault();
+    //         console.log('sdafsf');
+    //     });
+    //     bookingButton.addEventListener('click', function(event) {
+    //         event.preventDefault(); // Ngăn chặn việc gửi form mặc định
+
+    //         var userConfirmation = confirm("Bạn có muốn đặt xe không?"); // Hiển thị cảnh báo
+
+    //         if(userConfirmation) {
+    //             formBookingVehicle.submit(); // Nếu người dùng nhấn OK, gửi form
+    //         }
+    //         // Không cần phần else vì event đã bị prevent ở trên rồi nếu không phải là OK.
+    //     });
+
+    // });
+
+</script>
+ 
 <script>
     $(function() {
         const list_rental_time = @json($list_rental_time);
