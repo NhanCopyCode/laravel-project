@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use Carbon\Carbon;
 use App\Models\Rental;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -22,13 +23,14 @@ class BookingVehicleRequest extends FormRequest
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
-    public function rules(): array
+    public function rules(Request $request): array
     {
         return [
+            'vehicle_id' => 'required|exists:vehicles,vehicle_id',
             'payment_method_id' => 'required|exists:paymentmethod,payment_method_id',
             'booking_daterange' => [
                 'required',
-                function ($attribute, $value, $fail) {
+                function ($attribute, $value, $fail) use ($request) { // Thêm $request vào use
                     // Phân tích $value để lấy ngày bắt đầu và kết thúc
                     [$start_date, $end_date] = explode(' - ', $value);
                     
@@ -38,9 +40,10 @@ class BookingVehicleRequest extends FormRequest
                     
                     // Thực hiện truy vấn để kiểm tra xem khoảng thời gian đã tồn tại trong DB hay chưa
                     $exists = DB::table('rental') // Thay 'rental' bằng tên bảng đúng của bạn
+                                ->where('vehicle_id', $request->vehicle_id) // Thêm điều kiện where cho vehicle_id
                                 ->where(function($query) use ($start_date, $end_date) {
                                     $query->whereBetween('rental_start_date',[$start_date, $end_date])
-                                          ->whereBetween('rental_end_date',[$start_date, $end_date]);
+                                          ->orWhereBetween('rental_end_date',[$start_date, $end_date]);
                                 })
                                 ->get();
     
@@ -52,6 +55,7 @@ class BookingVehicleRequest extends FormRequest
             ],
         ];
     }
+    
 
     public function messages()
     {
