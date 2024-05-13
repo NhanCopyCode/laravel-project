@@ -26,6 +26,7 @@ class BookingVehicleRequest extends FormRequest
     public function rules(Request $request): array
     {
         return [
+            'booking_total_price' => 'required',
             'vehicle_id' => 'required|exists:vehicles,vehicle_id',
             'payment_method_id' => 'required|exists:paymentmethod,payment_method_id',
             'booking_daterange' => [
@@ -62,7 +63,7 @@ class BookingVehicleRequest extends FormRequest
         return [
             'required' => ':attribute không được bỏ trống',
             'payment_method_id.exists' => 'Phương thức thanh toán không hợp lệ',
-            
+            'booking_total_price.required' => 'Cần chọn ngày thuê xe',
         ];
     }
 

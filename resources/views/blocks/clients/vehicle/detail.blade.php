@@ -74,13 +74,15 @@
                         <span class="text-danger">{{$message}}</span>
                     @enderror
                 </div> --}}
-
                 <div class="form-group">
-                    <label for="booking_daterange">Chọn ngày thuê</label>
+                    <label style="font-weight: bold;" class="font-weight-bold" for="booking_daterange">Chọn ngày thuê</label>
                     <input class="form-control" required  type="text" id="booking_daterange" name="booking_daterange" value="{{old('booking_daterange')}}"/>
-                    @error('booking_daterange')
-                        <span class="text-danger">{{$message}}</span>
-                    @enderror
+                    @if ($errors->has('booking_daterange'))
+                        <span class="text-danger">{{ $errors->first('booking_daterange') }}</span>
+                    @elseif ($errors->has('booking_total_price'))
+                        <span class="text-danger">{{ $errors->first('booking_total_price') }}</span>
+                    @endif
+
                 </div>
                 {{-- Tiếng việt --}}
                 <input type="hidden" id="language"  name="language" value="vn">
@@ -88,6 +90,7 @@
 
                 
                 <p>Số tiền phải trả: <span id="booking_vehicle_price" class="vnd_format"></span></p>
+               
                 <input type="hidden" id="booking_total_price" name="booking_total_price" value="" >
                 <button style="margin-top: 24px;" name="form_booking_vehicle" class="btn btn-primary" type="submit">Thanh toán bằng tiền mặt</button>
                 <button id="button_vnpay_payment" class="btn btn-outline-dark" name="redirect" value="vnpay_payment" type="submit"><ion-icon name="card-outline"></ion-icon>Thanh toán VNPAY</button>
@@ -120,6 +123,7 @@
         $('input[name="booking_daterange"]').daterangepicker(
             {
                 opens: 'left',
+                // autoUpdateInput: false,
                 minDate: new Date(),
                 isInvalidDate: isInvalidDate ,// Sử dụng hàm để xác định các ngày không khả dụng
                 locale: {
