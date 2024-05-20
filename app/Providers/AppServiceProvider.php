@@ -53,6 +53,16 @@ class AppServiceProvider extends ServiceProvider
                 DB::raw("CONCAT(models.model_name, ' - ', models.engine_type, ' - ', models.color, ' - ', models.year_of_production) as model_type")
             )->get();
 
+            $list_engine_type = DB::table('models')
+            ->distinct()
+            ->select('models.engine_type')
+            ->get();
+
+            $list_color = DB::table('models')
+            ->distinct()
+            ->select('models.color')
+            ->get();
+
             $carrentalstore_list = DB::table('carrentalstore')
             ->join('location', 'location.location_id', '=', 'carrentalstore.location_id')
             ->select('carrentalstore.*', 'location.*')
@@ -88,6 +98,8 @@ class AppServiceProvider extends ServiceProvider
                 'payment_method_list',
                 'rental_status_list',
                 'is_deleted_list',
+                'list_engine_type',
+                'list_color',
             ));
 
 

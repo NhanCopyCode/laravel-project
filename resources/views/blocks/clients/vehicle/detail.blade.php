@@ -72,8 +72,8 @@
                 <p>Số tiền phải trả: <span id="booking_vehicle_price" class="vnd_format"></span></p>
                
                 <input type="hidden" id="booking_total_price" name="booking_total_price" value="" >
-                <button id="button_vnpay_payment" class="btn btn-outline-dark" name="redirect" value="vnpay_payment" type="submit"><ion-icon name="card-outline"></ion-icon>Thanh toán VNPAY</button>
                 <button style="margin-top: 24px;" name="form_booking_vehicle" id="booking_vehicle_button" class="btn btn-primary" type="button" data-toggle="modal" data-target="#bookingModal">Thanh toán bằng tiền mặt</button>
+                <button id="button_vnpay_payment" class="btn btn-outline-dark" name="redirect" value="vnpay_payment" type="submit"><ion-icon name="card-outline"></ion-icon>Thanh toán VNPAY</button>
             </form>
 
             {{-- <form action="{{route('vnpay.payment')}}" method="POST">

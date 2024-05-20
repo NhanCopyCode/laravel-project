@@ -89,6 +89,9 @@ Route::prefix('auth')->name('auth.')->group(function () {
 
 //Route clients
 Route::prefix('/user')->name('user.')->middleware('auth')->group(function () {
+
+    
+
     //Vehicle
     Route::get('/vehicle/{vehicle}', [VehicleController::class, 'showVehicle'])->name('showVehicle');
 
@@ -96,6 +99,10 @@ Route::prefix('/user')->name('user.')->middleware('auth')->group(function () {
 
     //Search vehicle available
     Route::get('/search', [SearchVehicleController::class, 'searchVehicle'])->name('search_vehicle');
+
+    Route::get('/search_advanced', [SearchVehicleController::class, 'searchVehicleAdvanced'])->name('search.advanced');
+
+    Route::get('/search_advanced_date', [SearchVehicleController::class, 'searchVehicleAdvancedDate'])->name('search.advanced.date');
 
     // Profile
     Route::get('/profile', [UserController::class, 'profile'])->name('profile');

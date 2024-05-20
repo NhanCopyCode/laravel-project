@@ -13,14 +13,18 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use App\Http\Requests\BookingVehicleRequest;
+use Illuminate\Support\Composer;
 
 class BookingController extends Controller
 {
     //
     public function index()
     {
-        return view();
-        dd('Xin chào đây là booking');
+        $vehicle_list = Vehicle::join('models', 'models.model_id', '=', 'vehicles.model_id')
+        ->join('vehicleimages', 'vehicleimages.vehicle_img_id', '=', 'vehicles.vehicle_image_id')
+        ->paginate(1);
+        $vehicle_count = $vehicle_list->count();
+        return view('clients.booking.showBooking', compact('vehicle_list', 'vehicle_count'));
     }
 
     public function showBookingHistory()

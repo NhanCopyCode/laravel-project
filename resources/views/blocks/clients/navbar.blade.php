@@ -5,7 +5,7 @@
     <ion-icon class="navbar-toggler" onclick="toggleNavbar()" name="menu-outline"></ion-icon>
     <ul class="nav__links">
       <li class="link"><a href="{{route('home')}}">Trang chủ</a></li>
-      <li class="link"><a href="#">Đặt xe</a></li>
+      <li class="link"><a href="{{route('user.booking.index')}}">Đặt xe</a></li>
       <li class="link"><a href="#">Blog</a></li>
       @if (Auth::guard('web')->check())
         <li class="navbar-user-icon">

@@ -650,3 +650,36 @@ nav {
       width: 100%;
     }
 }
+
+
+/*  form_search_vehicle_advanced*/
+
+#form_search_vehicle_advanced {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+#form_search_vehicle_advanced .form__group {
+  width: 40%;
+}
+
+/* Responsive form search vehicle */
+@media (max-width: 768px) {
+  
+  #form_search_vehicle_advanced {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  #form_search_vehicle_advanced .form__group {
+    width: 100%;
+  }
+}
+
+
+
+.booking_pagination > nav {
+  padding: 0;
+}

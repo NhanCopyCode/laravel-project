@@ -22,18 +22,20 @@ class PermissionChecker
         $userRole = null;
         $adminRole = null;
         if(Auth::guard('admin')->check()) {
+            dd('vào admin');
             $adminRole = strtolower($this->getUserType(Auth::guard('admin')->user()->role_id));
         }
 
         if(Auth::guard('web')->check()) {
+            dd('vào user');
+
             $userRole = strtolower($this->getUserType(Auth::guard('web')->user()->role_id));
         }
         if(in_array($userRole, $allowRoles) || in_array($adminRole, $allowRoles)) {
-
+            
             return $next($request);
 
         }
-        return redirect()->route('403');
     }
 
     public function getUserType($role_id)

@@ -2,10 +2,11 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\api\ProvineController;
-use App\Http\Controllers\admins\BranchController;
-use App\Http\Controllers\api\DistrictController;
+use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\api\WardController;
+use App\Http\Controllers\api\ProvineController;
+use App\Http\Controllers\api\DistrictController;
+use App\Http\Controllers\admins\BranchController;
 
 /*
 |--------------------------------------------------------------------------
@@ -27,3 +28,6 @@ Route::get('/provine', [ProvineController::class, 'index']);
 Route::get('/wards', [WardController::class,'index']);
 
 Route::get('/districts', [DistrictController::class,'index']);
+
+Route::post('/auth/register', [AuthController::class, 'register']);
+Route::post('/auth/responseJson', [AuthController::class, 'responseJson']);

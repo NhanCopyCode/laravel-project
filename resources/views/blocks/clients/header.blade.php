@@ -7,9 +7,11 @@
     <div class="booking__container">
     <form method="GET" action="{{route('user.search_vehicle')}}" id="form_search_vehicle">
         <div class="form__group">
-          <select class="form-control background-transparent" name="location_id" id="location_client" value="{{ request()->location_id}}">
+          <select class="form-control background-transparent" name="location_id" id="location_client" >
               @foreach ($location_list as $location)
-                  <option value="{{$location->location_id}}">{{$location->province}}</option>
+                <option value="{{$location->location_id}}" {{ request()->get('location_id') == $location->location_id ? 'selected' : '' }}>
+                    {{$location->province}}
+                </option>
               @endforeach
           </select>
           <p>Chọn nơi muốn thuê</p>
