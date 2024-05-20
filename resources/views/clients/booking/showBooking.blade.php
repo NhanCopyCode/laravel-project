@@ -58,7 +58,7 @@
                 <div class="row booking__section">
                     <div class="booking__section__header">
                         <h3>Danh sách toàn bộ xe: </h3>
-                        <h3>: Tìm thấy <span class="vehicle_count fw-bold">3</span> xe</h3>
+                        <h3>Tìm thấy <span class="vehicle_count fw-bold">3</span> xe</h3>
                     </div>
                     
                     <div class="booking__section__content">
@@ -67,14 +67,15 @@
                                 <div class="row booking__section__item border rounded mb-4"  style="height: 200px;">
                                     <div class="col-4">
                                         <div class="row">
-                                            <img src="{{$vehicle->vehicle_image_data_1}}" alt="Ảnh xe" class="col-8  p-1">
+                                            <img style="object-fit: cover; height: 200px;" src="{{$vehicle->vehicle_image_data_1}}" alt="Ảnh xe" class="col-8  p-1">
                                             <div class="col-4 d-flex flex-column">
-                                                <img src="{{$vehicle->vehicle_image_data_1}}" alt="Ảnh xe" class=" p-1">
-                                                <img src="{{$vehicle->vehicle_image_data_2}}" alt="Ảnh xe" class=" p-1">
-                                                <img src="{{$vehicle->vehicle_image_data_3}}" alt="Ảnh xe" class=" p-1">
+                                                <img style="height: 33.33333%; object-fit: cover;" src="{{$vehicle->vehicle_image_data_1}}" alt="Ảnh xe" class=" p-1">
+                                                <img style="height: 33.33333%; object-fit: cover;" src="{{$vehicle->vehicle_image_data_2}}" alt="Ảnh xe" class=" p-1">
+                                                <img style="height: 33.33333%; object-fit: cover;" src="{{$vehicle->vehicle_image_data_3}}" alt="Ảnh xe" class=" p-1">
         
                                             </div>
                                         </div>
+                                       
                                     </div>
                                     <div class="col-8">
                                         <div class="row d-flex justify-content-between booking__section__item-header">
@@ -145,7 +146,7 @@
 
 
                 var newFormData = urlParamsReal.replace(/\?/g, '');
-                newFormData += '&page=' + currentPage + '&per_page=' + perPage;
+                // newFormData += '&page=' + currentPage + '&per_page=' + perPage;
                 console.log('newFormData', newFormData);
                 // Gửi yêu cầu AJAX đến server
                 $.ajax({
@@ -182,19 +183,18 @@
                                 </div>
                                 <div class="col-8">
                                     <div class="row d-flex justify-content-between booking__section__item-header">
-                                        <h4 class="fw-bold">Xe Air Blade 125 mới keng</h4>
-
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-8">
-                                            Đây là thông tin chi tiết descriptiuon lấhfilhalksjdf
+                                            <h4 class="fw-bold">{{$vehicle->model_name}}</h4>
                                         </div>
-                                        <div class="col-4">
-                                            <a href="${vehicleItemRoute}" class="btn btn-primary">
+                                        <div class="d-flex justify-content-between align-items-end">
+                                            <div class="booking__section__item-content d-flex flex-column">
+                                                <p>Chi tiết: {{$vehicle->description}}</p>
+                                                <p>Giá thuê xe: {{$vehicle->rental_price_day}}</p>
+                                            </div>
+
+                                            <a style="height: 40px;" href="{{env('APP_URL')}}/user/vehicle/{{$vehicle->vehicle_id}}" class="btn btn-primary">
                                                 Đặt xe
                                             </a>
                                         </div>
-                                    </div>
                                 </div>
                             </div>`;
                             });
@@ -237,7 +237,7 @@
             history.pushState({path:newUrl}, '', newUrl);
 
             var newFormData = urlParamsReal.replace(/\?/g, '');
-            newFormData += '&page=' + currentPage + '&per_page=' + perPage;
+            // newFormData += '&page=' + currentPage + '&per_page=' + perPage;
 
               $.ajax({
                 method: "GET",
@@ -267,18 +267,17 @@
                             </div>
                             <div class="col-8">
                                 <div class="row d-flex justify-content-between booking__section__item-header">
-                                    <h4 class="fw-bold">Xe Air Blade 125 mới keng</h4>
-
+                                    <h4 class="fw-bold">{{$vehicle->model_name}}</h4>
                                 </div>
-                                <div class="row">
-                                    <div class="col-8">
-                                        Đây là thông tin chi tiết descriptiuon lấhfilhalksjdf
+                                <div class="d-flex justify-content-between align-items-end">
+                                    <div class="booking__section__item-content d-flex flex-column">
+                                        <p>Chi tiết: {{$vehicle->description}}</p>
+                                        <p>Giá thuê xe: {{$vehicle->rental_price_day}}</p>
                                     </div>
-                                    <div class="col-4">
-                                        <a href="${vehicleItemRoute}" class="btn btn-primary">
-                                            Đặt xe
-                                        </a>
-                                    </div>
+
+                                    <a style="height: 40px;" href="{{env('APP_URL')}}/user/vehicle/{{$vehicle->vehicle_id}}" class="btn btn-primary">
+                                        Đặt xe
+                                    </a>
                                 </div>
                             </div>
                         </div>`;

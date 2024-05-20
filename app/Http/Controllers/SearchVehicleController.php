@@ -145,7 +145,7 @@ class SearchVehicleController extends Controller
 
         $page = $request->get('page', 1); // Default to page 1
 
-        $per_page = $request->get('per_page', 1); // Default to 10 results per page
+        $per_page = $request->get('per_page', 3); // Default to 10 results per page
 
         $offset = ($page - 1) * $per_page; // Calculate offset for pagination
 
