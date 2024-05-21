@@ -96,7 +96,7 @@
                                             <h4 class="fw-bold">{{$vehicle->model_name}}</h4>
                                         </div>
                                         <div class="d-flex justify-content-between align-items-end booking__section__item-content">
-                                            <div class="booking__section__item-content d-flex flex-column">
+                                            <div class="booking__section__item-content-description d-flex flex-column">
                                                 <p>Chi tiết: {{$vehicle->description}}</p>
                                                 <p>Giá thuê xe: {{$vehicle->rental_price_day}}</p>
                                             </div>
@@ -110,7 +110,27 @@
                             @endforeach
                         @endif
                        <div class="booking__pagination">
-                        {{ $vehicle_list->links()}}
+                            @if (isset($vehicle_list))
+                                {{ $vehicle_list->links()}}
+                            @else 
+                                <nav aria-label="Page navigation example">
+                                    <ul class="pagination">
+                                        <li class="page-item">
+                                            <a class="page-link" href="#" aria-label="Previous">
+                                            <span aria-hidden="true">&laquo;</span>
+                                            </a>
+                                        </li>
+                                        <li class="page-item"><a class="page-link" href="#">1</a></li>
+                                        <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                        <li class="page-item">
+                                            <a class="page-link" href="#" aria-label="Next">
+                                            <span aria-hidden="true">&raquo;</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </nav>
+                            @endif
                        </div>
                     </div>
                 </div>
@@ -175,7 +195,6 @@
                         var html = '';
                         console.log(response);
                         if(response.status === 'success') {
-                            $('.vehicle_count').html(response.vehicle_number);
                             console.log(response);
                             var currentPage = response.vehicle_available.current_page;
                             var totalPages = response.vehicle_available.total_pages;
@@ -185,12 +204,20 @@
                             var vehicleItemRoute = '{{ env('APP_URL')}}' +  `/user/vehicle/${item.vehicle_id}`;
                                 html += `<div class="row booking__section__item border rounded mb-4"  style="height: 200px;">
                                 <div class="col-4">
-                                    <div class="row">
-                                        <img style="object-fit: cover; height: 200px;"  data-lightbox="booking_vehicle_${item.vehicle_id}" src="${item.vehicle_image_data_1}" src="${item.vehicle_image_data_1}" alt="Ảnh xe" class="col-8  p-1">
-                                        <div class="col-4 d-flex flex-column">
-                                            <img style="height: 33.33333%; object-fit: cover;" data-lightbox="booking_vehicle_${item.vehicle_id}" src="${item.vehicle_image_data_1}" alt="Ảnh xe" class=" p-1">
-                                            <img style="height: 33.33333%; object-fit: cover;" data-lightbox="booking_vehicle_${item.vehicle_id}" src="${item.vehicle_image_data_2}" alt="Ảnh xe" class=" p-1">
-                                            <img style="height: 33.33333%; object-fit: cover;" data-lightbox="booking_vehicle_${item.vehicle_id}" src="${item.vehicle_image_data_3}" alt="Ảnh xe" class=" p-1">
+                                    <div class="row booking__section__item-group-img">
+                                        <a class="col-8 booking__section__item-main-img" style="object-fit: cover; height: 200px;" data-lightbox="booking_vehicle_${item.vehicle_id}" href="{{$vehicle->vehicle_image_data_1}}" alt="Ảnh xe" class="col-8  p-1">
+                                            <img src="${item.vehicle_image_data_1}" alt="Ảnh xe">
+                                        </a>
+                                        <div class="col-4 d-flex flex-column booking__section__item-group-img-sidebar">
+                                            <a style="height: 33.33333%; object-fit: cover;" data-lightbox="booking_vehicle_${item.vehicle_id}"  href="${item.vehicle_image_data_1}" alt="Ảnh xe" class=" p-1">
+                                                    <img src="${item.vehicle_image_data_1}" alt="Ảnh xe">
+                                            </a>
+                                            <a style="height: 33.33333%; object-fit: cover;" data-lightbox="booking_vehicle_${item.vehicle_id}"  href="${item.vehicle_image_data_2}" alt="Ảnh xe" class=" p-1">
+                                                    <img src="${item.vehicle_image_data_2}" alt="Ảnh xe">
+                                            </a>
+                                            <a style="height: 33.33333%; object-fit: cover;" data-lightbox="booking_vehicle_${item.vehicle_id}"  href="${item.vehicle_image_data_3}" alt="Ảnh xe" class=" p-1">
+                                                    <img src="${item.vehicle_image_data_3}" alt="Ảnh xe">
+                                            </a>
 
                                         </div>
                                     </div>
@@ -199,8 +226,8 @@
                                     <div class="row d-flex justify-content-between booking__section__item-header">
                                             <h4 class="fw-bold">{{$vehicle->model_name}}</h4>
                                         </div>
-                                        <div class="d-flex justify-content-between align-items-end">
-                                            <div class="booking__section__item-content d-flex flex-column">
+                                        <div class="d-flex justify-content-between align-items-end booking__section__item-content">
+                                            <div class="booking__section__item-content-description d-flex flex-column">
                                                 <p>Chi tiết: {{$vehicle->description}}</p>
                                                 <p>Giá thuê xe: {{$vehicle->rental_price_day}}</p>
                                             </div>
@@ -219,6 +246,9 @@
 
                         // Cập nhật nội dung vào phần tử với class .booking__main
                         $('.booking__section__content').html(html);
+                        //Cập nhật số lượng xe
+                        $('.vehicle_count').html(response.vehicle_number);
+
                     },
                     error: function (request, status, error) {
                         // Xử lý lỗi từ máy chủ
@@ -262,7 +292,7 @@
                     var html = '';
                     if(response.status === 'success') {
                         console.log(response.vehicle_available.vehicle_number)
-                        $('.vehicle_count').html(response.vehicle_number);
+
                         var currentPage = response.vehicle_available.current_page;
                         var totalPages = response.vehicle_available.total_pages;
                         console.log('currentPage: ' + currentPage + ' totalPages: ' + totalPages);
@@ -270,12 +300,20 @@
                         var vehicleItemRoute = '{{ env('APP_URL')}}' +  `/user/vehicle/${item.vehicle_id}`;
                             html += `<div class="row booking__section__item border rounded mb-4"  style="height: 200px;">
                             <div class="col-4">
-                                <div class="row">
-                                    <img style="object-fit: cover; height: 200px;"  data-lightbox="booking_vehicle_${item.vehicle_id}" src="${item.vehicle_image_data_1}" src="${item.vehicle_image_data_1}" alt="Ảnh xe" class="col-8  p-1">
-                                    <div class="col-4 d-flex flex-column">
-                                        <img style="height: 33.33333%; object-fit: cover;" data-lightbox="booking_vehicle_${item.vehicle_id}" src="${item.vehicle_image_data_1}" alt="Ảnh xe" class=" p-1">
-                                        <img style="height: 33.33333%; object-fit: cover;" data-lightbox="booking_vehicle_${item.vehicle_id}" src="${item.vehicle_image_data_2}" alt="Ảnh xe" class=" p-1">
-                                        <img style="height: 33.33333%; object-fit: cover;" data-lightbox="booking_vehicle_${item.vehicle_id}" src="${item.vehicle_image_data_3}" alt="Ảnh xe" class=" p-1">
+                                <div class="row booking__section__item-group-img">
+                                    <a class="col-8 booking__section__item-main-img" style="object-fit: cover; height: 200px;" data-lightbox="booking_vehicle_${item.vehicle_id}" href="{{$vehicle->vehicle_image_data_1}}" alt="Ảnh xe" class="col-8  p-1">
+                                        <img src="${item.vehicle_image_data_1}" alt="Ảnh xe">
+                                    </a>
+                                    <div class="col-4 d-flex flex-column booking__section__item-group-img-sidebar">
+                                        <a style="height: 33.33333%; object-fit: cover;" data-lightbox="booking_vehicle_${item.vehicle_id}"  href="${item.vehicle_image_data_1}" alt="Ảnh xe" class=" p-1">
+                                                <img src="${item.vehicle_image_data_1}" alt="Ảnh xe">
+                                        </a>
+                                        <a style="height: 33.33333%; object-fit: cover;" data-lightbox="booking_vehicle_${item.vehicle_id}"  href="${item.vehicle_image_data_2}" alt="Ảnh xe" class=" p-1">
+                                                <img src="${item.vehicle_image_data_2}" alt="Ảnh xe">
+                                        </a>
+                                        <a style="height: 33.33333%; object-fit: cover;" data-lightbox="booking_vehicle_${item.vehicle_id}"  href="${item.vehicle_image_data_3}" alt="Ảnh xe" class=" p-1">
+                                                <img src="${item.vehicle_image_data_3}" alt="Ảnh xe">
+                                        </a>
 
                                     </div>
                                 </div>
@@ -284,8 +322,8 @@
                                 <div class="row d-flex justify-content-between booking__section__item-header">
                                     <h4 class="fw-bold">{{$vehicle->model_name}}</h4>
                                 </div>
-                                <div class="d-flex justify-content-between align-items-end">
-                                    <div class="booking__section__item-content d-flex flex-column">
+                                <div class="d-flex justify-content-between align-items-end booking__section__item-content">
+                                    <div class="booking__section__item-content-description d-flex flex-column">
                                         <p>Chi tiết: {{$vehicle->description}}</p>
                                         <p>Giá thuê xe: {{$vehicle->rental_price_day}}</p>
                                     </div>
@@ -305,7 +343,8 @@
                     // Cập nhật nội dung vào phần tử với class .booking__main
                     $('.booking__section__content').html(html);
                     
-
+                    //Cập nhật số lượng xe
+                    $('.vehicle_count').html(response.vehicle_number);
                   
                 },
                 error: function (request, status, error) {

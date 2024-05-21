@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\admins;
 
 use App\Models\Brand;
+use App\Models\Vehicle;
 use App\Models\BrandStatus;
 use Illuminate\Http\Request;
 use App\Http\Requests\BrandRequest;
+use App\Models\admins\ModelVehicle;
 use App\Http\Controllers\Controller;
 
 class BrandController extends Controller
@@ -87,9 +89,15 @@ class BrandController extends Controller
         }
 
         $brand = Brand::find($brand_id);
+        $models = ModelVehicle::where('brand_id', $brand_id)->get();
+
         $brand_list_number = Brand::all()->count();
         if($brand) {
             $brand->delete();
+            foreach ($models as $model) {
+                Vehicle::where('model_id', $model->id)->delete();
+                $model->delete();
+            }
             return response()->json([
                 'status' => 'success',
                 'message' => 'Xóa thành công hãng xe',

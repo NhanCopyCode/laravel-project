@@ -171,6 +171,7 @@ class SearchVehicleController extends Controller
             return response()->json([
                 'status' => 'not found',
                 'message' => 'Không tìm thấy xe nào rảnh',
+                'vehicle_number' => 0,
             ]);
         }
     }

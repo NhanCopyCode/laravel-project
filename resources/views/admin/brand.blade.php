@@ -287,7 +287,9 @@
                 let brand_id = $(this).data('brand-id');
                 let brand_name = $(this).data('brand-name');
                 
-                if(confirm(`Bạn có muốn xóa hãng xe ${brand_name} không`)) {
+
+                
+                if(confirm(`Xóa hãng xe ${brand_name} sẽ đồng thời xóa những mẫu xe và xe liên quan liên quan! Bạn có muốn xóa không ?`)) {
                     $.ajax({
                     url: "{{route('admin.brand.delete')}}",
                     method: 'POST',

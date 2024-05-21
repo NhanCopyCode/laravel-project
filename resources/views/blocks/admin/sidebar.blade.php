@@ -9,78 +9,55 @@
     </div>
     <ul class="sidebar-nav">
         <li class="sidebar-item">
-            <a href="{{route('admin.profile')}}" class="sidebar-link">
+            <a href="{{route('admin.profile')}}" class="sidebar-link" title="Trang home">
                 <i class="lni lni-user"></i>
                 <span>Home</span>
             </a>
         </li>
         <li class="sidebar-item">
-            <a href="{{route('admin.booking.vehicle.index')}}" class="sidebar-link">
+            <a href="{{route('admin.booking.vehicle.index')}}" class="sidebar-link" title="Quản lý thuê xe">
                 <i class="fa-solid fa-calendar-days"></i>
                 <span>Quản lý thuê xe</span>
             </a>
         </li>
         <li class="sidebar-item">
-            <a href="{{route('admin.branch.index')}}" class="sidebar-link">
+            <a href="{{route('admin.branch.index')}}" class="sidebar-link" title="Quản lý chi nhánh">
                 <i class="fa-solid fa-code-branch"></i>
                 <span>Quản lý chi nhánh</span>
             </a>
         </li>
         <li class="sidebar-item">
-            <a href="{{route('admin.carrentalstore.index')}}" class="sidebar-link">
+            <a href="{{route('admin.carrentalstore.index')}}" class="sidebar-link" title="Quản lý cửa hàng">
                 <i class="fa-solid fa-store"></i>
                 <span>Quản lý cửa hàng</span>
             </a>
         </li>
         <li class="sidebar-item">
-            <a href="#" class="sidebar-car sidebar-link collapsed has-dropdown" data-bs-toggle="collapse"
+            <a href="#" class="sidebar-car sidebar-link collapsed has-dropdown" data-bs-toggle="collapse" title="Quản lý xe"
                 data-bs-target="#auth" aria-expanded="false" aria-controls="auth">
                 <i class="fa-solid fa-motorcycle"></i>
                 <span>Quản lý xe</span>
             </a>
             <ul id="auth" class="sidebar-dropdown list-unstyled collapse list-car-sidebar" data-bs-parent="#sidebar">
                 <li class="sidebar-item">
-                    <a href="{{route('admin.brand.index')}}" class="sidebar-link">Hãng xe</a>
+                    <a href="{{route('admin.brand.index')}}" class="sidebar-link" title="Quản lý hãng xe">Hãng xe</a>
                 </li>
                 <li class="sidebar-item">
-                    <a href="{{route('admin.model.index')}}" class="sidebar-link">Mẫu xe</a>
+                    <a href="{{route('admin.model.index')}}" class="sidebar-link" title="Quản lý mẫu xe">Mẫu xe</a>
                 </li>
                 <li class="sidebar-item">
-                    <a href="{{route('admin.vehicle.index')}}" class="sidebar-link">Xe</a>
+                    <a href="{{route('admin.vehicle.index')}}" class="sidebar-link" title="Quản lý xe">Xe</a>
                 </li>
             </ul>
         </li>
         <li class="sidebar-item">
-            <a href="#" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse"
-                data-bs-target="#multi" aria-expanded="false" aria-controls="multi">
-                <i class="lni lni-layout"></i>
-                <span>Multi Level</span>
-            </a>
-            <ul id="multi" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
-                <li class="sidebar-item">
-                    <a href="#" class="sidebar-link collapsed" data-bs-toggle="collapse"
-                        data-bs-target="#multi-two" aria-expanded="false" aria-controls="multi-two">
-                        Two Links
-                    </a>
-                    <ul id="multi-two" class="sidebar-dropdown list-unstyled collapse">
-                        <li class="sidebar-item">
-                            <a href="#" class="sidebar-link">Link 1</a>
-                        </li>
-                        <li class="sidebar-item">
-                            <a href="#" class="sidebar-link">Link 2</a>
-                        </li>
-                    </ul>
-                </li>
-            </ul>
-        </li>
-        <li class="sidebar-item">
-            <a href="#" class="sidebar-link">
+            <a href="#" class="sidebar-link" title="Quản lý người dùng">
                 <i class="fa-solid fa-users"></i>
                 <span>Quản lý user</span>
             </a>
         </li>
         <li class="sidebar-item">
-            <a href="#" class="sidebar-link">
+            <a href="#" class="sidebar-link" title="Setting">
                 <i class="lni lni-cog"></i>
                 <span>Setting</span>
             </a>

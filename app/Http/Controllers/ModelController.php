@@ -17,6 +17,10 @@ class ModelController extends Controller
                     ->join('brands', 'models.brand_id', '=', 'brands.brand_id')
                     ->select('models.*', 'brands.brand_name as brand_name') // Lấy tất cả cột từ model_vehicles và cột tên từ brands, đặt là brand_name
                     ->paginate(5);
+
+  
+        // dd($modelList);
+
         return view('admin.model', compact('modelList'))->with('i', (request()->input('page', 1) - 1) * 5);
         // return view('admin.model', compact('modelList'));
     }
