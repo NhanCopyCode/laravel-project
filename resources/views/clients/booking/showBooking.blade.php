@@ -54,7 +54,7 @@
                     </div>
                 </form>  
             </div>
-            <div class="col-8">
+            <div class="col-8 booking__container__vehicle_item">
                 <div class="row booking__section">
                     <div class="booking__section__header">
                         <h3>Danh sách toàn bộ xe: </h3>
@@ -72,12 +72,20 @@
                             @foreach ($vehicle_list as $vehicle)
                                 <div class="row booking__section__item border rounded mb-4"  style="height: 200px;">
                                     <div class="col-4">
-                                        <div class="row">
-                                            <img style="object-fit: cover; height: 200px;" src="{{$vehicle->vehicle_image_data_1}}" alt="Ảnh xe" class="col-8  p-1">
-                                            <div class="col-4 d-flex flex-column">
-                                                <img style="height: 33.33333%; object-fit: cover;" src="{{$vehicle->vehicle_image_data_1}}" alt="Ảnh xe" class=" p-1">
-                                                <img style="height: 33.33333%; object-fit: cover;" src="{{$vehicle->vehicle_image_data_2}}" alt="Ảnh xe" class=" p-1">
-                                                <img style="height: 33.33333%; object-fit: cover;" src="{{$vehicle->vehicle_image_data_3}}" alt="Ảnh xe" class=" p-1">
+                                        <div class="row booking__section__item-group-img">
+                                            <a class="col-8 booking__section__item-main-img" style="object-fit: cover; height: 200px;" data-lightbox="booking_vehicle_{{$vehicle->vehicle_id}}" href="{{$vehicle->vehicle_image_data_1}}" alt="Ảnh xe" class="col-8  p-1">
+                                                <img src="{{$vehicle->vehicle_image_data_1}}" alt="Ảnh xe">
+                                            </a>
+                                            <div class="col-4 d-flex flex-column booking__section__item-group-img-sidebar">
+                                                <a style="height: 33.33333%; object-fit: cover;" data-lightbox="booking_vehicle_{{$vehicle->vehicle_id}}"  href="{{$vehicle->vehicle_image_data_1}}" alt="Ảnh xe" class=" p-1">
+                                                     <img src="{{$vehicle->vehicle_image_data_1}}" alt="Ảnh xe">
+                                                </a>
+                                                <a style="height: 33.33333%; object-fit: cover;" data-lightbox="booking_vehicle_{{$vehicle->vehicle_id}}"  href="{{$vehicle->vehicle_image_data_2}}" alt="Ảnh xe" class=" p-1">
+                                                     <img src="{{$vehicle->vehicle_image_data_2}}" alt="Ảnh xe">
+                                                </a>
+                                                <a style="height: 33.33333%; object-fit: cover;" data-lightbox="booking_vehicle_{{$vehicle->vehicle_id}}"  href="{{$vehicle->vehicle_image_data_3}}" alt="Ảnh xe" class=" p-1">
+                                                     <img src="{{$vehicle->vehicle_image_data_3}}" alt="Ảnh xe">
+                                                </a>
         
                                             </div>
                                         </div>
@@ -87,7 +95,7 @@
                                         <div class="row d-flex justify-content-between booking__section__item-header">
                                             <h4 class="fw-bold">{{$vehicle->model_name}}</h4>
                                         </div>
-                                        <div class="d-flex justify-content-between align-items-end">
+                                        <div class="d-flex justify-content-between align-items-end booking__section__item-content">
                                             <div class="booking__section__item-content d-flex flex-column">
                                                 <p>Chi tiết: {{$vehicle->description}}</p>
                                                 <p>Giá thuê xe: {{$vehicle->rental_price_day}}</p>
@@ -101,7 +109,7 @@
                                 </div>
                             @endforeach
                         @endif
-                       <div class="booking_pagination">
+                       <div class="booking__pagination">
                         {{ $vehicle_list->links()}}
                        </div>
                     </div>
@@ -178,11 +186,11 @@
                                 html += `<div class="row booking__section__item border rounded mb-4"  style="height: 200px;">
                                 <div class="col-4">
                                     <div class="row">
-                                        <img style="object-fit: cover; height: 200px;" src="${item.vehicle_image_data_1}" alt="Ảnh xe" class="col-8  p-1">
+                                        <img style="object-fit: cover; height: 200px;"  data-lightbox="booking_vehicle_${item.vehicle_id}" src="${item.vehicle_image_data_1}" src="${item.vehicle_image_data_1}" alt="Ảnh xe" class="col-8  p-1">
                                         <div class="col-4 d-flex flex-column">
-                                            <img style="height: 33.33333%; object-fit: cover;" src="${item.vehicle_image_data_1}" alt="Ảnh xe" class=" p-1">
-                                            <img style="height: 33.33333%; object-fit: cover;" src="${item.vehicle_image_data_2}" alt="Ảnh xe" class=" p-1">
-                                            <img style="height: 33.33333%; object-fit: cover;" src="${item.vehicle_image_data_3}" alt="Ảnh xe" class=" p-1">
+                                            <img style="height: 33.33333%; object-fit: cover;" data-lightbox="booking_vehicle_${item.vehicle_id}" src="${item.vehicle_image_data_1}" alt="Ảnh xe" class=" p-1">
+                                            <img style="height: 33.33333%; object-fit: cover;" data-lightbox="booking_vehicle_${item.vehicle_id}" src="${item.vehicle_image_data_2}" alt="Ảnh xe" class=" p-1">
+                                            <img style="height: 33.33333%; object-fit: cover;" data-lightbox="booking_vehicle_${item.vehicle_id}" src="${item.vehicle_image_data_3}" alt="Ảnh xe" class=" p-1">
 
                                         </div>
                                     </div>
@@ -263,11 +271,11 @@
                             html += `<div class="row booking__section__item border rounded mb-4"  style="height: 200px;">
                             <div class="col-4">
                                 <div class="row">
-                                    <img style="object-fit: cover; height: 200px;" src="${item.vehicle_image_data_1}" alt="Ảnh xe" class="col-8  p-1">
+                                    <img style="object-fit: cover; height: 200px;"  data-lightbox="booking_vehicle_${item.vehicle_id}" src="${item.vehicle_image_data_1}" src="${item.vehicle_image_data_1}" alt="Ảnh xe" class="col-8  p-1">
                                     <div class="col-4 d-flex flex-column">
-                                        <img style="height: 33.33333%; object-fit: cover;" src="${item.vehicle_image_data_1}" alt="Ảnh xe" class=" p-1">
-                                        <img style="height: 33.33333%; object-fit: cover;" src="${item.vehicle_image_data_2}" alt="Ảnh xe" class=" p-1">
-                                        <img style="height: 33.33333%; object-fit: cover;" src="${item.vehicle_image_data_3}" alt="Ảnh xe" class=" p-1">
+                                        <img style="height: 33.33333%; object-fit: cover;" data-lightbox="booking_vehicle_${item.vehicle_id}" src="${item.vehicle_image_data_1}" alt="Ảnh xe" class=" p-1">
+                                        <img style="height: 33.33333%; object-fit: cover;" data-lightbox="booking_vehicle_${item.vehicle_id}" src="${item.vehicle_image_data_2}" alt="Ảnh xe" class=" p-1">
+                                        <img style="height: 33.33333%; object-fit: cover;" data-lightbox="booking_vehicle_${item.vehicle_id}" src="${item.vehicle_image_data_3}" alt="Ảnh xe" class=" p-1">
 
                                     </div>
                                 </div>

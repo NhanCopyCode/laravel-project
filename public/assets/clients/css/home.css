@@ -684,11 +684,38 @@ nav {
   .booking__container__filter-sidebar {
     width: 100%;
   }
+
+  .booking__container__vehicle_item {
+    width: 100%;
+  }
+
+  .booking__section__item-group-img-sidebar {
+    display: none !important;
+  }
+
+  .booking__section__item-main-img {
+    width: 100%;
+  }
+  .booking__section__item-main-img img{
+    width: 100%;
+  }
+}
+
+.booking__section__item-main-img img {
+  height: 95%;
+  object-fit: cover;
+}
+
+/* // Small devices (landscape phones, 576px and up) */
+@media (max-width: 576px) { 
+  .booking__section__item-content {
+    flex-direction: column;
+    align-items: baseline !important;
+  }
 }
 
 
-
-.booking_pagination > nav {
+.booking__pagination > nav {
   padding: 0;
 }
 
