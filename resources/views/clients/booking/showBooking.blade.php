@@ -109,10 +109,15 @@
                                 </div>
                             @endforeach
                         @endif
-                       <div class="booking__pagination">
-                            @if (isset($vehicle_list))
+                    </div>
+                        <div class="booking__pagination">
+                            @php
+                                // dd(isset(request()->page))
+                            @endphp
+                            @if (isset($vehicle_list) &&  ((count(request()->all()) === 0 ) && isset(request()->page) === false ) || (count(request()->all()) === 1) && isset(request()->page) === true) 
                                 {{ $vehicle_list->links()}}
-                            @else 
+                            @else
+
                                 <nav aria-label="Page navigation example">
                                     <ul class="pagination">
                                         <li class="page-item">
@@ -131,7 +136,6 @@
                                     </ul>
                                 </nav>
                             @endif
-                       </div>
                     </div>
                 </div>
 

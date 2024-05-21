@@ -24,6 +24,7 @@ class BookingController extends Controller
         ->join('vehicleimages', 'vehicleimages.vehicle_img_id', '=', 'vehicles.vehicle_image_id')
         ->paginate(3);
         $vehicle_count = Vehicle::count();
+        // dd(Vehicle::get());
         return view('clients.booking.showBooking', compact('vehicle_list', 'vehicle_count'));
     }
 
