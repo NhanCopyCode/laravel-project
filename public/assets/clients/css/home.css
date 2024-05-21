@@ -664,7 +664,7 @@ nav {
   width: 40%;
 }
 
-/* Responsive form search vehicle */
+/* Responsive form search vehicle and booking vehicle page*/
 @media (max-width: 768px) {
   
   #form_search_vehicle_advanced {
@@ -675,6 +675,15 @@ nav {
   #form_search_vehicle_advanced .form__group {
     width: 100%;
   }
+
+  .booking__container {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .booking__container__filter-sidebar {
+    width: 100%;
+  }
 }
 
 
@@ -682,3 +691,4 @@ nav {
 .booking_pagination > nav {
   padding: 0;
 }
+

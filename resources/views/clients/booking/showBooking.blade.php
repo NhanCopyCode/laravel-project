@@ -4,8 +4,8 @@
 @endsection
 @section('content')    
     <div class="section__container">
-        <div class="row">
-            <div class="col-4">
+        <div class="row booking-vehicle__container">
+            <div class="col-4 booking__container__filter-sidebar">
                 <form action="{{route('user.search.advanced')}}" method="GET" class="filters-sidebar border rounded-2">
                     <div class="filters-sidebar__heading border-bottom p-3">
                         <h5 class="fw-bold">Chọc lọc theo: </h5>
@@ -58,7 +58,13 @@
                 <div class="row booking__section">
                     <div class="booking__section__header">
                         <h3>Danh sách toàn bộ xe: </h3>
-                        <h3>Tìm thấy <span class="vehicle_count fw-bold">3</span> xe</h3>
+                        <h3>
+                            Tìm thấy <span class="vehicle_count fw-bold">
+                                @if (isset($vehicle_count))
+                                    {{$vehicle_count}}
+                                @endif
+                            </span> xe
+                        </h3>
                     </div>
                     
                     <div class="booking__section__content">
@@ -161,7 +167,7 @@
                         var html = '';
                         console.log(response);
                         if(response.status === 'success') {
-                            $('.vehicle_count').html(response.vehicle_available.vehicle_number);
+                            $('.vehicle_count').html(response.vehicle_number);
                             console.log(response);
                             var currentPage = response.vehicle_available.current_page;
                             var totalPages = response.vehicle_available.total_pages;
@@ -204,7 +210,7 @@
                         }
 
                         // Cập nhật nội dung vào phần tử với class .booking__main
-                        $('.booking__section').html(html);
+                        $('.booking__section__content').html(html);
                     },
                     error: function (request, status, error) {
                         // Xử lý lỗi từ máy chủ
@@ -247,7 +253,8 @@
                 success: function (response) {
                     var html = '';
                     if(response.status === 'success') {
-                        $('.vehicle_count').html(response.vehicle_available.vehicle_number);
+                        console.log(response.vehicle_available.vehicle_number)
+                        $('.vehicle_count').html(response.vehicle_number);
                         var currentPage = response.vehicle_available.current_page;
                         var totalPages = response.vehicle_available.total_pages;
                         console.log('currentPage: ' + currentPage + ' totalPages: ' + totalPages);
@@ -288,7 +295,7 @@
                     }
 
                     // Cập nhật nội dung vào phần tử với class .booking__main
-                    $('.booking__section').html(html);
+                    $('.booking__section__content').html(html);
                     
 
                   
