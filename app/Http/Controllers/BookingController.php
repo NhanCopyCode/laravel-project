@@ -124,7 +124,8 @@ class BookingController extends Controller
             if($rental_id) {
                 $payment = new Payment;
                 $payment->rental_id = $rental_id;
-                $payment->payment_date = Carbon::now();
+                // Không thể update payment date bởi vì đây là phương thức thanh toán bằng tiền mặt
+                // $payment->payment_date = Carbon::now();
                 $payment->amount = $request->booking_total_price;
                 $payment->payment_method_id = $request->payment_method_id;
                 $payment->save();

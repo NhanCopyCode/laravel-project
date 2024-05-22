@@ -80,6 +80,7 @@ class SearchVehicleController extends Controller
         $colors = $request->get('colors', []);
         $engine_type = $request->get('engine_type', []);
         $models = $request->get('models', []);
+        $year_of_productions = $request->get('year_of_productions', []);
 
         $start_date = null;
         $end_date = null;
@@ -139,6 +140,14 @@ class SearchVehicleController extends Controller
             $query->where(function ($query) use ($models) {
                 foreach ($models as $model) {
                     $query->orWhere('models.model_name', 'like', '%' . $model . '%');
+                }
+            });
+        }
+
+        if (!empty($year_of_productions)) {
+            $query->where(function ($query) use ($year_of_productions) {
+                foreach ($year_of_productions as $year_of_production) {
+                    $query->orWhere('models.year_of_production', '=',  $year_of_production);
                 }
             });
         }

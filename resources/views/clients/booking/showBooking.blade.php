@@ -38,13 +38,27 @@
                     {{-- Chọn màu --}}
                     <div class="filters-sidebar__model border p-3">
                         <div class="filters-sidear__model-heading">
-                            <h5 class="fw-bold">Chọn phân khối: </h5>
+                            <h5 class="fw-bold">Chọn màu xe: </h5>
                         </div>
                         
                         @foreach ($list_color as $item)
                             <div class="form-group">
                                 <input class="form-check-input" type="checkbox" name="colors[]" id="{{$item->color}}" value="{{$item->color}}" {{ in_array($item->color, request('colors', [])) ? 'checked' : '' }}>
                                 <label class="form-check-label" for="{{$item->color}}">{{$item->color}} </label>
+                            </div>
+                        @endforeach
+                    </div>
+
+                    {{-- Chọn năm sản xuất --}}
+                    <div class="filters-sidebar__model border p-3">
+                        <div class="filters-sidear__model-heading">
+                            <h5 class="fw-bold">Chọn năm sản xuất: </h5>
+                        </div>
+                        
+                        @foreach ($year_of_production as $item)
+                            <div class="form-group">
+                                <input class="form-check-input" type="checkbox" name="year_of_productions[]" id="{{$item->year_of_production}}" value="{{$item->year_of_production}}" {{ in_array($item->year_of_production, request('year_of_productions', [])) ? 'checked' : '' }}>
+                                <label class="form-check-label" for="{{$item->year_of_production}}">{{$item->year_of_production}} </label>
                             </div>
                         @endforeach
                     </div>
@@ -193,7 +207,6 @@
                             }
 
                             for (var i = 1; i <= totalPages; i++) {
-                                console.log('Đây là vòng form: ' + typeof i + ' currentPage: ' +  currentPage);
                                 pagination += '<li class="page-item' + (i == currentPage ? ' active' : '') + '"><a class="page-link" href="#" data-page="' + i + '">' + i + '</a></li>';
                             }
 

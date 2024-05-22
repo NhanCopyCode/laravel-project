@@ -1,4 +1,5 @@
 $(function() {
+    $('#booking_vehicle_price').text(formatCash($('input[name="booking_total_price"]').val()));
    $('#booking_daterange').on('change', function(e) {
          // Giả sử value input của bạn là một chuỗi như sau:
         const  input = $(this).val();
@@ -26,6 +27,7 @@ $(function() {
 
         totalPrice = formatCash(totalPrice.toString());
         $('#booking_vehicle_price').text(totalPrice);
+        $('#booking_vehicle_price').addClass('alert alert-success');
 
        
    });

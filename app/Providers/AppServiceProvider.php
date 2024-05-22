@@ -75,6 +75,10 @@ class AppServiceProvider extends ServiceProvider
                 ->select('carrentalstore.*', 'location.*')
                 ->get();
 
+            $year_of_production = DB::table('models')
+                ->distinct()
+                ->get();
+
             $payment_method_list = PaymentMethod::all();
             
             // Trạng thái thanh toán
@@ -100,6 +104,7 @@ class AppServiceProvider extends ServiceProvider
                 'is_deleted_list',
                 'list_engine_type',
                 'list_color',
+                'year_of_production',
             ));
 
 
