@@ -143,6 +143,11 @@ class SearchVehicleController extends Controller
             });
         }
 
+        $total_vehicle_count_query = $query->clone(); // Create a clone of the query
+
+        $total_vehicle_count = $total_vehicle_count_query->count(); // Count all vehicles
+
+
         $page = $request->get('page', 1); // Default to page 1
 
         $per_page = $request->get('per_page', 3); // Default to 10 results per page
@@ -152,20 +157,23 @@ class SearchVehicleController extends Controller
         $query = $query->skip($offset)->take($per_page); // Apply pagination
 
         $vehicle_available = $query->distinct()->get();
-
-        $vehicle_number = $vehicle_available->count();
-
-        $total_pages = ceil($vehicle_number / $per_page);
+        
+        
 
 
-        if ($vehicle_number > 0) {
+
+        $total_pages = ceil($total_vehicle_count / $per_page);
+
+
+        if ($total_vehicle_count > 0) {
             return response()->json([
                 'status' => 'success',
                 'vehicle_available' => $vehicle_available,
-                'vehicle_number' => $vehicle_number,
+                'vehicle_number' => $total_vehicle_count,
                 'total_pages' => $total_pages,
                 'current_page' => $page,
                 'per_page' => $per_page,
+                'query' => $query,
             ]);
         } else {
             return response()->json([

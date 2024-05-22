@@ -6,7 +6,7 @@
     <div class="section__container">
         <div class="row booking-vehicle__container">
             <div class="col-4 booking__container__filter-sidebar">
-                <form action="{{route('user.search.advanced')}}" method="GET" class="filters-sidebar border rounded-2">
+                <form action="{{route('user.search.advanced')}}" method="GET" id="filters-sidebar" class="filters-sidebar border rounded-2">
                     <div class="filters-sidebar__heading border-bottom p-3">
                         <h5 class="fw-bold">Chọc lọc theo: </h5>
                     </div>
@@ -111,32 +111,9 @@
                         @endif
                     </div>
                         <div class="booking__pagination">
-                            @php
-                                // dd(isset(request()->page))
-                            @endphp
-                            @if (isset($vehicle_list) &&  ((count(request()->all()) === 0 ) && isset(request()->page) === false ) || (count(request()->all()) === 1) && isset(request()->page) === true) 
-                                {{ $vehicle_list->links()}}
-                            @else
+                            {{ $vehicle_list->links()}}
 
-                                <nav aria-label="Page navigation example">
-                                    <ul class="pagination">
-                                        <li class="page-item">
-                                            <a class="page-link" href="#" aria-label="Previous">
-                                            <span aria-hidden="true">&laquo;</span>
-                                            </a>
-                                        </li>
-                                        <li class="page-item"><a class="page-link" href="#">1</a></li>
-                                        <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                        <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                        <li class="page-item">
-                                            <a class="page-link" href="#" aria-label="Next">
-                                            <span aria-hidden="true">&raquo;</span>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </nav>
-                            @endif
-                    </div>
+                        </div>
                 </div>
 
             </div>
@@ -151,24 +128,29 @@
             var urlParamsReal = null;
             var urlFilterSidebar = null;
             var urlHeaderBooking = null;
-            // Khi người dùng submit form tìm kiếm nâng cao
-            $('.filters-sidebar').on('submit', function(event) {
-                event.preventDefault(); // Ngăn không cho gửi form theo cách truyền thống
+            var formId_clone = null;
 
-                // Lấy dữ liệu từ form
-                var formData = $(this).serialize();
-                urlFilterSidebar = formData;
-                if(urlParamsReal === null) {
-                    urlParamsReal = '?' + formData;
-                }else if(urlFilterSidebar === null) {
-                    urlParamsReal ='?' + urlHeaderBooking ;
-                }else if(urlHeaderBooking === null) {
-                    urlParamsReal = '?' +  urlFilterSidebar;
-                }else if(urlFilterSidebar !== null && urlHeaderBooking !== null) {
-                    urlParamsReal = '?' + urlHeaderBooking + '&' + urlFilterSidebar;
+            function updateContentBookingVehicle(formId, page = 1) {
+                 // Lấy dữ liệu từ form
+                formId_clone = formId;
+                var formData = $(formId).serialize();
+                urlParams = formData;
+
+                if(formId_clone !== '#filters-sidebar') {
+                    urlHeaderBooking = formData;
+                    urlParamsReal ='?' + urlHeaderBooking + '&page=' + page  ;
+                }else if(formId_clone !== '#form_search_vehicle_advanced') {
+                    urlFilterSidebar = formData;
+                    urlParamsReal = '?' +  urlFilterSidebar + '&page=' + page ;
                 }
 
-                console.log(urlParamsReal);
+                if(urlFilterSidebar !== null && urlHeaderBooking !== null) {
+                    console.log('Vào được tỏng if');
+                    urlParamsReal = '?' + urlHeaderBooking + '&' + urlFilterSidebar + '&page=' + page ;
+                } 
+
+                console.log('urlFilterSideBar: ' + urlFilterSidebar);
+                console.log('urlHeaderBooking: ' + urlHeaderBooking);
                 // var urlParams = window.location.search;
                 // if(urlParams) {
                 //     urlParams = urlParams + formData;
@@ -197,12 +179,29 @@
                         // Bạn cần thay thế nội dung của phần tử với class .booking__main
                         // với dữ liệu trả về từ máy chủ
                         var html = '';
+                        var pagination = '';
                         console.log(response);
                         if(response.status === 'success') {
-                            console.log(response);
-                            var currentPage = response.vehicle_available.current_page;
-                            var totalPages = response.vehicle_available.total_pages;
+                            var currentPage = response.current_page;
+                            var totalPages = response.total_pages;
                             console.log('currentPage: ' + currentPage + ' totalPages: ' + totalPages);
+
+                            // Paganation
+                            pagination = '<nav aria-label="Page navigation example"><ul class="pagination">';
+                            if (currentPage > 1) {
+                                pagination += '<li class="page-item"><a class="page-link" href="#" data-page="' + (currentPage - 1) + '">&laquo;</a></li>';
+                            }
+
+                            for (var i = 1; i <= totalPages; i++) {
+                                console.log('Đây là vòng form: ' + typeof i + ' currentPage: ' +  currentPage);
+                                pagination += '<li class="page-item' + (i == currentPage ? ' active' : '') + '"><a class="page-link" href="#" data-page="' + i + '">' + i + '</a></li>';
+                            }
+
+                            if (currentPage < totalPages) {
+                                pagination += '<li class="page-item"><a class="page-link" href="#" data-page="' + (currentPage + 1) + '">&raquo;</a></li>';
+                            }
+                            pagination += '</ul></nav>';
+
 
                             response.vehicle_available.forEach(function(item) {
                             var vehicleItemRoute = '{{ env('APP_URL')}}' +  `/user/vehicle/${item.vehicle_id}`;
@@ -252,6 +251,8 @@
                         $('.booking__section__content').html(html);
                         //Cập nhật số lượng xe
                         $('.vehicle_count').html(response.vehicle_number);
+                        // Cập nhật lại pagination
+                        $('.booking__pagination').html(pagination);
 
                     },
                     error: function (request, status, error) {
@@ -259,103 +260,28 @@
                         // alert('Có lỗi xảy ra: ' + request.responseText);
                     }
                 });
+            }
+            // Khi người dùng submit form tìm kiếm nâng cao
+            $('.filters-sidebar').on('submit', function(event) {
+                event.preventDefault(); // Ngăn không cho gửi form theo cách truyền thống
+                updateContentBookingVehicle('#filters-sidebar');
+               
+            });
+
+            // Handle pagination click
+            $(document).on('click', '.pagination a', function(event) {
+                event.preventDefault();
+                var page = $(this).data('page');
+                updateContentBookingVehicle(formId_clone, page);
             });
 
 
             // Xử lý phần from daterange
             $('#form_search_vehicle_advanced').on('submit', function(event) {
               event.preventDefault();
+              updateContentBookingVehicle('#form_search_vehicle_advanced');
 
-            var formData = $(this).serialize();
-            urlHeaderBooking = formData;
-            if(urlParamsReal === null) {
-                urlParamsReal = '?' + formData;
-            }else if(urlFilterSidebar === null) {
-                urlParamsReal ='?' + urlHeaderBooking ;
-            }else if(urlHeaderBooking === null) {
-                urlParamsReal = '?' +  urlFilterSidebar;
-            }else if(urlFilterSidebar !== null && urlHeaderBooking !== null) {
-                urlParamsReal = '?' + urlHeaderBooking + '&' + urlFilterSidebar;
-            }
-
-            var url = window.location.origin + window.location.pathname;
-
-            var newUrl = url + urlParamsReal;
-
-            history.pushState({path:newUrl}, '', newUrl);
-
-            var newFormData = urlParamsReal.replace(/\?/g, '');
-            // newFormData += '&page=' + currentPage + '&per_page=' + perPage;
-
-              $.ajax({
-                method: "GET",
-                url: "{{ route('user.search.advanced') }}",
-                data: newFormData,
-                dataType: "json", // Giả sử máy chủ trả về JSON
-                success: function (response) {
-                    var html = '';
-                    if(response.status === 'success') {
-                        console.log(response.vehicle_available.vehicle_number)
-
-                        var currentPage = response.vehicle_available.current_page;
-                        var totalPages = response.vehicle_available.total_pages;
-                        console.log('currentPage: ' + currentPage + ' totalPages: ' + totalPages);
-                        response.vehicle_available.forEach(function(item) {
-                        var vehicleItemRoute = '{{ env('APP_URL')}}' +  `/user/vehicle/${item.vehicle_id}`;
-                            html += `<div class="row booking__section__item border rounded mb-4"  style="height: 200px;">
-                            <div class="col-4">
-                                <div class="row booking__section__item-group-img">
-                                    <a class="col-8 booking__section__item-main-img" style="object-fit: cover; height: 200px;" data-lightbox="booking_vehicle_${item.vehicle_id}" href="{{$vehicle->vehicle_image_data_1}}" alt="Ảnh xe" class="col-8  p-1">
-                                        <img src="${item.vehicle_image_data_1}" alt="Ảnh xe">
-                                    </a>
-                                    <div class="col-4 d-flex flex-column booking__section__item-group-img-sidebar">
-                                        <a style="height: 33.33333%; object-fit: cover;" data-lightbox="booking_vehicle_${item.vehicle_id}"  href="${item.vehicle_image_data_1}" alt="Ảnh xe" class=" p-1">
-                                                <img src="${item.vehicle_image_data_1}" alt="Ảnh xe">
-                                        </a>
-                                        <a style="height: 33.33333%; object-fit: cover;" data-lightbox="booking_vehicle_${item.vehicle_id}"  href="${item.vehicle_image_data_2}" alt="Ảnh xe" class=" p-1">
-                                                <img src="${item.vehicle_image_data_2}" alt="Ảnh xe">
-                                        </a>
-                                        <a style="height: 33.33333%; object-fit: cover;" data-lightbox="booking_vehicle_${item.vehicle_id}"  href="${item.vehicle_image_data_3}" alt="Ảnh xe" class=" p-1">
-                                                <img src="${item.vehicle_image_data_3}" alt="Ảnh xe">
-                                        </a>
-
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-8">
-                                <div class="row d-flex justify-content-between booking__section__item-header">
-                                    <h4 class="fw-bold">{{$vehicle->model_name}}</h4>
-                                </div>
-                                <div class="d-flex justify-content-between align-items-end booking__section__item-content">
-                                    <div class="booking__section__item-content-description d-flex flex-column">
-                                        <p>Chi tiết: {{$vehicle->description}}</p>
-                                        <p>Giá thuê xe: {{$vehicle->rental_price_day}}</p>
-                                    </div>
-
-                                    <a style="height: 40px;" href="{{env('APP_URL')}}/user/vehicle/{{$vehicle->vehicle_id}}" class="btn btn-primary">
-                                        Đặt xe
-                                    </a>
-                                </div>
-                            </div>
-                        </div>`;
-                        });
-                    } else {
-
-                        html = `<div class="col-md-12 alert alert-danger"><p>${response.message}</p></div>`;
-                    }
-
-                    // Cập nhật nội dung vào phần tử với class .booking__main
-                    $('.booking__section__content').html(html);
-                    
-                    //Cập nhật số lượng xe
-                    $('.vehicle_count').html(response.vehicle_number);
-                  
-                },
-                error: function (request, status, error) {
-                    // Xử lý lỗi từ máy chủ
-                    // alert('Có lỗi xảy ra: ' + request.responseText);
-                }
-            });
+               
           });
 
     });
