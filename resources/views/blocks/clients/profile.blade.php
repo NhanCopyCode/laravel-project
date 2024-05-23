@@ -83,6 +83,18 @@
         Swal.fire({
               title: '{{ session('success') }}',
               icon: 'success',
+
+              showCancelButton: false,
+              confirmButtonText: 'OK',
+            });
+    </script>
+@endif
+
+@if (session('msg--need-profile-user'))
+    <script>
+      Swal.fire({
+              title: '{{ session('msg--need-profile-user') }}',
+              icon: 'warning',
               showCancelButton: false,
               confirmButtonText: 'OK',
             });

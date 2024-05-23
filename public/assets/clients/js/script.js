@@ -263,14 +263,6 @@ document.addEventListener('DOMContentLoaded', function() {
         cancelButtonText: 'Hủy',
     }).then((result) => {
         if (result.isConfirmed) {
-            Swal.fire({
-              title: 'Đặt xe thành công!',
-              text: "Hãy vào lịch sử đặt xe để kiểm tra",
-              icon: 'success',
-              showCancelButton: false,
-              confirmButtonText: 'OK',
-            }
-          )
             document.getElementById("form_booking_vehicle_detail").submit();
         }
     })

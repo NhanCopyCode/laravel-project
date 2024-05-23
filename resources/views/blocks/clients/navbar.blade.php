@@ -15,7 +15,7 @@
             </span>
             <ul class="user_menu">
                 <li class="link" >
-                    <a href="{{route('user.profile')}}">Thông tin của tôi</a>
+                    <a href="{{route('user.profile', ['user' => Auth::guard('web')->user()->user_id])}}">Thông tin của tôi</a>
                 </li>
                 <li class="link" >
                     <a href="{{route('user.booking.history')}}">Lịch sử đặt xe</a>

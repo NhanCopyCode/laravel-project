@@ -87,6 +87,52 @@
 
 </div>
 
+@if ($errors->any())
+    <script>
+        Swal.fire({
+            title: 'Đặt xe thất bại! Xin vui lòng hãy kiểm tra lại!',
+            icon: 'warning',
+            showCancelButton: false,
+            confirmButtonText: 'OK',
+            });
+    </script>
+@endif
+
+@if (session('msg--success'))
+    <script>
+        Swal.fire({
+              title: 'Đặt xe thành công, hãy vào lịch sử đặt xe để kiểm tra!',
+              icon: 'success',
+              showCancelButton: false,
+              confirmButtonText: 'OK',
+            });
+    </script>
+@endif
+
+@if (session('msg--failure'))
+    <script>
+        Swal.fire({
+              title: '{{ session('msg--failure') }}',
+              icon: 'warning',
+              showCancelButton: false,
+              confirmButtonText: 'OK',
+            });
+    </script>
+@endif
+
+@if (session('error'))
+    <script>
+
+        Swal.fire({
+              title: 'Đặt xe thất bại! Xin vui lòng hãy kiểm tra lại!',
+              icon: 'warning',
+              showCancelButton: false,
+              confirmButtonText: 'OK',
+            });
+    </script>
+@endif
+
+
 <script defer>
     // document.addEventListener('DOMContentLoaded', function(e) {
 

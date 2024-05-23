@@ -105,7 +105,7 @@ Route::prefix('/user')->name('user.')->middleware('auth')->group(function () {
     Route::get('/search_advanced_date', [SearchVehicleController::class, 'searchVehicleAdvancedDate'])->name('search.advanced.date');
 
     // Profile
-    Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
+    Route::get('/profile/{user}', [ProfileController::class, 'index'])->name('profile');
 
     Route::post('/profile/{user}', [ProfileController::class, 'updateProfile'])->name('update.profile');
 

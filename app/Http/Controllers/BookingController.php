@@ -51,91 +51,104 @@ class BookingController extends Controller
 
     public function  bookingVehicle(BookingVehicleRequest $request)
     {
-        $validatedData = $request->validated(); 
+        try {
+            $validatedData = $request->validated(); 
 
-        $booking_start_date =  explode(' - ', $request->booking_daterange)[0];
-        $booking_end_date = str_replace(' / ', ' - ', explode(' - ', $request->booking_daterange)[1]);
+            if($validatedData->fails()) {
+                return redirect()->back()->with('msg--failure', 'Đặt xe thất bại! Hãy thử kiểm tra lại!');
 
-        // dd($booking_start_date, $booking_end_date);
-
-        // Check user login và payment method === Thanh toán tiền mặt
-        if(Auth::guard('web')->check() && $request->redirect === 'vnpay_payment') {
-            
-            // dd(Carbon::now());
-            $user_id = Auth::user()->user_id;
-
-            $rental = new Rental;
-            $rental->user_id = $user_id;
-            $rental->vehicle_id = $request->vehicle_id;
-            $rental->rental_start_date = $booking_start_date;
-            $rental->rental_end_date = $booking_end_date;
-            $rental->total_cost = $request->booking_total_price;
-            // status === 1 đồng nghĩa với việc chưa thanh toán
-            $rental->rental_status_id = 1;
-
-            $rental->save();
-
-            $rental_id = $rental->rental_id;
-            if($rental_id) {
-                $payment = new Payment;
-                $payment->rental_id = $rental_id;
-                $payment->payment_date = Carbon::now();
-                $payment->amount = $request->booking_total_price;
-                $payment->payment_method_id = 2;
-                $payment->save();
-            }
-            
-            $payment_id = $payment->payment_id;
-          
-               // Lưu vào cache
-            Cache::put('rental_id', $rental_id, now()->addMinutes(30));
-            Cache::put('payment_id', $payment_id, now()->addMinutes(30));
-   
-
-
-            $this->VNPAYpayment($request, $rental_id, $payment_id);
-            // $this->vnpayReturn();
-        }
-        elseif(Auth::guard('web')->check() && $request->payment_method_id == 1) 
-        {
-            $user_id = Auth::user()->user_id;
-
-            // $payment = Rental::created([
-            //     'user_id' => $user_id,
-            //     'vehicle_id' => $request->vehicle_id,
-            //     'rental_start_date' => $request->booking_start_date,
-            //     'rental_end_date' => $request->booking_end_date,
-            //     'total_cost' => $request->total_cost,
-            //     'rental_status_id' => 1
-            // ]);
-
-            $rental = new Rental;
-            $rental->user_id = $user_id;
-            $rental->vehicle_id = $request->vehicle_id;
-            $rental->rental_start_date = $booking_start_date;
-            $rental->rental_end_date = $booking_end_date;
-            $rental->total_cost = $request->booking_total_price;
-            // status === 1 đồng nghĩa với việc chưa thanh toán
-            $rental->rental_status_id = 1;
-
-            $rental->save();
-
-            $rental_id = $rental->rental_id;
-            if($rental_id) {
-                $payment = new Payment;
-                $payment->rental_id = $rental_id;
-                // Không thể update payment date bởi vì đây là phương thức thanh toán bằng tiền mặt
-                // $payment->payment_date = Carbon::now();
-                $payment->amount = $request->booking_total_price;
-                $payment->payment_method_id = $request->payment_method_id;
-                $payment->save();
             }
 
-            return back()->with('msg--success', 'Đặt xe thành công vui lòng vào <a href="'.route('user.booking.history').'">Lịch sử đặt xe</a> để kiểm tra');
+            $booking_start_date =  explode(' - ', $request->booking_daterange)[0];
+            $booking_end_date = str_replace(' / ', ' - ', explode(' - ', $request->booking_daterange)[1]);
 
-        }else {
-            return redirect()->route('home');
+            // Đầu tiên phải check được user đã đủ thông tin để booking được vehicle hay chưa
+            $user = Auth::user();
+            if($user->phone_number == null || $user->CCCD == null || $user->date_of_birth == null || $user->name == null || $user->email == null ) {
+                return redirect()->route('user.update.profile', ['user' => $user->user_id])->with('msg--need-profile-user', 'Bạn cần nhập đầy đủ thông tin trước khi thuê xe!' );
+            }
+
+            // Check user login và payment method === Thanh toán tiền mặt
+            if(Auth::guard('web')->check() && $request->redirect === 'vnpay_payment') {
+                
+                // dd(Carbon::now());
+                $user_id = Auth::user()->user_id;
+
+                $rental = new Rental;
+                $rental->user_id = $user_id;
+                $rental->vehicle_id = $request->vehicle_id;
+                $rental->rental_start_date = $booking_start_date;
+                $rental->rental_end_date = $booking_end_date;
+                $rental->total_cost = $request->booking_total_price;
+                // status === 1 đồng nghĩa với việc chưa thanh toán
+                $rental->rental_status_id = 1;
+
+                $rental->save();
+
+                $rental_id = $rental->rental_id;
+                if($rental_id) {
+                    $payment = new Payment;
+                    $payment->rental_id = $rental_id;
+                    $payment->payment_date = Carbon::now();
+                    $payment->amount = $request->booking_total_price;
+                    $payment->payment_method_id = 2;
+                    $payment->save();
+                }
+                
+                $payment_id = $payment->payment_id;
+            
+                // Lưu vào cache
+                Cache::put('rental_id', $rental_id, now()->addMinutes(30));
+                Cache::put('payment_id', $payment_id, now()->addMinutes(30));
+    
+
+
+                $this->VNPAYpayment($request, $rental_id, $payment_id);
+                // $this->vnpayReturn();
+            }
+            elseif(Auth::guard('web')->check() && $request->payment_method_id == 1) 
+            {
+                $user_id = Auth::user()->user_id;
+
+                // $payment = Rental::created([
+                //     'user_id' => $user_id,
+                //     'vehicle_id' => $request->vehicle_id,
+                //     'rental_start_date' => $request->booking_start_date,
+                //     'rental_end_date' => $request->booking_end_date,
+                //     'total_cost' => $request->total_cost,
+                //     'rental_status_id' => 1
+                // ]);
+
+                $rental = new Rental;
+                $rental->user_id = $user_id;
+                $rental->vehicle_id = $request->vehicle_id;
+                $rental->rental_start_date = $booking_start_date;
+                $rental->rental_end_date = $booking_end_date;
+                $rental->total_cost = $request->booking_total_price;
+                // status === 1 đồng nghĩa với việc chưa thanh toán
+                $rental->rental_status_id = 1;
+
+                $rental->save();
+
+                $rental_id = $rental->rental_id;
+                if($rental_id) {
+                    $payment = new Payment;
+                    $payment->rental_id = $rental_id;
+                    // Không thể update payment date bởi vì đây là phương thức thanh toán bằng tiền mặt
+                    // $payment->payment_date = Carbon::now();
+                    $payment->amount = $request->booking_total_price;
+                    $payment->payment_method_id = $request->payment_method_id;
+                    $payment->save();
+                }
+
+                return back()->with('msg--success', 'Đặt xe thành công vui lòng vào <a href="'.route('user.booking.history').'">Lịch sử đặt xe</a> để kiểm tra');
+
+            }
+        } catch (\Throwable $th) {
+            return redirect()->back()->with('msg--failure', 'Đặt xe thất bại! Hãy thử kiểm tra lại!');
         }
+
+
     }
 
     public function VNPAYpayment(Request $request, $rental_id, $payment_id)
