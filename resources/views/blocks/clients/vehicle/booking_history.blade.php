@@ -4,7 +4,6 @@
         <table class="table table-bordered mt-4">
             <thead>
                 <tr>
-                <th scope="col">#</th>
                 <th scope="col">Id</th>
                 <th scope="col">Xe thuê</th>
                 <th scope="col">Hình ảnh xe</th>
@@ -20,14 +19,13 @@
             <tbody>
                 @foreach ($list_booking_vehicle as $history)
                     <tr>
-                        <th scope="row">1</th>
                         <td>{{$history->payment_id}}</td>
                         <td>{{$history->model_name}}</td>
                         <td>
                             <img style="height: 100px; object-fit: cover;" src="{{$history->vehicle_image_data_1}}" alt="Hình ảnh xe">
                         </td>
                         
-                        <td>{{$history->amount}}</td>
+                        <td class="vnd_format">{{$history->amount}}</td>
                         <td>{{$history->rental_start_date}}</td>
                         <td>{{$history->rental_end_date}}</td>
                         

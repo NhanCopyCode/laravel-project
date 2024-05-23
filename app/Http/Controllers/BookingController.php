@@ -59,7 +59,7 @@ class BookingController extends Controller
         // dd($booking_start_date, $booking_end_date);
 
         // Check user login và payment method === Thanh toán tiền mặt
-        if(Auth::check() && $request->redirect === 'vnpay_payment') {
+        if(Auth::guard('web')->check() && $request->redirect === 'vnpay_payment') {
             
             // dd(Carbon::now());
             $user_id = Auth::user()->user_id;
@@ -96,7 +96,7 @@ class BookingController extends Controller
             $this->VNPAYpayment($request, $rental_id, $payment_id);
             // $this->vnpayReturn();
         }
-        elseif(Auth::check() && $request->payment_method_id == 1) 
+        elseif(Auth::guard('web')->check() && $request->payment_method_id == 1) 
         {
             $user_id = Auth::user()->user_id;
 
@@ -215,8 +215,7 @@ class BookingController extends Controller
     }
     public function vnpayReturn(Request $request)
     {
-        if(isset($_GET['vnp_Amount'])) {
-            
+        if($request->vnp_ResponseCode == 0) {
            
             // Lấy từ cache
             $rental_id = Cache::get('rental_id');
@@ -266,6 +265,29 @@ class BookingController extends Controller
             $rental->save();
 
 
+        }else {
+            $rental_id = Cache::get('rental_id');
+            $payment_id = Cache::get('payment_id');
+   
+            if ($rental_id && $payment_id) {
+            // Tìm và xóa payment
+                $payment = Payment::find($payment_id);
+                if ($payment) {
+                    $payment->delete();
+                }
+
+                // Tìm và xóa rental
+                $rental = Rental::find($rental_id);
+                if ($rental) {
+                    $rental->delete();
+                }
+        
+        
+                // Xóa các giá trị trong cache
+                Cache::forget('rental_id');
+                Cache::forget('payment_id');
+
+            }
         }
         return view('clients.vnpay.vnpay_return');
     }

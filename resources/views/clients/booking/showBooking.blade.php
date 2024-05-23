@@ -112,7 +112,7 @@
                                         <div class="d-flex justify-content-between align-items-end booking__section__item-content">
                                             <div class="booking__section__item-content-description d-flex flex-column">
                                                 <p>Chi tiết: {{$vehicle->description}}</p>
-                                                <p>Giá thuê xe: {{$vehicle->rental_price_day}}</p>
+                                                <p>Giá thuê xe: <span class="vnd_format">{{$vehicle->rental_price_day}}</span></p>
                                             </div>
 
                                             <a style="height: 40px;" href="{{env('APP_URL')}}/user/vehicle/{{$vehicle->vehicle_id}}" class="btn btn-primary">
@@ -240,15 +240,15 @@
                                 </div>
                                 <div class="col-8">
                                     <div class="row d-flex justify-content-between booking__section__item-header">
-                                            <h4 class="fw-bold">{{$vehicle->model_name}}</h4>
+                                            <h4 class="fw-bold">${item.model_name}</h4>
                                         </div>
                                         <div class="d-flex justify-content-between align-items-end booking__section__item-content">
                                             <div class="booking__section__item-content-description d-flex flex-column">
-                                                <p>Chi tiết: {{$vehicle->description}}</p>
-                                                <p>Giá thuê xe: {{$vehicle->rental_price_day}}</p>
+                                                <p>Chi tiết: ${item.description}</p>
+                                                <p>Giá thuê xe: <span class="vnd_format">${item.rental_price_day}</span></p>
                                             </div>
 
-                                            <a style="height: 40px;" href="{{env('APP_URL')}}/user/vehicle/{{$vehicle->vehicle_id}}" class="btn btn-primary">
+                                            <a style="height: 40px;" href="{{env('APP_URL')}}/user/vehicle/${item.vehicle_id}" class="btn btn-primary">
                                                 Đặt xe
                                             </a>
                                         </div>

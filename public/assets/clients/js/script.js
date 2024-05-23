@@ -214,9 +214,35 @@ document.addEventListener('DOMContentLoaded', function() {
   //Ngăn chặn hành vi mặc định của button vnpay khi thanh toán (alert thông báo 'Bạn có muốn thuê xe này không')
   if(button_booking_vehicle_VNPAY) {
       button_booking_vehicle_VNPAY.addEventListener('click', function(e) {
-          if(!confirm('Bạn có muốn thuê xe này không?')) {
-            e.preventDefault();
+        e.preventDefault();
+        const vehicle_title = document.querySelector('.vehicle-detail__title').textContent;
+
+        Swal.fire({
+          title: `Bạn có muốn đặt chiếc ${vehicle_title} này bằng phương thức VNPAY không?`,
+          text: "Hãy kiểm tra xe trước khi nhận xe",
+          icon: 'success',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Đặt',
+          cancelButtonText: 'Hủy',
+        }).then((result) => {
+          if (result.isConfirmed) {
+              var input = document.createElement("input");
+              input.type = "hidden";
+              input.name = "redirect";
+              input.value = "vnpay_payment";
+              const form = document.getElementById("form_booking_vehicle_detail");
+
+              form.appendChild(input);
+              
+              form.submit();
+
+              setTimeout(() => {
+                  form.removeChild(input);
+              }, 0);
           }
+      })
       })
   }
 
@@ -228,7 +254,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
       Swal.fire({
         title: `Bạn có muốn đặt chiếc ${vehicle_title} này không?`,
-        text: "Hãy kiểm tra xe trước khi thanh toán",
+        text: "Hãy kiểm tra xe trước khi thanh toán và nhận xe",
         icon: 'success',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
@@ -297,3 +323,18 @@ window.addEventListener('load', function() {
 //       }
 //     });
 // })
+
+/*
+
+vnp_Amount=90000000
+&vnp_BankCode=NCB
+&vnp_CardType=ATM
+&vnp_OrderInfo=Thanh+toan+GD%3A+6931
+&vnp_PayDate=20240523151858
+&vnp_ResponseCode=24
+&vnp_TmnCode=JY3C3HGY
+&vnp_TransactionNo=14426521
+&vnp_TransactionStatus=02
+&vnp_TxnRef=6931
+&vnp_SecureHash=c9213f0f5287e0094e7619716287fb8910828bce852af4ca5ca37700af7bf207c087264041dc53973272763c5bcafe960230ec4c2e8a2b47d0ec82218e6b02f1
+*/

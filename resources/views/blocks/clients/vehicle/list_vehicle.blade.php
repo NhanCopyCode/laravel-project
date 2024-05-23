@@ -18,7 +18,7 @@
                 <div class="vehicle__content">
                 <div class="vehicle__card__header">
                     <h4>{{$vehicle->model_name}}</h4>
-                    <h4>{{$vehicle->rental_price_day}} VND</h4>
+                    <h4 class="vnd_format">{{$vehicle->rental_price_day}}VND</h4>
                 </div>
                 <p class="vehicle__description">{{$vehicle->description}}</p>
                 <p>Trạng thái: 
