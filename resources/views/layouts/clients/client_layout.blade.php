@@ -70,7 +70,7 @@
     <script  src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/11.0.5/swiper-bundle.min.js" integrity="sha512-Ysw1DcK1P+uYLqprEAzNQJP+J4hTx4t/3X2nbVwszao8wD+9afLjBQYjz7Uk4ADP+Er++mJoScI42ueGtQOzEA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     {{-- <script src="{{asset('/assets/clients/js/calendar.js')}}"></script> --}}
     <script  src="{{asset('/assets/clients/js/script.js')}}"></script>
-        
+    <script  src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script>
         // Khởi tạo swiper js

@@ -222,7 +222,12 @@ class BookingController extends Controller
             $rental_id = Cache::get('rental_id');
             $payment_id = Cache::get('payment_id');
    
+            if(Cache::has('rental_id') && Cache::has('payment_id')) {
+                Cache::forget('rental_id');
+                Cache::forget('payment_id');
+            }
 
+            
 
             $vnp_Amount = $_GET['vnp_Amount'];
             $vnp_BankCode = $_GET['vnp_BankCode'];

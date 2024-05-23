@@ -202,21 +202,52 @@ document.addEventListener('DOMContentLoaded', function() {
   //Ngăn chặn hành vi mặc định
   const button_search_vehicle_available = document.querySelector("button[name='form_search_vehicle_available']");
   const button_booking_vehicle = document.querySelector("button[name='form_booking_vehicle']");
+  const button_booking_vehicle_VNPAY = document.getElementById('button_vnpay_payment');
 
   if(button_search_vehicle_available)
   {
     button_search_vehicle_available.addEventListener('click', function(e) {
-      e.preventDefault();
-      this.form.submit();
+
     })
+  }
+
+  //Ngăn chặn hành vi mặc định của button vnpay khi thanh toán (alert thông báo 'Bạn có muốn thuê xe này không')
+  if(button_booking_vehicle_VNPAY) {
+      button_booking_vehicle_VNPAY.addEventListener('click', function(e) {
+          if(!confirm('Bạn có muốn thuê xe này không?')) {
+            e.preventDefault();
+          }
+      })
   }
 
   if(button_booking_vehicle)
   {
     button_booking_vehicle.addEventListener('click', function(e) {
       e.preventDefault();
-      // this.form.submit();
-      this.form.submit();
+      const vehicle_title = document.querySelector('.vehicle-detail__title').textContent;
+
+      Swal.fire({
+        title: `Bạn có muốn đặt chiếc ${vehicle_title} này không?`,
+        text: "Hãy kiểm tra xe trước khi thanh toán",
+        icon: 'success',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Đặt',
+        cancelButtonText: 'Hủy',
+    }).then((result) => {
+        if (result.isConfirmed) {
+            Swal.fire({
+              title: 'Đặt xe thành công!',
+              text: "Hãy vào lịch sử đặt xe để kiểm tra",
+              icon: 'success',
+              showCancelButton: false,
+              confirmButtonText: 'OK',
+            }
+          )
+            document.getElementById("form_booking_vehicle_detail").submit();
+        }
+    })
   
     })
 
@@ -256,3 +287,13 @@ window.addEventListener('load', function() {
   }
   
 });
+
+// Xử lý phần alert khi clients click 'Thanh toán bằng tiền mặt'
+// document.addEventListener('DOMContentLoaded', function() {
+//     const bookingButtonByCash = document.getElementById('booking_vehicle_button');
+//     bookingButtonByCash.addEventListener('click', function(e) {
+//       if(!confirm('Bạn có muốn thuê xe này ')) {
+//         e.preventDefault();
+//       }
+//     });
+// })
