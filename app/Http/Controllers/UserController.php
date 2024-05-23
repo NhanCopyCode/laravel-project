@@ -352,12 +352,7 @@ class UserController extends Controller
     }
 
 
-    public function profile()
-    {
-        $user = Auth::user();
-        // dd($user);
-        return view('clients.profile');
-    }
+    
 
     public function test_view()
     {

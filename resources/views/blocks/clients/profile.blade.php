@@ -1,163 +1,105 @@
-
-
-<div class="container">    
-      <div class="col">
-        <div class="row">
-          <div class="col mb-3">
-            <div class="card">
-              <div class="card-body">
-                <div class="e-profile">
-                  <div class="row">
-                    <div class="col-12 col-sm-auto mb-3">
-                      <div class="mx-auto" style="width: 140px;">
-                        <div class="d-flex justify-content-center align-items-center rounded" style="height: 140px; background-color: rgb(233, 236, 239);">
-                          <span style="color: rgb(166, 168, 170); font: bold 8pt Arial;">140x140</span>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col d-flex flex-column flex-sm-row justify-content-between mb-3">
-                      <div class="text-center text-sm-left mb-2 mb-sm-0">
-                        <h4 class="pt-sm-2 pb-1 mb-0 text-nowrap">John Smith</h4>
-                        <p class="mb-0">@johnny.s</p>
-                        <div class="text-muted"><small>Last seen 2 hours ago</small></div>
-                        <div class="mt-2">
-                          <button class="btn btn-primary" type="button">
-                            <i class="fa fa-fw fa-camera"></i>
-                            <span>Change Photo</span>
-                          </button>
-                        </div>
-                      </div>
-                      <div class="text-center text-sm-right">
-                        <span class="badge badge-secondary">administrator</span>
-                        <div class="text-muted"><small>Joined 09 Dec 2017</small></div>
-                      </div>
-                    </div>
-                  </div>
-                  <ul class="nav nav-tabs">
-                    <li class="nav-item"><a href="" class="active nav-link">Settings</a></li>
-                  </ul>
-                  <div class="tab-content pt-3">
-                    <div class="tab-pane active">
-                      <form class="form" novalidate="">
-                        <div class="row">
-                          <div class="col">
-                            <div class="row">
-                              <div class="col">
-                                <div class="form-group">
-                                  <label>Full Name</label>
-                                  <input class="form-control" type="text" name="name" placeholder="John Smith" value="John Smith">
-                                </div>
-                              </div>
-                              <div class="col">
-                                <div class="form-group">
-                                  <label>Username</label>
-                                  <input class="form-control" type="text" name="username" placeholder="johnny.s" value="johnny.s">
-                                </div>
-                              </div>
-                            </div>
-                            <div class="row">
-                              <div class="col">
-                                <div class="form-group">
-                                  <label>Email</label>
-                                  <input class="form-control" type="text" placeholder="user@example.com">
-                                </div>
-                              </div>
-                            </div>
-                            <div class="row">
-                              <div class="col mb-3">
-                                <div class="form-group">
-                                  <label>About</label>
-                                  <textarea class="form-control" rows="5" placeholder="My Bio"></textarea>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="row">
-                          <div class="col-12 col-sm-6 mb-3">
-                            <div class="mb-2"><b>Change Password</b></div>
-                            <div class="row">
-                              <div class="col">
-                                <div class="form-group">
-                                  <label>Current Password</label>
-                                  <input class="form-control" type="password" placeholder="••••••">
-                                </div>
-                              </div>
-                            </div>
-                            <div class="row">
-                              <div class="col">
-                                <div class="form-group">
-                                  <label>New Password</label>
-                                  <input class="form-control" type="password" placeholder="••••••">
-                                </div>
-                              </div>
-                            </div>
-                            <div class="row">
-                              <div class="col">
-                                <div class="form-group">
-                                  <label>Confirm <span class="d-none d-xl-inline">Password</span></label>
-                                  <input class="form-control" type="password" placeholder="••••••"></div>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="col-12 col-sm-5 offset-sm-1 mb-3">
-                            <div class="mb-2"><b>Keeping in Touch</b></div>
-                            <div class="row">
-                              <div class="col">
-                                <label>Email Notifications</label>
-                                <div class="custom-controls-stacked px-2">
-                                  <div class="custom-control custom-checkbox">
-                                    <input type="checkbox" class="custom-control-input" id="notifications-blog" checked="">
-                                    <label class="custom-control-label" for="notifications-blog">Blog posts</label>
-                                  </div>
-                                  <div class="custom-control custom-checkbox">
-                                    <input type="checkbox" class="custom-control-input" id="notifications-news" checked="">
-                                    <label class="custom-control-label" for="notifications-news">Newsletter</label>
-                                  </div>
-                                  <div class="custom-control custom-checkbox">
-                                    <input type="checkbox" class="custom-control-input" id="notifications-offers" checked="">
-                                    <label class="custom-control-label" for="notifications-offers">Personal Offers</label>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="row">
-                          <div class="col d-flex justify-content-end">
-                            <button class="btn btn-primary" type="submit">Save Changes</button>
-                          </div>
-                        </div>
-                      </form>
-    
-                    </div>
-                  </div>
-                </div>
+<form action="{{route('user.update.profile', $user->user_id)}}" method="POST" enctype="multipart/form-data" class="section__container border rounded p-8 mb-4" id="form_update_profile_user">
+  @csrf
+  <h2 class="text-center fw-bold">Cập nhật hồ sơ</h2>
+  </div>
+    <div class="form-row row">
+        <div class="col-md-4">  
+            <div class="card" style="max-height: 300px;min-height: 200px;">
+                <img style="object-fit: cover;" src="{{$user->avatar}}" id="user_avatar" class="card-img-top" alt="Ảnh đại diện">
+                
+            </div>
+            <div class="form-group">
+              <div class="mb-3">
+                <label for="avatar" class="form-label">Cập nhật ảnh đại diện</label>
+                <input class="form-control" type="file" id="avatar" name="avatar">
+                @error('avatar')
+                  <span class="text-danger">{{$message}}</span>
+                @enderror
               </div>
             </div>
-          </div>
-    
-          <div class="col-12 col-md-3 mb-3">
-            <div class="card mb-3">
-              <div class="card-body">
-                <div class="px-xl-3">
-                  <button class="btn btn-block btn-secondary">
-                    <i class="fa fa-sign-out"></i>
-                    <span>Logout</span>
-                  </button>
-                </div>
-              </div>
-            </div>
-            <div class="card">
-              <div class="card-body">
-                <h6 class="card-title font-weight-bold">Support</h6>
-                <p class="card-text">Get fast, free help from our friendly assistants.</p>
-                <button type="button" class="btn btn-primary">Contact Us</button>
-              </div>
-            </div>
-          </div>
         </div>
-    
+    </div>
+    <div class="form-row row">
+
+      {{-- User name / Email --}}
+      <div class="form-group col-md-6">
+        <label for="name" >Tên người dùng</label>
+        <input type="text" class="form-control" name="name" id="name" value="{{$user->name ? : old('name')}}" placeholder="Nhập tên người dùng">
+        @error('name')
+            <span class="text-danger">{{$message}}</span>
+        @enderror
+      </div>
+
+      <div class="form-group col-md-6">
+          <label for="email">Email</label>
+          <input type="email" class="form-control" name="email" id="email" value="{{$user->email ?: old('email')}}" placeholder="VD: abc@gmail.com">
+          @error('email')
+            <span class="text-danger">{{$message}}</span>
+          @enderror
       </div>
     </div>
+
+    {{-- Số điện thoại /  --}}
+    <div class="form-row row">
+      <div class="form-group col-md-6">
+        <label for="phone_number" >Số điện thoại</label>
+        <input type="number" class="form-control" name="phone_number" id="phone_number" value="{{$user->phone_number ? : old('phone_number')}}" placeholder="VD: 0919094701">
+        @error('phone_number')
+          <span class="text-danger">{{$message}}</span>
+        @enderror
+      </div>
+
+      <div class="form-group col-md-6">
+          <label for="CCCD">Số CCCD (Phải nhập đủ 12 số)</label>
+          <input type="number" class="form-control" id="CCCD" name="CCCD" value="{{$user->CCCD ?: old('CCCD')}}" placeholder="Nhập CCCD...">
+          @error('CCCD')
+            <span class="text-danger">{{$message}}</span>
+          @enderror
+      </div>
     </div>
+
+    {{-- Số điện thoại / Căn cước công dân --}}
+
+    <div class="form-row row">
+      @php
+          // Assuming $user->date_of_birth is in the format 'Y-m-d H:i:s'
+          $date_of_birth = \Carbon\Carbon::parse($user->date_of_birth)->format('Y-m-d');
+
+      @endphp
+      <div class="form-group col-md-6">
+          <label for="date_of_birth">Nhập ngày sinh</label>
+          <input type="date" class="form-control" id="date_of_birth" name="date_of_birth" value="{{$date_of_birth ?: old('date_of_birth')}}" placeholder="Nhập CCCD...">
+          @error('date_of_birth')
+            <span class="text-danger">{{$message}}</span>
+          @enderror
+      </div>
+    </div>
+    
+    <button class="btn btn-primary" id="button_submit_update_profile" type="submit">Cập nhật hồ sơ</button>
+</form>
+
+@if(session('success'))
+    <script>
+        Swal.fire({
+              title: '{{ session('success') }}',
+              icon: 'success',
+              showCancelButton: false,
+              confirmButtonText: 'OK',
+            });
+    </script>
+@endif
+
+<script>
+     $(document).ready(function() {
+          $('#avatar').change(function() {
+              const file = this.files[0];
+              if (file) {
+                  const reader = new FileReader();
+                  reader.onload = function(e) {
+                      $('#user_avatar').attr('src', e.target.result);
+                  }
+                  reader.readAsDataURL(file);
+              }
+          });
+      });
+</script>

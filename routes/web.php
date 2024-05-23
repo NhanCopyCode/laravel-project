@@ -105,8 +105,9 @@ Route::prefix('/user')->name('user.')->middleware('auth')->group(function () {
     Route::get('/search_advanced_date', [SearchVehicleController::class, 'searchVehicleAdvancedDate'])->name('search.advanced.date');
 
     // Profile
-    Route::get('/profile', [UserController::class, 'profile'])->name('profile');
+    Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
 
+    Route::post('/profile/{user}', [ProfileController::class, 'updateProfile'])->name('update.profile');
 
     //Booking 
     Route::get('/booking', [BookingController::class, 'index'])->name('booking.index');
@@ -143,7 +144,7 @@ Route::prefix('/admin')->middleware('permission.checker:admin|Manager')->name('a
 
     // Profile
 
-    Route::get('/profile', [ProfileController::class, 'profile'])->name('profile');
+    Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
 
     Route::post('/profile', [ProfileController::class, 'edit_profile'])->name('edit_profile');
 
