@@ -88,9 +88,16 @@
 </div>
 
 @if ($errors->any())
+    <div class="alert alert-danger">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
     <script>
         Swal.fire({
-            title: 'Đặt xe thất bại! Xin vui lòng hãy kiểm tra lại!',
+            title: 'Đặt xe thất bại! Xin vui lòng hãy kiểm tra lsadfasdfại!',
             icon: 'warning',
             showCancelButton: false,
             confirmButtonText: 'OK',

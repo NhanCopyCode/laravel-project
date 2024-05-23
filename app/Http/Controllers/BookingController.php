@@ -54,10 +54,11 @@ class BookingController extends Controller
         try {
             $validatedData = $request->validated(); 
 
-            if($validatedData->fails()) {
-                return redirect()->back()->with('msg--failure', 'Đặt xe thất bại! Hãy thử kiểm tra lại!');
+            // if($validatedData->fails()) {
+            //     dd('vào ddaaay là sai');
+            //     return redirect()->back()->with('msg--failure', 'Đặt xe thất bại! Hãy thử kiểm tra lại!');
 
-            }
+            // }
 
             $booking_start_date =  explode(' - ', $request->booking_daterange)[0];
             $booking_end_date = str_replace(' / ', ' - ', explode(' - ', $request->booking_daterange)[1]);
@@ -145,6 +146,7 @@ class BookingController extends Controller
 
             }
         } catch (\Throwable $th) {
+            // dd($th->getMessage());
             return redirect()->back()->with('msg--failure', 'Đặt xe thất bại! Hãy thử kiểm tra lại!');
         }
 
