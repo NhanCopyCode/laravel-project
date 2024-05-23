@@ -159,7 +159,6 @@
                 }
 
                 if(urlFilterSidebar !== null && urlHeaderBooking !== null) {
-                    console.log('Vào được tỏng if');
                     urlParamsReal = '?' + urlHeaderBooking + '&' + urlFilterSidebar + '&page=' + page ;
                 } 
 
@@ -277,7 +276,16 @@
             // Khi người dùng submit form tìm kiếm nâng cao
             $('.filters-sidebar').on('submit', function(event) {
                 event.preventDefault(); // Ngăn không cho gửi form theo cách truyền thống
-                updateContentBookingVehicle('#filters-sidebar');
+
+                const urlParams = new URLSearchParams(window.location.search);
+                if (!urlParams.has('location_id')) {
+                    event.preventDefault();
+                    $('#search_vehicle_daterange').focus();
+                } else {
+                    updateContentBookingVehicle('#filters-sidebar');
+                }
+
+                
                
             });
 

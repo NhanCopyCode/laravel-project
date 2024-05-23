@@ -113,6 +113,9 @@ Route::prefix('/user')->name('user.')->middleware('auth')->group(function () {
     
     Route::get('/booking-history', [BookingController::class, 'showBookingHistory'])->name('booking.history');
 
+    //Hủy đặt xe
+    Route::post('/booking/vehicle/cancel/{payment}', [BookingController::class, 'cancelBooking'])->name('cancel.vehicle');
+
     // Xe đăng đặt
     Route::get('/vehicle-currently-booked', [BookingController::class, 'showBookingHistory'])->name('vehicle_currently_booked');
 

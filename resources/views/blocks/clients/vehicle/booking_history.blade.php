@@ -14,6 +14,8 @@
                 <th scope="col">Ngày thanh toán</th>
                 <th scope="col">Hình thức thanh toán</th>
                 <th scope="col">Thuê lại xe</th>
+                <th scope="col">Hành động</th>
+
                 </tr>
             </thead>
             <tbody>
@@ -44,6 +46,12 @@
                         <td>{{$history->payment_method_name}}</td>
                         <td>
                             <a href="{{route('user.showVehicle', ['vehicle' => $history->vehicle_id])}}">Link</a>
+                        </td>
+
+
+                        {{-- Hành động --}}
+                        <td>
+                            <a href="{{route('user.cancel.vehicle' , ['payment' => $history->payment_id])}}" class="btn btn-danger btn-sm">Hủy đặt xe</a>
                         </td>
                     </tr>
                     @endforeach
