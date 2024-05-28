@@ -17,6 +17,7 @@ use App\Http\Requests\Auth\LoginRequest;
 use Illuminate\Support\Facades\Validator;
 use Symfony\Component\VarDumper\Caster\RedisCaster;
 use App\Http\Requests\Auth\AdminRequest as AuthAdminRequest;
+use Carbon\Carbon;
 
 class UserController extends Controller
 {
@@ -253,7 +254,7 @@ class UserController extends Controller
         $message = [
             'required' => ':attribute không được để trống',
             'email' => ':attribute không hợp lệ',
-            'exists' => ':attribute chưa được đăng kí',
+            'exists' => ':attribute không tồn tại trong hệ thống',
         ];
 
         $attributes = [
@@ -264,7 +265,11 @@ class UserController extends Controller
 
         $token = strtoupper(Str::random(10));
         $user = User::where('email', $request->email)->first();
-        $user->update(['token' => $token]);
+        $user->update([
+            'token' => $token,
+            'email_verfied_at' => Carbon::now(),
+        ]);
+        
         // dd($user);
 
 
@@ -272,13 +277,16 @@ class UserController extends Controller
             $email->subject('Nhangg Webiste - Lấy lại mật khẩu');
             $email->to($user->email, $user->name);
         });
-        return redirect()->route('auth.forgot_password')->with('msg--email-forget-password', 'Vui lòng check email để thực hiện thay đổi mật khẩu');
+        return redirect()->route('auth.forgot_password')->with('msg--email-forget-password', 'Vui lòng check email để thực hiện thay đổi mật khẩu. Hành động này sẽ được hủy trong vòng 24h!');
     }
 
 
     public function getForgotPasword(User $user, $token)
     {
-        if($user->token === $token)
+        // dd(gettype($user->email_verfied_at));
+        // dd($user->email_verfied_at);
+        // && $user->email_verfied_at  && $user->email_verfied_at->diffInHours(now()) <= 24
+        if($user->token === $token )
         {
             return view('email.get_password', compact('user'));
         }

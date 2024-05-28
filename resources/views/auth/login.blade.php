@@ -7,11 +7,12 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{asset('assets/clients/css/login.css')}}">
+    <link rel="stylesheet" href="{{asset('assets/bootstrap/css/bootstrap.min.css')}}">
     <title>Login</title>
 </head>
 <body>
-    {{-- {{time()}} --}}
-    <form action="{{route('auth.login')}}" method="POST" class="login-box">
+    
+    {{-- <form action="{{route('auth.login')}}" method="POST" class="login-box">
 
         @csrf
         <div class="login-header">
@@ -61,12 +62,13 @@
             <button type="submit" class="submit-btn" id="submit"></button>
             <label for="submit">Sign In</label>
         </div>
-        <div class="sign-up-link">
-            <p>Don't have account? <a href="{{route('auth.register')}}">Sign Up</a></p>
-            <a href="/auth/google/redirect">Login with Google</a>
-            {{-- <p>Are you a car rental person? <a href="{{route('auth.login_owner')}}">Login here</a></p> --}}
-        </div>
-    </form>
+        
+    </form> --}}
+    <div class="login-header d-flex flex-column">
+        <header style="margin-bottom: 40px; font-size: 50px;">Login</header>
+
+        <a style="text-decoration: none;" class="login_google_btn btn btn-dark mt-10" href="/auth/google/redirect">Login with Google</a>
+    </div>
     {{-- <script src="{{asset('assets/clients/js/login.js')}}"></script> --}}
 
 </body>

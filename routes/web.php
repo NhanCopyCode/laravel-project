@@ -44,7 +44,7 @@ Route::prefix('auth')->name('auth.')->group(function () {
 
     Route::post('/login', [UserController::class, 'login'])->name('login');
 
-    Route::get('/sign_up', [UserController::class, 'register'])->name('register');
+    // Route::get('/sign_up', [UserController::class, 'register'])->name('register');
 
     Route::post('/sign_up', [UserController::class, 'check_register'])->name('check_register');
 

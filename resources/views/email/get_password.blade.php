@@ -15,7 +15,7 @@
 
         @csrf
         <div class="login-header">
-            <header>Reset password</header>
+            <header>Đổi mật khẩu</header>
             @if (session('msg'))
                 <span style="color: red;">{!!session('msg')!!}</span>
             @endif
@@ -43,13 +43,13 @@
         <div class="forgot">
             <section>
                 <input id="btnShowPassword" type="checkbox" >
-                <label for="btnShowPassword">Show passowrd</label>
+                <label for="btnShowPassword">Hiển thị mật khẩu</label>
             </section>
             
         </div>
         <div class="input-submit">
             <button type="submit" class="submit-btn" id="submit"></button>
-            <label for="submit">Reset password</label>
+            <label for="submit">Đổi mật khẩu</label>
         </div>
         
     </form>

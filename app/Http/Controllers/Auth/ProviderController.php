@@ -33,7 +33,7 @@ class ProviderController extends Controller
             ])->first();
           
             if($user == null) {
-                // dd($SocialUser->id);
+                // dd($SocialUser->id)web
                 $user = User::create([
                     'name' => $SocialUser->name,
                     'email' => $SocialUser->email,

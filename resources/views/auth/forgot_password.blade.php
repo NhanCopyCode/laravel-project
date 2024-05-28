@@ -24,18 +24,15 @@
         <div class="input-box">
             <input type="email" class="input-field" placeholder="Email" name="email" autocomplete="off" required value="{{old('email')}}">
             @error('email')
-                <span style="color: red;">{{$message}}</span>
+                <span style="color: red;margin-bottom: 12px;">{{$message}}</span>
             @enderror
         </div>
        
-        <div class="input-submit">
+        <div style="margin-top: 12px;" class="input-submit">
             <button type="submit" class="submit-btn" id="submit"></button>
             <label for="submit">Get password</label>
         </div>
-        <div class="sign-up-link">
-            <p>Don't have account? <a href="{{route('auth.register')}}">Sign Up</a></p>
-            {{-- <p>Are you a car rental person? <a href="{{route('auth.login_owner')}}">Login here</a></p> --}}
-        </div>
+      
     </form>
     {{-- <script src="{{asset('assets/clients/js/login.js')}}"></script> --}}
 

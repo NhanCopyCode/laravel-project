@@ -723,3 +723,7 @@ nav {
   padding: 0;
 }
 
+/* Login Google button */
+.login_google_btn:hover{
+  filter: brightness(105%);
+}

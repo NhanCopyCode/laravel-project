@@ -30,8 +30,6 @@
         </li>
       @else 
         <li class="link"><a href="{{route('auth.index')}}">Đăng nhập</a></li>
-        <li class="link"><a href="{{route('auth.register')}}">Đăng kí</a></li>
-
       @endif
     </ul>
 </nav>

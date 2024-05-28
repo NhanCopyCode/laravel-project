@@ -18,22 +18,23 @@ class PermissionChecker
     {
 
         // dd();
-        $allowRoles = array_map('strtolower', explode('|', $role)); 
-        $userRole = null;
-        $adminRole = null;
-        if(Auth::guard('admin')->check()) {
-            $adminRole = strtolower($this->getUserType(Auth::guard('admin')->user()->role_id));
-        }
+        // $allowRoles = array_map('strtolower', explode('|', $role)); 
+        // $userRole = null;
+        // $adminRole = null;
+        // if(Auth::guard('admin')->check()) {
+        //     $adminRole = strtolower($this->getUserType(Auth::guard('admin')->user()->role_id));
+        // }
 
-        if(Auth::guard('web')->check()) {
+        // if(Auth::guard('web')->check()) {
 
-            $userRole = strtolower($this->getUserType(Auth::guard('web')->user()->role_id));
-        }
-        if(in_array($userRole, $allowRoles) || in_array($adminRole, $allowRoles)) {
+        //     $userRole = strtolower($this->getUserType(Auth::guard('web')->user()->role_id));
+        // }
+        // if(in_array($userRole, $allowRoles) || in_array($adminRole, $allowRoles)) {
             
-            return $next($request);
+        //     return $next($request);
 
-        }
+        // }
+        return $next($request);
     }
 
     public function getUserType($role_id)
