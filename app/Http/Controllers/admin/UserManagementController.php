@@ -54,17 +54,17 @@ class UserManagementController extends Controller
     {
         // return $request->all();
         $rules = [
-            'user_name' => 'required|unique:users,user_name,'.$request->user_id.',user_id',
-            'user_status_id' => 'required',
+            'role_id' => "required|exists:role",
+            'user_status_id' => 'required|exists:userstatus',
         ];
 
         $messages = [
             'required' => ':attribute không được để trống',
-            'unique' => ':attribute đã tồn tại trong hệ thống',
+            'exists' => ':attribute không tồn tại trong hệ thống',
         ];
 
         $attributes = [
-            'user_name' => 'Tên người dùng',
+            'role_id' => 'Vai trò người dùng',
             'user_status_id' => 'Trạng thái người dùng'
         ];
         $request->validate($rules, $messages, $attributes);
@@ -72,13 +72,14 @@ class UserManagementController extends Controller
         // $user_id = $request->user_id;
         // $user = user::findOrFail($user_id);
 
-        user::where('user_id', $request->user_id)->update([
-            'user_name' => $request->user_name,
+        $user = User::where('user_id', $request->user_id)->update([
+            'role_id' => $request->role_id,
             'user_status_id' => $request->user_status_id
         ]);
 
         return response()->json([
             'status' => 'success',
+            'user' => $user,
         ]);
     }
 

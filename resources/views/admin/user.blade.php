@@ -34,9 +34,8 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="password">Mật khẩu</label>
-                    <input type="password" class="form-control" id="password" name="password"  required value="{{old('password')}}">
-                    <div class="message_error_password message_error">
+                    <label for="user_status_id">Trạng thái người dùng</label>
+                    <div class="message_error_email message_error">
 
                     </div>
                 </div>
@@ -144,6 +143,7 @@
                         data-id = "{{$item->user_id}}"
                         data-user-name = "{{$item->name}}"
                         data-user-status-id = "{{$item->user_status_id}}"
+                        data-role-id = "{{$item->role_id}}"
                     >
                         <i class="fa-regular fa-pen-to-square"></i>
                     </a>
@@ -271,16 +271,18 @@
                 // alert('Xin chào');
                 let id = $(this).data('id');
                 let user_status_id = $(this).data('user-status-id');
-                let user_status_name = $(this).data('user-name');
+                let user_name = $(this).data('user-name');
+                let role_id = $(this).data('role-id');
                 let messageError = $('.message_error_name');
 
                 //Clear message error exists
                 messageError.empty();
                 
-                console.log(user_status_id, user_status_name)
-                $('#update_name').val(user_status_name);
-                $('#update_user_status').val(user_status_id);
                 $('#update_user_id').val(id);
+                $('#update_user_status_id').val(user_status_id);
+                $("#update_role_id").val(role_id);
+
+                console.log(id, user_status_id, role_id, user_name);
             });
 
             //xử lý sự kiện Update user
@@ -288,8 +290,8 @@
                 e.preventDefault();
 
                 let user_id = $('#update_user_id').val();
-                let name = $('#update_name').val().trim();
-                let user_status_id = $('#update_user_status').val().trim();
+                let user_status_id = $('#update_user_status_id').val().trim();
+                let role_id = $('#update_role_id').val().trim();
 
                 $('.message_error').empty();
                 
@@ -298,7 +300,7 @@
                     method: 'POST',
                     data: { 
                         user_id : user_id,
-                        name: name,
+                        role_id: role_id,
                         user_status_id : user_status_id,
                     },
                     success: function(response) {

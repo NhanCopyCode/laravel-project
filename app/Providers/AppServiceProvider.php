@@ -5,6 +5,7 @@ namespace App\Providers;
 use App\Models\Brand;
 use App\Models\Branch;
 use App\Models\Rental;
+use App\Models\UserStatus;
 use App\Models\BrandStatus;
 use App\Models\ModelStatus;
 use App\Models\BranchStatus;
@@ -88,6 +89,8 @@ class AppServiceProvider extends ServiceProvider
                 0, 1
             ];
 
+            $user_status_list = UserStatus::all();
+
 
             $view->with(compact(
                 'branch_status_list', 
@@ -105,6 +108,7 @@ class AppServiceProvider extends ServiceProvider
                 'list_engine_type',
                 'list_color',
                 'year_of_production',
+                'user_status_list',
             ));
 
 
