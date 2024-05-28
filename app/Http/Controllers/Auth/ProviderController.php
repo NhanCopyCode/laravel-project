@@ -24,6 +24,9 @@ class ProviderController extends Controller
             if(User::where('email', $SocialUser->getEmail())->exists()) {
                 $user = User::where('email', $SocialUser->getEmail())->first();
                 Auth::login($user);
+                if($user->user_status_id !== 1) {
+                    return redirect()->route('403');
+                }
                 return redirect()->route('home');
             }
 

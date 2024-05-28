@@ -280,6 +280,7 @@
                 const urlParams = new URLSearchParams(window.location.search);
                 if (!urlParams.has('location_id')) {
                     event.preventDefault();
+                    $('input[type=checkbox]').prop('checked', false);
                     $('#search_vehicle_daterange').focus();
                 } else {
                     updateContentBookingVehicle('#filters-sidebar');

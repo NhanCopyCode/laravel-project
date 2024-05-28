@@ -10,6 +10,7 @@ use App\Http\Controllers\BookingController;
 use App\Http\Controllers\DistrictController;
 use App\Http\Controllers\SwitchModeController;
 use App\Http\Controllers\error\ErrorController;
+use App\Http\Controllers\AccessDeniedController;
 use App\Http\Controllers\admins\AdminController;
 use App\Http\Controllers\admins\BrandController;
 use App\Http\Controllers\clients\HomeController;
@@ -22,6 +23,7 @@ use App\Http\Controllers\admins\VehicleController;
 use App\Http\Controllers\CarRentalStoreController;
 use App\Http\Controllers\AdminBookingVehicleController;
 use App\Http\Controllers\admin\UserManagementController;
+use App\Http\Controllers\RentalController;
 
 /*
 |--------------------------------------------------------------------------
@@ -43,15 +45,15 @@ Route::get('/test-home', function() {
 Route::prefix('auth')->name('auth.')->group(function () {
     Route::get('/', [UserController::class, 'index'])->name('index');
 
-    Route::post('/login', [UserController::class, 'login'])->name('login');
+    // Route::post('/login', [UserController::class, 'login'])->name('login');
 
     // Route::get('/sign_up', [UserController::class, 'register'])->name('register');
 
-    Route::post('/sign_up', [UserController::class, 'check_register'])->name('check_register');
+    // Route::post('/sign_up', [UserController::class, 'check_register'])->name('check_register');
 
     Route::post('/logout', [UserController::class, 'logout'])->name('logout');
 
-    Route::get('/user_actived/{user}/{token}', [UserController::class, 'actived'])->name('user.actived');
+    // Route::get('/user_actived/{user}/{token}', [UserController::class, 'actived'])->name('user.actived');
 
     //Forgot Password
     Route::get('/forgot_password', [UserController::class, 'forgotPassowrd'])->name('forgot_password');
@@ -89,7 +91,7 @@ Route::prefix('auth')->name('auth.')->group(function () {
 
 
 //Route clients
-Route::prefix('/user')->name('user.')->middleware('auth')->group(function () {
+Route::prefix('/user')->name('user.')->middleware('auth', 'permission.checker:user')->group(function () {
 
     
 
@@ -111,12 +113,12 @@ Route::prefix('/user')->name('user.')->middleware('auth')->group(function () {
     Route::post('/profile/{user}', [ProfileController::class, 'updateProfile'])->name('update.profile');
 
     //Booking 
-    Route::get('/booking', [BookingController::class, 'index'])->name('booking.index');
+    Route::get('/booking', [BookingController::class, 'index'])->middleware(['update.rental.status'])->name('booking.index');
     
     Route::get('/booking-history', [BookingController::class, 'showBookingHistory'])->name('booking.history');
 
     //Hủy đặt xe
-    Route::post('/booking/vehicle/cancel/{payment}', [BookingController::class, 'cancelBooking'])->name('cancel.vehicle');
+    Route::post('/booking/vehicle/cancel/{rental}', [RentalController::class, 'cancelRental'])->name('cancel.vehicle');
 
     // Xe đăng đặt
     Route::get('/vehicle-currently-booked', [BookingController::class, 'showBookingHistory'])->name('vehicle_currently_booked');
@@ -236,6 +238,9 @@ Route::prefix('/admin')->middleware('permissionAdmin.checker:Admin|Manager')->na
         Route::post('/delete', [UserManagementController::class, 'delete'])->name('user.delete');
 
         Route::get('/search', [UserManagementController::class, 'searchuser'])->name('user.search');
+
+        Route::post('/unblock', [UserManagementController::class, 'unBlockUser'])->name('user.unblock');
+
     });
 
 

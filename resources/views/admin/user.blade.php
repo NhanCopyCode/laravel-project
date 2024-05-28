@@ -136,17 +136,31 @@
                     @endphp
                 </td>
                 <td style="display: flex;align-items: center;">
-                    <a  href=""
-                        class="btn btn-primary btn-update btn-update-user" 
-                        data-toggle = "modal"
-                        data-target = "#form_update_user"
-                        data-id = "{{$item->user_id}}"
-                        data-user-name = "{{$item->name}}"
-                        data-user-status-id = "{{$item->user_status_id}}"
-                        data-role-id = "{{$item->role_id}}"
-                    >
-                        <i class="fa-regular fa-pen-to-square"></i>
-                    </a>
+                    {{-- @if ($item->role_id === 1) 
+                        <a  style="width: 100px;"
+                            href=""
+                            class="btn btn-secondary btn-primary btn-update btn-update-user_client" 
+                            data-user-id = "{{$item->user_id}}"
+                            data-user-name = "{{$item->name}}"
+                            data-user-status-id = "{{$item->user_status_id}}"
+                            data-role-id = "{{$item->role_id}}"
+                        >
+                            Gỡ block
+                        </a>
+                    
+                    @else --}}
+                        <a  href=""
+                            class="btn btn-primary btn-update btn-update-user" 
+                            data-toggle = "modal"
+                            data-target = "#form_update_user"
+                            data-id = "{{$item->user_id}}"
+                            data-user-name = "{{$item->name}}"
+                            data-user-status-id = "{{$item->user_status_id}}"
+                            data-role-id = "{{$item->role_id}}"
+                        >
+                            <i class="fa-regular fa-pen-to-square"></i>
+                        </a>
+                    {{-- @endif --}}
                     {{-- <form action="{{route('admin.user.delete')}}" method="POST" id="form_delete_user">
                         @csrf
                         <input type="hidden" name="delete_user_id" value="{{$item->user_id}}">
@@ -154,15 +168,17 @@
                             <i class="fa-regular fa-trash-can"></i>
                         </button>
                     </form> --}}
-                    <a  href=""
+                    <a  style="margin-right: 12px;"
+                        href=""
                         class="btn btn-danger btn-delete btn-delete-user" 
                         data-toggle = "modal"
                         data-target = "#form_delete_user"
                         data-user-id = "{{$item->user_id}}"
                         data-user-name = "{{$item->name}}"
                     >
-                    <i class="fa-regular fa-circle-xmark"></i>
+                        Block
                     </a>
+
                 </td>
             </tr>
             @endforeach
@@ -183,6 +199,50 @@
 
     <script>
         $(document).ready(function () {
+
+            //Update lại active cho user có role id = 1
+            // $(document).on('click', $('.btn-unblock-user'), function (e) {
+            //     e.preventDefault();
+            //     let user_id = $('.btn-unblock-user').data('user-id');
+            //     console.log(user_id)
+            //     $.ajax({
+            //         type: "POST",
+            //         url: "{{route('admin.user.unblock')}}",
+            //         data: {
+            //             user_id: user_id,
+            //         },
+            //         success: function (response) {
+            //             $('.table').load(location.href + ' .table > *');
+            //             Command: toastr["success"](`Gỡ block người dùng thành công`, "Gỡ block thành công!")
+
+            //             toastr.options = {
+            //                 "closeButton": false,
+            //                 "debug": false,
+            //                 "newestOnTop": true,
+            //                 "progressBar": true,
+            //                 "positionClass": "toast-top-right",
+            //                 "preventDuplicates": false,
+            //                 "onclick": null,
+            //                 "showDuration": "300",
+            //                 "hideDuration": "1000",
+            //                 "timeOut": "5000",
+            //                 "extendedTimeOut": "1000",
+            //                 "showEasing": "swing",
+            //                 "hideEasing": "linear",
+            //                 "showMethod": "fadeIn",
+            //                 "hideMethod": "fadeOut"
+            //             }
+            //         },
+            //         error: function(err) {
+            //             swal.fire({ 
+            //                 title: 'Cảnh báo', 
+            //                 icon: 'warning',
+            //                 text: 'Đã có lỗi xảy ra không thể thực hiện hành động này!!',
+            //             });
+            //         }
+            //     });
+            // });
+
             const checkAllInputSelector = '.check-all';
             const checkBoxSelector = 'input[type="checkbox"]:not(.check-all)';
 
@@ -275,6 +335,18 @@
                 let role_id = $(this).data('role-id');
                 let messageError = $('.message_error_name');
 
+                if(role_id === 1) {
+                    e.preventDefault();
+                    console.log('xíakfdl')
+                    swal.fire({ 
+                        title: 'Cảnh báo', 
+                        icon: 'warning',
+                        text: 'Không thể update cho người dùng này!!',
+                    })
+
+                    console.log($('#form_update_user'))
+                    return;
+                }
                 //Clear message error exists
                 messageError.empty();
                 
@@ -283,6 +355,7 @@
                 $("#update_role_id").val(role_id);
 
                 console.log(id, user_status_id, role_id, user_name);
+
             });
 
             //xử lý sự kiện Update user

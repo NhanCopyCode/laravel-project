@@ -53,6 +53,7 @@ class UserManagementController extends Controller
     public function update(Request $request)
     {
         // return $request->all();
+     
         $rules = [
             'role_id' => "required|exists:role",
             'user_status_id' => 'required|exists:userstatus',
@@ -81,6 +82,27 @@ class UserManagementController extends Controller
             'status' => 'success',
             'user' => $user,
         ]);
+       
+    }
+
+    public function unBlockUser(Request $request) {
+        $user = User::where('user_id', $request->user_id)->update([
+            // User status id = 1 = active
+            'user_status_id' => 1
+        ]);
+
+        if($user) {
+
+            return response()->json([
+                'status' => 'success',
+                'user' => $user
+            ]);
+        }else {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Something went wrong!!',
+            ]);
+        }
     }
 
     public function delete(Request $request)

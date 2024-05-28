@@ -4,7 +4,6 @@
         <table class="table table-bordered mt-4">
             <thead>
                 <tr>
-                <th scope="col">Id</th>
                 <th scope="col">Xe thuê</th>
                 <th scope="col">Hình ảnh xe</th>
                 <th scope="col">Tổng tiền</th>
@@ -21,7 +20,6 @@
             <tbody>
                 @foreach ($list_booking_vehicle as $history)
                     <tr>
-                        <td>{{$history->payment_id}}</td>
                         <td>{{$history->model_name}}</td>
                         <td>
                             <img style="height: 100px; object-fit: cover;" src="{{$history->vehicle_image_data_1}}" alt="Hình ảnh xe">
@@ -51,7 +49,11 @@
 
                         {{-- Hành động --}}
                         <td>
-                            <a href="{{route('user.cancel.vehicle' , ['payment' => $history->payment_id])}}" class="btn btn-danger btn-sm">Hủy đặt xe</a>
+                            <form action="{{route('user.cancel.vehicle', ['rental' => $history->rental_id])}}" method="POST">
+                                @csrf
+                                {{-- <a href="{{route('user.cancel.vehicle' , ['payment' => $history->payment_id])}}" class="btn btn-danger btn-sm">Hủy đặt xe</a> --}}
+                                <button class="btn btn-danger">Hủy đặt xe</button>
+                            </form>
                         </td>
                     </tr>
                     @endforeach
