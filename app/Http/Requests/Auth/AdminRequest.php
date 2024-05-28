@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Auth;
 
+use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class AdminRequest extends FormRequest
@@ -25,12 +26,11 @@ class AdminRequest extends FormRequest
             'email' => [
                 'required',
                 'email',
-                // Rule::exists('users')->where(function ($query) {
-                //     $query->where('role_id', 2);
-                // }),
-                'exists:users'
+                Rule::exists('users')->where(function ($query) {
+                    $query->where('role_id', 2);
+                }),
             ],
-            'password' => 'required',
+            'password' => 'required|min:6',
         ];
     }
 
@@ -40,13 +40,13 @@ class AdminRequest extends FormRequest
             'required' => ':attribute không được để trống',
             'email' => ':attribute không hợp lệ',
             'exists' => ':attribute này chưa được đăng kí',
+            'min' => ':attribute tối thiểu :min ký tự',
         ];
     }
 
     public function attributes()
     {
         return [
-            'name' => 'Tên',
             'email' => 'Email',
             'password' => 'Mật khẩu'
         ];

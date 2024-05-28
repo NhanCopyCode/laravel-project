@@ -147,9 +147,9 @@ Route::prefix('/admin')->middleware('permissionAdmin.checker:Admin|Manager')->na
 
     // Profile
 
-    Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
+    // Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
 
-    Route::post('/profile', [ProfileController::class, 'edit_profile'])->name('edit_profile');
+    // Route::post('/profile', [ProfileController::class, 'edit_profile'])->name('edit_profile');
 
     // Branch 
     Route::prefix('/branch')->group(function () {

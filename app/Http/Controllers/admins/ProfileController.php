@@ -14,7 +14,7 @@ class ProfileController extends Controller
     //
     public function index()
     {
-        $user = Auth::user();
+        $user = Auth::guard('web')->user();
         // dd($user);
         return view('clients.profile', compact('user'));
     }
@@ -23,7 +23,7 @@ class ProfileController extends Controller
     {
 
         // Lấy người dùng hiện tại đang đăng nhập
-        $user = Auth::user();
+        $user = Auth::guard('web')->user();
 
         // Kiểm tra nếu có avatar mới tải lên và xử lý lưu file
         if ($request->hasFile('avatar') && $request->file('avatar')->isValid()) {

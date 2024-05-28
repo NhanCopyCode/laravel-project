@@ -29,10 +29,11 @@
                         <td>{{$history->rental_start_date}}</td>
                         <td>{{$history->rental_end_date}}</td>
                         
-                        @if ($history->rental_status_id === 1)
-                        <td class="text-danger">{{$history->rental_status_name}}</td>
+                        {{-- Nếu rental status id = 3 = Bị hủy --}}
+                        @if ($history->rental_status_id === 3)
+                            <td class="text-danger">{{$history->rental_status_name}}</td>
                         @else 
-                        <td class="text-success">{{$history->rental_status_name}}</td>
+                            <td class="text-success">{{$history->rental_status_name}}</td>
                         @endif
                         
                         @if ($history->payment_date === null) 
@@ -43,13 +44,13 @@
                         {{-- Hình thức thanh toán --}}
                         <td>{{$history->payment_method_name}}</td>
                         <td>
-                            <a href="{{route('user.showVehicle', ['vehicle' => $history->vehicle_id])}}">Link</a>
+                            <a class="btn btn-primary " href="{{route('user.showVehicle', ['vehicle' => $history->vehicle_id])}}">Đặt lại xe</a>
                         </td>
 
 
                         {{-- Hành động --}}
                         <td>
-                            <form action="{{route('user.cancel.vehicle', ['rental' => $history->rental_id])}}" method="POST">
+                            <form action="{{route('user.cancel.vehicle', ['rental' => $history->rental_id])}}" method="POST" id="form_cancel_booking_vehicle">
                                 @csrf
                                 {{-- <a href="{{route('user.cancel.vehicle' , ['payment' => $history->payment_id])}}" class="btn btn-danger btn-sm">Hủy đặt xe</a> --}}
                                 <button class="btn btn-danger">Hủy đặt xe</button>
@@ -66,3 +67,14 @@
     @endif
     {{$list_booking_vehicle->links()}}
 </div>
+
+<script>
+    $(document).ready(function () {
+        $(document).on('submit', '#form_cancel_booking_vehicle', function(e) {
+            e.prevenDefault();
+
+
+            console.log(123);
+        });
+    });
+</script>

@@ -323,6 +323,10 @@ class VehicleController extends Controller
         ->get();
 
         $list_rental_time = Rental::where('vehicle_id', $vehicle->vehicle_id)
+        ->where(function($query) {
+            $query->where('rental_status_id', 1)
+                ->orWhere('rental_status_id', 4);
+        })
         ->select('rental_start_date', 'rental_end_date') // Chọn ra các cột liên quan đến thời gian đặt thuê
         ->get();
         // dd($list_rental_time);

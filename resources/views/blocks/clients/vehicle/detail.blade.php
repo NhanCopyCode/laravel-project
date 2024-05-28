@@ -97,7 +97,7 @@
     </div>
     <script>
         Swal.fire({
-            title: 'Đặt xe thất bại! Xin vui lòng hãy kiểm tra lsadfasdfại!',
+            title: 'Đặt xe thất bại! Xin vui lòng hãy kiểm tra!!',
             icon: 'warning',
             showCancelButton: false,
             confirmButtonText: 'OK',

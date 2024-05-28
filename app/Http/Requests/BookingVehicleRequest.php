@@ -40,14 +40,20 @@ class BookingVehicleRequest extends FormRequest
                     $end_date = Carbon::createFromFormat('Y-m-d', trim($end_date))->format('Y-m-d');
                     
                     // Thực hiện truy vấn để kiểm tra xem khoảng thời gian đã tồn tại trong DB hay chưa
-                    $exists = DB::table('rental') // Thay 'rental' bằng tên bảng đúng của bạn
-                                ->where('vehicle_id', $request->vehicle_id) // Thêm điều kiện where cho vehicle_id
-                                ->where(function($query) use ($start_date, $end_date) {
-                                    $query->whereBetween('rental_start_date',[$start_date, $end_date])
-                                          ->orWhereBetween('rental_end_date',[$start_date, $end_date]);
-                                })
-                                ->get();
-    
+                    $exists = DB::table('rental')
+                        ->where('vehicle_id', $request->vehicle_id)
+                        ->where(function($query) use ($start_date, $end_date) {
+                            $query->whereBetween('rental_start_date', [$start_date, $end_date])
+                                ->orWhereBetween('rental_end_date', [$start_date, $end_date]);
+                        })
+                        ->where(function($query) {
+                            $query->where('rental_status_id', 1)
+                                ->orWhere('rental_status_id', 4);
+                        })
+                        ->get();
+                        // $sql = $exists->toSql();
+                        // $bindings = $exists->getBindings();
+                        // dd($sql, $bindings);
                     // Nếu tồn tại, trả về lỗi
                     if (!$exists->isEmpty()) {
                         $fail('Xe đã được đặt trong thời gian này!!');
