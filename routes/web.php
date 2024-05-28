@@ -21,6 +21,7 @@ use App\Http\Controllers\admins\ProfileController;
 use App\Http\Controllers\admins\VehicleController;
 use App\Http\Controllers\CarRentalStoreController;
 use App\Http\Controllers\AdminBookingVehicleController;
+use App\Http\Controllers\admin\UserManagementController;
 
 /*
 |--------------------------------------------------------------------------
@@ -73,9 +74,9 @@ Route::prefix('auth')->name('auth.')->group(function () {
     Route::post('/admin_login', [UserController::class, 'check_admin_login'])->name('check_login_admin');
 
     //admin register
-    Route::get('/admin_register', [UserController::class, 'register_admin'])->name('register_admin');
+    // Route::get('/admin_register', [UserController::class, 'register_admin'])->name('register_admin');
 
-    Route::post('/admin_register', [UserController::class, 'check_register_admin'])->name('check_register_admin');
+    // Route::post('/admin_register', [UserController::class, 'check_register_admin'])->name('check_register_admin');
 
     Route::get('/admin_actived/{user}/{token}', [UserController::class, 'admin_actived'])->name('admin.actived');
 
@@ -128,7 +129,7 @@ Route::prefix('/user')->name('user.')->middleware('auth')->group(function () {
 Route::get('/admin/login_error', [AdminController::class, 'login_error'])->name('admin_login_error');
 
 
-Route::prefix('/admin')->middleware('permission.checker:admin|Manager')->name('admin.')->group(function () {
+Route::prefix('/admin')->middleware('permissionAdmin.checker:Admin|Manager')->name('admin.')->group(function () {
 
     Route::get('/', [AdminController::class, 'index'])->name('index');
 
@@ -220,6 +221,21 @@ Route::prefix('/admin')->middleware('permission.checker:admin|Manager')->name('a
         Route::post('/delete', [VehicleController::class, 'delete'])->name('vehicle.delete');
 
         Route::get('/search', [VehicleController::class, 'searchvehicle'])->name('vehicle.search');
+    });
+    
+    // Management User
+    //Tạo tài khoản cho user
+    Route::prefix('/user')->group(function() {
+
+        Route::get('/', [UserManagementController::class, 'index'])->name('user.index');
+
+        Route::post('/add-user',[UserManagementController::class, 'addUser'])->name('user.add');
+
+        Route::post('/update-user', [UserManagementController::class, 'update'])->name('user.update');
+
+        Route::post('/delete', [UserManagementController::class, 'delete'])->name('user.delete');
+
+        Route::get('/search', [UserManagementController::class, 'searchuser'])->name('user.search');
     });
 
 

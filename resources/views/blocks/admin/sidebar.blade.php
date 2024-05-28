@@ -51,7 +51,7 @@
             </ul>
         </li>
         <li class="sidebar-item">
-            <a href="#" class="sidebar-link" title="Quản lý người dùng">
+            <a href="{{route("admin.user.index")}}" class="sidebar-link" title="Quản lý người dùng">
                 <i class="fa-solid fa-users"></i>
                 <span>Quản lý user</span>
             </a>

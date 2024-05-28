@@ -14,7 +14,7 @@
     <form action="{{route('auth.check_login_admin')}}" method="POST" class="login-box">
         @csrf
         <div class="login-header">
-            <header>Login with admin</header>
+            <header>Đăng nhập quản lý/ quản trị viên</header>
             @if (session('msg--confirm'))
                 <span style="color: green;">{{session('msg--confirm')}}</span>
             @endif
@@ -62,9 +62,9 @@
         </div>
         <div class="input-submit">
             <button type="submit" class="submit-btn" id="submit"></button>
-            <label for="submit">Sign In</label>
+            <label for="submit">Đăng nhập</label>
         </div>
-        <a style="color: black; text-align: center;" href="{{route('auth.register_admin')}}">Create admin account</a>
+        {{-- <a style="color: black; text-align: center;" href="{{route('auth.register_admin')}}">Create admin account</a> --}}
     </form>
     {{-- <script src="{{asset('assets/clients/js/login.js')}}"></script> --}}
 
