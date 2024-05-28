@@ -20,9 +20,9 @@ class UserManagementController extends Controller
         ->paginate(5);
         // $userList = User::paginate(5);
 
-        // dd($brandList);
+        // dd($userList);
         return view('admin.user', compact('userList'))->with('i', (request()->input('page', 1) - 1) * 5);
-        // return view('admin.brand', compact('brandList'));
+        // return view('admin.user', compact('userList'));
     }
 
     public function addUser(UserManagementRequest $request)
@@ -54,8 +54,8 @@ class UserManagementController extends Controller
     {
         // return $request->all();
         $rules = [
-            'brand_name' => 'required|unique:brands,brand_name,'.$request->brand_id.',brand_id',
-            'brand_status_id' => 'required',
+            'user_name' => 'required|unique:users,user_name,'.$request->user_id.',user_id',
+            'user_status_id' => 'required',
         ];
 
         $messages = [
@@ -64,17 +64,17 @@ class UserManagementController extends Controller
         ];
 
         $attributes = [
-            'brand_name' => 'Tên hãng xe',
-            'brand_status_id' => 'Trạng thái hãng xe'
+            'user_name' => 'Tên người dùng',
+            'user_status_id' => 'Trạng thái người dùng'
         ];
         $request->validate($rules, $messages, $attributes);
 
-        // $brand_id = $request->brand_id;
-        // $brand = brand::findOrFail($brand_id);
+        // $user_id = $request->user_id;
+        // $user = user::findOrFail($user_id);
 
-        Brand::where('brand_id', $request->brand_id)->update([
-            'brand_name' => $request->brand_name,
-            'brand_status_id' => $request->brand_status_id
+        user::where('user_id', $request->user_id)->update([
+            'user_name' => $request->user_name,
+            'user_status_id' => $request->user_status_id
         ]);
 
         return response()->json([
@@ -85,69 +85,69 @@ class UserManagementController extends Controller
     public function delete(Request $request)
     {
         // dd('Xin chào');
-        $brand_id = $request->brand_id;
+        $user_id = $request->user_id;
 
-        if(!$brand_id) {
+        if(!$user_id) {
             return response()->json([
                 'status' => 'error',
-                'message' => 'Không tìm thấy id của hãng xe'
+                'message' => 'Không tìm thấy id của người dùng'
             ]);
         }
 
-        $brand = Brand::find($brand_id);
-        $models = ModelVehicle::where('brand_id', $brand_id)->get();
+        $user = User::find($user_id);
+        // $models = ModelVehicle::where('user_id', $user_id)->get();
 
-        $brand_list_number = Brand::all()->count();
-        if($brand) {
-            $brand->delete();
-            foreach ($models as $model) {
-                Vehicle::where('model_id', $model->id)->delete();
-                $model->delete();
-            }
+        $user_list_number = user::all()->count();
+        if($user) {
+            // user status id = 2 = "Block"
+            $user->update([
+                'user_status_id' => 2,
+            ]);
+            
             return response()->json([
                 'status' => 'success',
-                'message' => 'Xóa thành công hãng xe',
-                'brand_list_number' => $brand_list_number
+                'message' => 'Xóa thành công người dùng',
+                'user_list_number' => $user_list_number
             ]);
         }else {
             return response()->json([
                 'status' => 'error',
-                'message' => 'Không tìm thấy hãng xe cần xóa'
+                'message' => 'Không tìm thấy người dùng cần xóa'
             ]);
         }
 
     }
 
 
-    // return view('admin.brand', compact('brandList'))->with('i', (request()->input('page', 1) - 1) * 5);
+    // return view('admin.user', compact('userList'))->with('i', (request()->input('page', 1) - 1) * 5);
 
-    //Search brand
-    public function searchBrand(Request $request) {
-        $brandList = Brand::where('brand_name', 'like', '%'.$request->search_string_brand.'%')
-            ->orWhere('brand_id', 'like', '%'.$request->search_string_brand.'%')
-            ->orderBy('brand_id', 'asc')
+    //Search user
+    public function searchuser(Request $request) {
+        $userList = user::where('user_name', 'like', '%'.$request->search_string_user.'%')
+            ->orWhere('user_id', 'like', '%'.$request->search_string_user.'%')
+            ->orderBy('user_id', 'asc')
             ->paginate(5);
         
-        // dd($request->search_string_brand);
-        // dd($brandList);
+        // dd($request->search_string_user);
+        // dd($userList);
 
-        if($brandList->count() > 0) {
-            return view('blocks.admin.search_brand', compact('brandList'))->with('i', (request()->input('page', 1) - 1) * 5)->render();
+        if($userList->count() > 0) {
+            return view('blocks.admin.search_user', compact('userList'))->with('i', (request()->input('page', 1) - 1) * 5)->render();
         }else {
             return response()->json([
                 'status' => 'not found',
-                'message' => 'Không tìm thấy hãng xe'
+                'message' => 'Không tìm thấy người dùng'
             ]);
         }
     }
     
 
-    public function getbrandStatusId($brand_status_name) {
-        $brand_status_list = config('brand_status');
-        // dd($brand_status_list);
+    public function getuserStatusId($user_status_name) {
+        $user_status_list = config('user_status');
+        // dd($user_status_list);
 
-        foreach ($brand_status_list as $key => $value) {
-            if ($value === $brand_status_name) {
+        foreach ($user_status_list as $key => $value) {
+            if ($value === $user_status_name) {
                 return $key;
             }
         }

@@ -102,8 +102,8 @@
                     <input type="checkbox"  id="user-id user-id-{{$item->user_id}}">
                 </th>
                 <th>{{$item->user_id}}</th>
-                <th>
-                    <img style="font-weight: normal;" src="{{$item->avatar}}" alt="Ảnh đại diện">
+                <th style="width: 120px;">
+                    <img style="font-weight: normal; width: 100%; object-fit: cover;" src="{{$item->avatar}}" alt="Ảnh đại diện">
                 </th>
                 <td>{{$item->name}}</td>
                 {{-- Email --}}
@@ -161,7 +161,7 @@
                         data-user-id = "{{$item->user_id}}"
                         data-user-name = "{{$item->name}}"
                     >
-                        <i class="fa-regular fa-trash-can"></i>
+                    <i class="fa-regular fa-circle-xmark"></i>
                     </a>
                 </td>
             </tr>
@@ -356,7 +356,7 @@
                 
 
                 
-                if(confirm(`Xóa người dùng ${name} sẽ đồng thời xóa những mẫu xe và xe liên quan liên quan! Bạn có muốn xóa không ?`)) {
+                if(confirm(`Chặn người dùng ${name}?`)) {
                     $.ajax({
                     url: "{{route('admin.user.delete')}}",
                     method: 'POST',
@@ -377,7 +377,7 @@
                                 $('.pagination').load(location.href + ' .pagination > *');
                             }
 
-                            Command: toastr["success"](`Xóa thành công người dùng`, "Xóa người dùng")
+                            Command: toastr["success"](`Chặn thành công người dùng`, `Chặn người dùng ${name}`)
 
                             toastr.options = {
                                 "closeButton": false,
