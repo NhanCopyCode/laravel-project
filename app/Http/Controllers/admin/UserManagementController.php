@@ -124,8 +124,14 @@ class UserManagementController extends Controller
 
     //Search user
     public function searchuser(Request $request) {
-        $userList = user::where('user_name', 'like', '%'.$request->search_string_user.'%')
-            ->orWhere('user_id', 'like', '%'.$request->search_string_user.'%')
+        $userList = User::join('role', 'users.role_id', '=', 'role.role_id')
+            ->join("userstatus", 'users.user_status_id', '=', 'userstatus.user_status_id')
+            ->where('name', 'like', '%'.$request->search_string_user.'%')
+            ->orWhere('phone_number', 'like', '%'.$request->search_string_user.'%')
+            ->orWhere('users.user_id', 'like', '%'.$request->search_string_user.'%')
+            ->orWhere('user_status_name', 'like', '%'.$request->search_string_user.'%')
+            ->orWhere('users.email', 'like', '%'.$request->search_string_user.'%')
+            ->orWhere('role.role_name', 'like', '%'.$request->search_string_user.'%')
             ->orderBy('user_id', 'asc')
             ->paginate(5);
         
