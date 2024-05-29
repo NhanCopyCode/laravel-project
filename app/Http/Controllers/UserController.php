@@ -305,12 +305,13 @@ class UserController extends Controller
     {
         // dd($ú);
         $rules = [
-            'password' => 'required|confirmed'
+            'password' => 'required|confirmed|min:6'
         ];
 
         $message = [
             'required' => ':attribute không được để trống',
-            'confirmed' => ':attribute nhập vào không trùng nhau'
+            'confirmed' => ':attribute nhập vào không trùng nhau',
+            'min' => ':attribute phải tối thiểu :min ký tự',
         ];
 
         $attributes = [
@@ -318,13 +319,16 @@ class UserController extends Controller
         ];
         $request->validate($rules, $message, $attributes);
         // dd($user);
+        if (Hash::check($request->password, $user->password)) {
+            return redirect()->back()->withErrors(['password' => 'Mật khẩu mới không thể giống mật khẩu cũ']);
+        }
 
         $password = Hash::make( $request->password);
         // dd($password);
         $user->update(['password' => $password, 'token' => null]);
         $user->save();
 
-        return redirect()->route('auth.index')->with('msg--get-password', 'Đổi mật khẩu thành công');
+        return redirect()->route('auth.login_admin')->with('msg--get-password', 'Đổi mật khẩu thành công');
     }
 
     // Active account

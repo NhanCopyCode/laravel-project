@@ -34,7 +34,11 @@
             @if (session('msg--complete'))
                 <span style="color: green;">{{session('msg--complete')}}</span>
             @endif
-
+            @if (session('msg--get-password'))
+                <span style="color: green;">{{session('msg--get-password')}}</span>
+            </script>
+            
+        @endif
         </div>
         <div class="input-box">
             <input type="text" class="input-field" placeholder="Email" name="email" autocomplete="off" required value="{{old('email')}}">
@@ -68,6 +72,7 @@
     </form>
     {{-- <script src="{{asset('assets/clients/js/login.js')}}"></script> --}}
 
-    
+   
+   
 </body>
 </html>
