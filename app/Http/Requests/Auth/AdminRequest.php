@@ -27,10 +27,11 @@ class AdminRequest extends FormRequest
                 'required',
                 'email',
                 Rule::exists('users')->where(function ($query) {
-                    $query->where('role_id', 2);
+                    $query->where('role_id', 2)
+                    ->orWhere('role_id', 3);
                 }),
             ],
-            'password' => 'required|min:6',
+            'password' => 'required|min:3',
         ];
     }
 

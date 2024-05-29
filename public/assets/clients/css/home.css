@@ -458,13 +458,24 @@ nav {
     background-color: #f9f9f9; /* Màu nền cho menu */
     min-width: 160px; /* hoặc bất kỳ chiều rộng nào bạn muốn */
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); /* Thêm shadow nếu cần */
-    padding: 12px 16px; /* Điều chỉnh khoảng cách */
     list-style: none; 
 
 }
 
 .user_menu li {
-    padding: 8px 0;
+  padding: 12px 16px; /* Điều chỉnh khoảng cách */
+
+}
+
+.user_menu li:hover {
+  background-color: #f5f5f5;
+  color: #000;
+}
+
+
+.user_menu .link a {
+  display: inline-block;
+  width: 100%;
 }
 
 .user_menu button {

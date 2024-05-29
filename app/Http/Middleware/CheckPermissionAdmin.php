@@ -26,7 +26,7 @@ class CheckPermissionAdmin
             return $next($request);
         }
 
-        return redirect()->route('auth.login_admin');
+        return redirect()->route('403');
     }
     public function getUserType($role_id)
     {

@@ -27,6 +27,7 @@ class UserManagementController extends Controller
 
     public function addUser(UserManagementRequest $request)
     {
+        // dd($request->all());
 
         $user = User::create([
             'name' => $request->name,

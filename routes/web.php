@@ -6,7 +6,9 @@ use App\Http\Controllers\WardController;
 use Laravel\Socialite\Facades\Socialite;
 use App\Http\Controllers\ModelController;
 
+use App\Http\Controllers\RentalController;
 use App\Http\Controllers\BookingController;
+use App\Http\Controllers\CalendarController;
 use App\Http\Controllers\DistrictController;
 use App\Http\Controllers\SwitchModeController;
 use App\Http\Controllers\error\ErrorController;
@@ -23,7 +25,6 @@ use App\Http\Controllers\admins\VehicleController;
 use App\Http\Controllers\CarRentalStoreController;
 use App\Http\Controllers\AdminBookingVehicleController;
 use App\Http\Controllers\admin\UserManagementController;
-use App\Http\Controllers\RentalController;
 
 /*
 |--------------------------------------------------------------------------
@@ -111,6 +112,10 @@ Route::prefix('/user')->name('user.')->middleware('auth', 'permission.checker:us
     Route::get('/profile/{user}', [ProfileController::class, 'index'])->name('profile');
 
     Route::post('/profile/{user}', [ProfileController::class, 'updateProfile'])->name('update.profile');
+
+    //Calendar
+    Route::get('/calendar/{user}', [CalendarController::class, 'index'])->name('calendar');
+    
 
     //Booking 
     Route::get('/booking', [BookingController::class, 'index'])->middleware(['update.rental.status'])->name('booking.index');

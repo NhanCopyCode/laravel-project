@@ -2,22 +2,23 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use App\Models\User;
 use App\Models\UserStatus;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use App\Http\Requests\RegisterRequest;
+
 use App\Http\Requests\Auth\UserRequest;
 use App\Http\Requests\Auth\AdminRequest;
-
 use App\Http\Requests\Auth\LoginRequest;
 use Illuminate\Support\Facades\Validator;
 use Symfony\Component\VarDumper\Caster\RedisCaster;
 use App\Http\Requests\Auth\AdminRequest as AuthAdminRequest;
-use Carbon\Carbon;
 
 class UserController extends Controller
 {
@@ -248,7 +249,13 @@ class UserController extends Controller
     public function postForgetPassword(Request $request)
     {
         $rules = [
-            'email' => 'required|email|exists:users'
+            'email' => [
+                'required',
+                'email',
+                Rule::exists('users')->where(function ($query) {
+                    $query->whereIn('role_id', [2, 3]);
+                }),
+            ],
         ];
 
         $message = [

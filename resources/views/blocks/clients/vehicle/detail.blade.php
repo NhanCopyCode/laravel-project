@@ -167,6 +167,10 @@
 </script>
  
 <script>
+    $(document).ready(function() {
+         // Auto focus khi người dùng mới vào trang
+         $('#booking_daterange').focus();
+    });
     $(function() {
         const list_rental_time = @json($list_rental_time);
         // Hàm kiểm tra xem ngày đã có trong danh sách không
@@ -180,6 +184,8 @@
                 return date.isBetween(start, end, 'day', '[]');
             });
         }
+
+       
         $('input[name="booking_daterange"]').daterangepicker(
             {
                 opens: 'left',

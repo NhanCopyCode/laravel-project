@@ -9,7 +9,7 @@
     </div>
     <ul class="sidebar-nav">
         <li class="sidebar-item">
-            <a href="{{route('admin.profile')}}" class="sidebar-link" title="Trang home">
+            <a href="{{route('admin.index')}}" class="sidebar-link" title="Trang home">
                 <i class="lni lni-user"></i>
                 <span>Home</span>
             </a>

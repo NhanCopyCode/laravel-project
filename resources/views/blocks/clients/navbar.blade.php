@@ -18,6 +18,9 @@
                     <a href="{{route('user.profile', ['user' => Auth::guard('web')->user()->user_id])}}">Thông tin của tôi</a>
                 </li>
                 <li class="link" >
+                  <a href="{{route('user.calendar', ['user' => Auth::guard('web')->user()->user_id])}}">Theo dõi lịch trình đặt xe</a>
+                </li>
+                <li class="link" >
                     <a href="{{route('user.booking.history')}}">Lịch sử đặt xe</a>
                 </li>
                 <li class="link">

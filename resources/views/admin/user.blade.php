@@ -2,7 +2,7 @@
 
 @section('content')
     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#form_add_user">
-        Thêm người dùng
+        Cấp tài khoản
     </button>
     
     <!-- Modal add bracnh -->
@@ -11,7 +11,7 @@
         <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLongTitle">Thêm người dùng</h5>
+            <h5 class="modal-title" id="exampleModalLongTitle">Cấp tài khoản</h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
             </button>
@@ -34,8 +34,9 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="user_status_id">Trạng thái người dùng</label>
-                    <div class="message_error_email message_error">
+                    <label for="user_status_id">Mật khẩu</label>
+                    <input type="password" class="form-control" id="password" name="password" required value="{{old('password')}}">
+                    <div class="message_error_password message_error">
 
                     </div>
                 </div>
@@ -294,7 +295,7 @@
                                 $('.pagination').load(location.href + ' .pagination > *');
                             }
 
-                            Command: toastr["success"](`Thêm thành công người dùng "<span style="font-weight: bold;">${name}</span>"`, "Thêm người dùng")
+                            Command: toastr["success"](`Cấp tài khoản thành công "<span style="font-weight: bold;">${name}</span>"`, "Cấp tài khoản")
 
                             toastr.options = {
                                 "closeButton": false,
