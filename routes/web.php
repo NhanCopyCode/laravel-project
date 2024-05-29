@@ -266,6 +266,7 @@ Route::post('/vnpay_payment', [VNPayPaymentController::class, 'vnpayPayment'])->
 Route::get('/vnpay_return', [BookingController::class, 'vnpayReturn'])->name('vnpay.return');
 
 
+
 //Route errors
 
 Route::get('error_403', [ErrorController::class, 'error_403'])->name('403');

@@ -14,6 +14,10 @@
         <!-- Custom styles for this template -->
         <link rel="stylesheet" href="{{asset('/assets/clients/css/jumbotron-narrow.css')}}">
         <link rel="stylesheet" href="{{asset('/assets/clients/js/jquery-1.11.3.min.js')}}">
+
+        {{-- SweetAlert2 --}}
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     </head>
     <body>
         <?php
@@ -45,6 +49,11 @@
         <div class="container">
             <div class="header clearfix">
                 <h3 class="text-muted">VNPAY RESPONSE</h3>
+                @if ($_GET['vnp_ResponseCode'] == 0)
+                    <h4 class="alert alert-success text-center">
+                        Thanh toán thành công!!
+                    </h4>
+                @endif
             </div>
             <div class="table-responsive">
                 <div class="form-group">
@@ -111,4 +120,15 @@
             </footer>
         </div>  
     </body>
+
+    @if ($_GET['vnp_ResponseCode'] == 0)
+        <script>
+            Swal.fire({
+                title: "Hãy vào mail để check!",
+                text: "Thông tin đơn đặt xe đã được gửi vào mail của bạn! Hãy vào mail để kiểm tra.",
+                icon: "success",
+            });
+        </script>        
+    @endif
+   
 </html>

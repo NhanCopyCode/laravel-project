@@ -13,7 +13,7 @@
                 <ion-icon ion-icon  class="link" style="margin-right: 6px;" name="person-circle-outline"></ion-icon>
                 {{Auth::guard('web')->user()->name}}
             </span>
-            <ul class="user_menu">
+            <ul style="padding: 0;" class="user_menu">
                 <li class="link" >
                     <a href="{{route('user.profile', ['user' => Auth::guard('web')->user()->user_id])}}">Thông tin của tôi</a>
                 </li>

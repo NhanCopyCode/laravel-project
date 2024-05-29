@@ -9,11 +9,12 @@ use App\Models\Payment;
 use App\Models\Vehicle;
 use Carbon\CarbonInterval;
 use Illuminate\Http\Request;
+use Illuminate\Support\Composer;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Cache;
 use App\Http\Requests\BookingVehicleRequest;
-use Illuminate\Support\Composer;
 
 class BookingController extends Controller
 {
@@ -279,6 +280,23 @@ class BookingController extends Controller
             $rental->rental_status_id = 2;
             $rental->save();
 
+            $user = Auth::guard('web')->user();
+            $vehicle_information = DB::table('vehicles')
+                ->join('rental', 'rental.vehicle_id', '=', 'vehicles.vehicle_id')
+                ->join('models', 'models.model_id', '=', 'vehicles.model_id')
+                ->where('rental.rental_id', $rental->rental_id) // Thêm điều kiện này để lấy đúng bản ghi
+                ->select('vehicles.*', 'models.*', 'rental.*')
+                ->first();
+
+            // dd($vehicle_information);
+            Mail::send('email.booking_vehicle_information', compact('user', 'vehicle_information'), function ($email) use($user) {
+                // dd($user); 
+                $email->subject('NhanggWebsite - Thông tin đặt xe'); 
+                $email->to($user->email, $user->name);
+            });
+            
+            return view('clients.vnpay.vnpay_return')->with('msg--email', 'Hãy vào mail để kiểm tra thông tin đặt xe');
+
 
         }else {
             $rental_id = Cache::get('rental_id');
@@ -304,7 +322,7 @@ class BookingController extends Controller
 
             }
         }
-        return view('clients.vnpay.vnpay_return');
+        return view('clients.vnpay.vnpay_return')->with('msg--email', 'Hãy vào mail để kiểm tra thông tin đặt xe');
     }
 
   
