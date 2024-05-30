@@ -79,9 +79,12 @@ class BookingController extends Controller
                 $rental = new Rental;
                 $rental->user_id = $user_id;
                 $rental->vehicle_id = $request->vehicle_id;
-                $rental->rental_start_date = $booking_start_date;
+                // Thêm 12 giờ vào rental_start_date
+                $rental_start_date = Carbon::parse($booking_start_date)->addHours(12);
+                $rental->rental_start_date = $rental_start_date;
 
-                $rental_end_date = Carbon::parse($booking_end_date)->addDay();
+                // Thêm 12 giờ vào rental_end_date
+                $rental_end_date = Carbon::parse($booking_end_date)->addDay()->addHours(12);
                 $rental->rental_end_date = $rental_end_date;
 
                 $rental->total_cost = $request->booking_total_price;
