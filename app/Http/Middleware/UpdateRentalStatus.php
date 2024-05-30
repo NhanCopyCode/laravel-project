@@ -29,7 +29,8 @@ class UpdateRentalStatus
         Rental::where('rental_status_id', 4) // Đang thuê
             ->where('rental_end_date', '<', $now)
             ->update(['rental_status_id' => 2]); // Đã thuê
-
+        
+        // dd($now);
         return $next($request);
     }
 }

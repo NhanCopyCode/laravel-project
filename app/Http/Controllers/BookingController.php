@@ -80,9 +80,12 @@ class BookingController extends Controller
                 $rental->user_id = $user_id;
                 $rental->vehicle_id = $request->vehicle_id;
                 $rental->rental_start_date = $booking_start_date;
-                $rental->rental_end_date = $booking_end_date;
+
+                $rental_end_date = Carbon::parse($booking_end_date)->addDay();
+                $rental->rental_end_date = $rental_end_date;
+
                 $rental->total_cost = $request->booking_total_price;
-                // status === 1 đồng nghĩa với việc chưa thanh toán
+                // status === 1 đồng nghĩa với đang đợi thuê
                 $rental->rental_status_id = 1;
 
                 $rental->save();
@@ -127,7 +130,7 @@ class BookingController extends Controller
                 $rental->rental_start_date = $booking_start_date;
                 $rental->rental_end_date = $booking_end_date;
                 $rental->total_cost = $request->booking_total_price;
-                // status === 1 đồng nghĩa với việc chưa thanh toán
+                // status === 1 đồng nghĩa với việc đang đợi thuê
                 $rental->rental_status_id = 1;
 
                 $rental->save();
@@ -277,8 +280,8 @@ class BookingController extends Controller
 
             $rental = Rental::find($rental_id);
 
-            $rental->rental_status_id = 2;
-            $rental->save();
+            // $rental->rental_status_id = 2;
+            // $rental->save();
 
             $user = Auth::guard('web')->user();
             $vehicle_information = DB::table('vehicles')

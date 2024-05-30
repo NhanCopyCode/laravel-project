@@ -37,7 +37,7 @@ class BookingVehicleRequest extends FormRequest
                     
                     // Định dạng lại ngày tháng cho đúng với dữ liệu nhận được
                     $start_date = Carbon::createFromFormat('Y-m-d', trim($start_date))->format('Y-m-d');
-                    $end_date = Carbon::createFromFormat('Y-m-d', trim($end_date))->format('Y-m-d');
+                    $end_date = Carbon::createFromFormat('Y-m-d', trim($end_date))->subDay()->format('Y-m-d');
                     
                     // Thực hiện truy vấn để kiểm tra xem khoảng thời gian đã tồn tại trong DB hay chưa
                     $exists = DB::table('rental')

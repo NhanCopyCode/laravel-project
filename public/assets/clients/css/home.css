@@ -738,3 +738,11 @@ nav {
 .login_google_btn:hover{
   filter: brightness(105%);
 }
+
+/* Vehicle grid */
+.vehicle__grid a {
+  text-decoration: none;
+}
+
+
+/* Responsive table */

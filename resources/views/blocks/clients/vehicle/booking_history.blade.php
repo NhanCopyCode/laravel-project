@@ -1,19 +1,19 @@
-<div class="section__container">
+<div class="section__container" style="overflow-x: scroll;">
     <h1 class="booking_history__title text-center alert-info alert">Lịch sử thuê xe</h1>
     @if ($list_booking_vehicle->count() > 0)
-        <table class="table table-bordered mt-4">
-            <thead>
+        <table  class="table table-bordered mt-4">
+            <thead class="thead-dark">
                 <tr>
-                <th scope="col">Xe thuê</th>
-                <th scope="col">Hình ảnh xe</th>
-                <th scope="col">Tổng tiền</th>
-                <th scope="col">Ngày bắt đầu thuê</th>
-                <th scope="col">Ngày kết thúc</th>
-                <th scope="col">Trạng thái</th>
-                <th scope="col">Ngày thanh toán</th>
-                <th scope="col">Hình thức thanh toán</th>
-                <th scope="col">Thuê lại xe</th>
-                <th scope="col">Hành động</th>
+                    <th scope="col">Xe thuê</th>
+                    <th scope="col">Hình ảnh xe</th>
+                    <th scope="col">Tổng tiền</th>
+                    <th scope="col">Ngày bắt đầu thuê</th>
+                    <th scope="col">Ngày kết thúc</th>
+                    <th scope="col">Trạng thái</th>
+                    <th scope="col">Ngày thanh toán</th>
+                    <th scope="col">Hình thức thanh toán</th>
+                    <th scope="col">Thuê lại xe</th>
+                    <th scope="col">Hành động</th>
 
                 </tr>
             </thead>

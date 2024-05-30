@@ -178,7 +178,7 @@
             return list_rental_time.some(function (rental) {
                 // Sử dụng 'rental_start_date' và 'rental_end_date' từ object
                 const start = moment(rental.rental_start_date);
-                const end = moment(rental.rental_end_date);
+                const end = moment(rental.rental_end_date).subtract(1, 'days');
                 // Kiểm tra xem 'date' có nằm trong khoảng thời gian không khả dụng đó không
                 // So sánh ở cấp độ ngày để bỏ qua giờ
                 return date.isBetween(start, end, 'day', '[]');
