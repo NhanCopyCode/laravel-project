@@ -22,11 +22,14 @@ class CalendarController extends Controller
         
         $events = $rentals->map(function($rental) {
             return [
+                'id' => $rental->rental_id,
                 'title' => $rental->model_name,
                 'start' => $rental->rental_start_date,
                 'end' => $rental->rental_end_date,
             ];
         });
+
+        // dd($events);
 
         return view('clients.calendar.showCalendar', compact('events'));
     }

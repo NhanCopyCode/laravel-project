@@ -2,10 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
+use App\Models\Rental;
 use App\Models\Payment;
+use App\Models\Vehicle;
 use App\Models\RentalStatus;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Models\admins\ModelVehicle;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
+use App\Http\Requests\admin\CancleBookingVehicleRequest;
 
 class AdminBookingVehicleController extends Controller
 {
@@ -162,5 +169,68 @@ class AdminBookingVehicleController extends Controller
             }
         }
 
+        public function  displayCalendar(Request $request)
+        {
+            $rentals = Rental::with(['user', 'vehicle'])
+            ->join('vehicles', 'vehicles.vehicle_id', '=' , 'rental.vehicle_id')
+            ->join("models", 'models.model_id', '=' , 'vehicles.model_id')
+            ->whereIn('rental.rental_status_id', [1,2,4])  // Chỉ lấy dữ liệu thuê xe của khách hàng hiện tại
+            ->get();
 
+        
+            $events = $rentals->map(function($rental) {
+                return [
+                    'rental_id' => $rental->rental_id,
+                    'user_id' => $rental->user_id,
+                    'vehicle_id' => $rental->vehicle_id,
+                    'title' => $rental->model_name,
+                    'start' => $rental->rental_start_date,
+                    'end' => $rental->rental_end_date,
+                ];
+            });
+
+            // dd($events);
+
+            return view('admin.booking_calendar', compact('events'));
+        }
+
+        public function cancelBookingVehicle(CancleBookingVehicleRequest $request) {
+
+            $reason = $request->reason;
+
+            $rental = Rental::find($request->rental_id);
+            $payment = Payment::where('rental_id', $rental->rental_id)->first();
+
+            $vehicle = Vehicle::find($rental->vehicle_id);
+            
+            $user = User::find($rental->user_id);
+
+            $model = ModelVehicle::find($vehicle->model_id);
+            
+            // dd($user);
+            $rental->rental_status_id = 3; // = 3 có nghĩa là đã Hủy
+            $rental->is_deleted = true;
+            $rental->save();
+
+
+            $payment->is_deleted = true;
+            $payment->save();
+
+            Mail::send('email.admin_cancel_booking_vehicle', compact('user', 'reason', 'model', 'rental'), function ($email) use($user, $rental) {
+                // dd($user); 
+                $email->subject('NhanggWebsite - Lịch đăng ký thuê xe của bạn đã bị hủy vui lòng liên hệ sdt 0919094701'); 
+                $email->to($user->email, $user->name);
+
+                
+            });
+
+           
+            return  response()->json(
+                [
+                    'status' => 'success',
+                    'message' => 'Hủy lịch đăng ký xe của người dùng '.$user->name . ' thành công',
+                    'rental_canceled' => $rental,
+                ]
+            );
+        }
 }

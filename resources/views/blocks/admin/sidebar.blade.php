@@ -14,17 +14,27 @@
                 <span>Home</span>
             </a>
         </li>
-        <li class="sidebar-item">
-            <a href="{{route('admin.booking.vehicle.index')}}" class="sidebar-link" title="Quản lý thuê xe">
+       
+        {{-- <li class="sidebar-item">
+            <a href=" {{route('admin.booking.vehicle.index')}}" class="sidebar-link  collapsed has-dropdown" title="Quản lý thuê xe">
                 <i class="fa-solid fa-calendar-days"></i>
-                <span>Quản lý thuê xe</span>
+                <span>Quản danh sách thuê xe</span>
             </a>
+           
+        </li> --}}
+        <li class="sidebar-item">
+            <a href=" {{route('admin.booking.vehicle.calendar')}}" class="sidebar-link  collapsed has-dropdown" title="Quản lý thuê xe">
+                <i class="fa-solid fa-calendar-days"></i>
+                <span>Quản lý lịch thuê xe</span>
+            </a>
+           
         </li>
         <li class="sidebar-item">
             <a href="{{route('admin.branch.index')}}" class="sidebar-link" title="Quản lý chi nhánh">
                 <i class="fa-solid fa-code-branch"></i>
                 <span>Quản lý chi nhánh</span>
             </a>
+           
         </li>
         <li class="sidebar-item">
             <a href="{{route('admin.carrentalstore.index')}}" class="sidebar-link" title="Quản lý cửa hàng">

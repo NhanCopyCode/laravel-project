@@ -1,11 +1,12 @@
 <?php
 
+use Spatie\GoogleCalendar\Event;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WardController;
 use Laravel\Socialite\Facades\Socialite;
-use App\Http\Controllers\ModelController;
 
+use App\Http\Controllers\ModelController;
 use App\Http\Controllers\RentalController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\CalendarController;
@@ -23,6 +24,7 @@ use App\Http\Controllers\SearchVehicleController;
 use App\Http\Controllers\admins\ProfileController;
 use App\Http\Controllers\admins\VehicleController;
 use App\Http\Controllers\CarRentalStoreController;
+use App\Http\Controllers\GoogleCalendarController;
 use App\Http\Controllers\AdminBookingVehicleController;
 use App\Http\Controllers\admin\UserManagementController;
 
@@ -94,8 +96,6 @@ Route::prefix('auth')->name('auth.')->group(function () {
 //Route clients
 Route::prefix('/user')->name('user.')->middleware('auth', 'permission.checker:user')->group(function () {
 
-    
-
     //Vehicle
     Route::get('/vehicle/{vehicle}', [VehicleController::class, 'showVehicle'])->name('showVehicle');
 
@@ -116,6 +116,13 @@ Route::prefix('/user')->name('user.')->middleware('auth', 'permission.checker:us
     //Calendar
     Route::get('/calendar/{user}', [CalendarController::class, 'index'])->name('calendar');
     
+    // Google Calendar
+    Route::get('/push-calendar', function ()
+    {
+        $events = Event::get();
+        // echo storage_path('app/google-calendar/service-account-credentials.json');
+        dd($events);
+    });
 
     //Booking 
     Route::get('/booking', [BookingController::class, 'index'])->name('booking.index');
@@ -127,6 +134,7 @@ Route::prefix('/user')->name('user.')->middleware('auth', 'permission.checker:us
 
     // Xe đăng đặt
     Route::get('/vehicle-currently-booked', [BookingController::class, 'showBookingHistory'])->name('vehicle_currently_booked');
+
 
 
 });
@@ -143,11 +151,15 @@ Route::prefix('/admin')->middleware('permissionAdmin.checker:Admin|Manager')->na
     //Booking Vehicle 
     Route::get('/booking/vehicle', [AdminBookingVehicleController::class, 'index'])->name('booking.vehicle.index');
 
+    Route::get('/booking/vehicle/calendar', [AdminBookingVehicleController::class, 'displayCalendar'])->name('booking.vehicle.calendar');
+
     Route::post('/booking/vehicle/update', [AdminBookingVehicleController::class, 'updateBookingVehicleHistory'])->name('booking.vehicle.update');
     
     Route::post('/booking/vehicle/delete', [AdminBookingVehicleController::class, 'deleteBoookingVehicleHistory'])->name('booking.vehicle.delete');
     
     Route::get('/booking/vehicle/search', [AdminBookingVehicleController::class, 'searchBookingVehicleHistory'])->name('booking.vehicle.search');
+
+    Route::post('/booking/vehicle/cancel', [AdminBookingVehicleController::class, 'cancelBookingVehicle'])->name('booking.vehicle.cancle');
 
 
     // Profile
