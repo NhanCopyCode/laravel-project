@@ -35,6 +35,7 @@ class RentalController extends Controller
 
         // Cập nhật trạng thái của đơn thuê xe thành "Đã hủy"
         $rental->rental_status_id = 3;
+        $rental->is_deleted = true;
         $rental->save();
 
         // Cập nhật các thanh toán liên quan (nếu có)

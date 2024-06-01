@@ -71,10 +71,30 @@
 <script>
     $(document).ready(function () {
         $(document).on('submit', '#form_cancel_booking_vehicle', function(e) {
-            e.prevenDefault();
+            e.preventDefault(); 
 
+            var form = $(this); // Lấy ra form đang được submit
+            var url = form.attr('action'); // Lấy URL của action gửi form
 
-            console.log(123);
+            // Lấy rental_id từ input trong form
+            var rental_id = form.find('input[name="rental_id"]').val();
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: {
+                    _token: "{{ csrf_token() }}", // Thêm token bảo mật CSRF
+                    rental_id: rental_id // Truyền rental_id vào dữ liệu gửi đi
+                },
+                success: function (response) {
+                    // Xử lý khi thành công, ví dụ như làm mới trang
+                    location.reload();
+                },
+                error: function (xhr, status, error) {
+                    // Xử lý khi có lỗi
+                    console.error(xhr.responseText);
+                }
+            });
+            
         });
     });
 </script>

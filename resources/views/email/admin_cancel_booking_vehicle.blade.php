@@ -43,6 +43,7 @@
                     <td>{{$rental->rental_start_date}}</td>
                     <td>{{$rental->rental_end_date}}</td>
                     <td>{{$rental->total_cost}}</td>
+                    <td>{{$rental->total_cost}}</td>
                 </tr>
             </tbody>
             

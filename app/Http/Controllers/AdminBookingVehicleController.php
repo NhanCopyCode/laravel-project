@@ -218,7 +218,7 @@ class AdminBookingVehicleController extends Controller
 
             Mail::send('email.admin_cancel_booking_vehicle', compact('user', 'reason', 'model', 'rental'), function ($email) use($user, $rental) {
                 // dd($user); 
-                $email->subject('NhanggWebsite - Lịch đăng ký thuê xe của bạn đã bị hủy vui lòng liên hệ sdt 0919094701'); 
+                $email->subject('NhanggWebsite - Lịch đăng ký thuê xe của bạn đã bị hủy vui lòng liên hệ sdt 0919094701 để nhận lại tiền đặt xe'); 
                 $email->to($user->email, $user->name);
 
                 

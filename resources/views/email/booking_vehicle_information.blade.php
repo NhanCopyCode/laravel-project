@@ -42,6 +42,7 @@
                     <td>{{$vehicle_information->rental_start_date}}</td>
                     <td>{{$vehicle_information->rental_end_date}}</td>
                     <td>{{$vehicle_information->total_cost}}</td>
+                    <td>{{$vehicle_information->total_cost}}</td>
                 </tr>
             </tbody>
             
