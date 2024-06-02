@@ -171,23 +171,32 @@ class AdminBookingVehicleController extends Controller
 
         public function  displayCalendar(Request $request)
         {
-            $rentals = Rental::with(['user', 'vehicle'])
-            ->join('vehicles', 'vehicles.vehicle_id', '=' , 'rental.vehicle_id')
-            ->join("models", 'models.model_id', '=' , 'vehicles.model_id')
-            ->whereIn('rental.rental_status_id', [1,2,4])  // Chỉ lấy dữ liệu thuê xe của khách hàng hiện tại
-            ->get();
+            $rentals = DB::select("
+                SELECT *
+                FROM rental
+                JOIN vehicles ON vehicles.vehicle_id = rental.vehicle_id
+                JOIN models ON models.model_id = vehicles.model_id
+                JOIN users ON users.user_id = rental.user_id
+                WHERE rental.rental_status_id IN (1, 2, 4)
+            ");
+            // dd($rentals);
 
         
-            $events = $rentals->map(function($rental) {
+            $events = array_map(function($rental) {
+                $user = DB::selectOne("SELECT * FROM users WHERE user_id = ?", [$rental->user_id]);
+                $vehicle = DB::selectOne("SELECT * FROM vehicles WHERE vehicle_id = ?", [$rental->vehicle_id]);
+                $model = DB::selectOne('SELECT * FROM models where model_id = ?', [$vehicle->model_id]);
                 return [
                     'rental_id' => $rental->rental_id,
-                    'user_id' => $rental->user_id,
-                    'vehicle_id' => $rental->vehicle_id,
+                    'user' => $user,
+                    'vehicle' => $vehicle,
+                    'model' => $model,
                     'title' => $rental->model_name,
                     'start' => $rental->rental_start_date,
                     'end' => $rental->rental_end_date,
                 ];
-            });
+            }, $rentals);
+
 
             // dd($events);
 

@@ -20,6 +20,7 @@ class CalendarController extends Controller
             ->get();
 
         
+        
         $events = $rentals->map(function($rental) {
             return [
                 'id' => $rental->rental_id,

@@ -9,19 +9,41 @@
         <input type="hidden" name="rental_id">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Hủy lịch đăng ký xe</h5>
+          <h5 class="modal-title" id="exampleModalLabel">Thông tin lịch đăng ký thuê xe</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
         <div class="modal-body">
-            <h4 class="text-center alert alert-danger ">Bạn có muốn hủy lịch đăng kí xe <span id="vehicle_title"></span> này?</h4>
+            {{-- <h4 class="text-center alert alert-danger ">Bạn có muốn hủy lịch đăng kí xe <span id="vehicle_title"></span> này?</h4> --}}
             @error('rental_id')
                     <span class="text-danger">{{$message}}</span>
                 @enderror
             <p class="fw-bold">Thời gian đăng kí</p>
             <p>Từ ngày: <span id="vehicle_rental_start_date"></span></p>
             <p>Đến ngày: <span id="vehicle_rental_end_date"></span></p>
+
+            <div class="form-group">
+                <label class="fw-bold" for="">Thông tin xe</label>
+                <div class="user_booking_information mt-2">
+                    <p class="w-100" >Loại xe: <span class="fw-normal" id="user_booking_model_name"></span></p>
+                    <p class="w-100" >Biển số xe: <span class="fw-normal" id="user_booking_license_plate"></span></p>
+                    <p class="w-100" >Năm sản xuất: <span class="fw-normal" id="user_booking_year_of_production"></span></p>
+                    <p class="w-100" >Tổng tiền phải trả: <span class="fw-normal vnd_format" id="user_booking_amount"></span></p>
+                    <p class="w-100" >Số tiền đã trả: <span class="fw-normal vnd_format" id="user_booking_total_cost"></span></p>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="fw-bold" for="">Thông tin người dùng thuê xe</label>
+                <div class="user_booking_information mt-2">
+                    <p class="w-100" >Tên người dùng: <span class="fw-normal" id="user_booking_name"></span></p>
+                    <p class="w-100" >Số điện thoại: <span class="fw-normal" id="user_booking_phone_number"></span></p>
+                    <p class="w-100" >Email người dùng: <span class="fw-normal" id="user_booking_email"></span></p>
+                </div>
+            </div>
+
+            
 
             <div class="form-group">
                 <label for="reason">Hãy nhập lí do hủy lịch đăng ký xe</label>
@@ -75,6 +97,14 @@
                     $('#vehicle_title').text(info.title);
                     $('#vehicle_rental_start_date').text(formattedStart);
                     $('#vehicle_rental_end_date').text(formattedEnd);
+                    $('#user_booking_name').text(info.user.name);
+                    $('#user_booking_phone_number').text(info.user.phone_number);
+                    $('#user_booking_email').text(info.user.email);
+                    // Thông tin của vehicle
+                    $('#user_booking_model_name').text(info.model.model_name);
+                    $('#user_booking_license_plate').text(info.vehicle.license_plate);
+                    $('#user_booking_year_of_production').text(info.model.year_of_production);
+                    $('#user_booking_rental_price_day').text(info.vehicle.rental_price_day.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }));
                 }
             });
         }
