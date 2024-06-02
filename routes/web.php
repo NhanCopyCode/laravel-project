@@ -127,7 +127,7 @@ Route::prefix('/user')->name('user.')->middleware('auth', 'permission.checker:us
     //Booking 
     Route::get('/booking', [BookingController::class, 'index'])->name('booking.index');
     
-    Route::get('/booking-history', [BookingController::class, 'showBookingHistory'])->middleware(['update.rental.status'])->name('booking.history');
+    Route::get('/booking-history', [BookingController::class, 'showBookingHistory'])->name('booking.history');
 
     //Hủy đặt xe
     Route::post('/booking/vehicle/cancel/{rental}', [RentalController::class, 'cancelRental'])->name('cancel.vehicle');

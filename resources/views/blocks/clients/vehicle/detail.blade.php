@@ -65,13 +65,14 @@
 
                 </div>
                 {{-- Tiếng việt --}}
-                <input type="hidden" id="language"  name="language" value="vn">
-                <input type="hidden" name="payment_method_id" value="1">
+                <input type="hidden" id="laguage"  name="language" value="vn">
+                {{-- <input type="hidden" name="payment_method_id" value="1"> --}}
 
                 
-                <p>Số tiền phải trả: <span id="booking_vehicle_price" class="vnd_format"></span></p>
+                <p>Tổng số tiền phải trả: <span id="booking_vehicle_price" class="vnd_format fw-bold"></span></p>
+                <span class="text-success">Lưu ý: Bạn chỉ cần đặt cọc 10% số tiền phải trả khi nhận xe</span>
                
-                <input type="hidden" id="booking_total_price" name="booking_total_price" value="{{$vehicle->rental_price_day}}" >
+                <input type="hidden" id="booking_total_price" name="booking_total_price" value="{{$vehicle->rental_price_day * (15/100)}}" >
                 <button style="margin-top: 24px;" name="form_booking_vehicle" id="booking_vehicle_button" class="btn btn-primary" type="button" data-toggle="modal" data-target="#bookingModal">Thanh toán bằng tiền mặt</button>
                 <button id="button_vnpay_payment" class="btn btn-dark" name="redirect" value="vnpay_payment" type="submit"><ion-icon name="card-outline"></ion-icon>Thanh toán VNPAY</button>
             </form>
@@ -88,13 +89,7 @@
 </div>
 
 @if ($errors->any())
-    <div class="alert alert-danger">
-        <ul>
-            @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
+    
     <script>
         Swal.fire({
             title: 'Đặt xe thất bại! Xin vui lòng hãy kiểm tra!!',
@@ -127,7 +122,7 @@
     </script>
 @endif
 
-@if (session('error'))
+{{-- @if (session('error'))
     <script>
 
         Swal.fire({
@@ -137,7 +132,7 @@
               confirmButtonText: 'OK',
             });
     </script>
-@endif
+@endif --}}
 
 
 <script defer>

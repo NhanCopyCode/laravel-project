@@ -16,8 +16,8 @@ class Rental extends Model
         'vehicle_id',
         'rental_start_date',
         'rental_end_date',
-        'total_cost',
         'rental_status_id',
+        'amount_paid',
     ];
 
     public $primaryKey = 'rental_id';

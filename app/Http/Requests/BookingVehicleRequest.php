@@ -28,7 +28,7 @@ class BookingVehicleRequest extends FormRequest
         return [
             'booking_total_price' => 'required',
             'vehicle_id' => 'required|exists:vehicles,vehicle_id',
-            'payment_method_id' => 'required|exists:paymentmethod,payment_method_id',
+            // 'payment_method_id' => 'required|exists:paymentmethod,payment_method_id',
             'booking_daterange' => [
                 'required',
                 function ($attribute, $value, $fail) use ($request) { // Thêm $request vào use

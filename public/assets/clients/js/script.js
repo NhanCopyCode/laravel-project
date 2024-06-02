@@ -219,7 +219,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         Swal.fire({
           title: `Bạn có muốn đặt chiếc ${vehicle_title} này bằng phương thức VNPAY không?`,
-          text: "Hãy kiểm tra xe trước khi nhận xe",
+          text: "Bạn chỉ cần cọc 10% để đặt xe và hãy trả toàn bộ số tiền khi nhận xe nhá!. Hãy kiểm tra xe trước khi nhận xe",
           icon: 'success',
           showCancelButton: true,
           confirmButtonColor: '#3085d6',

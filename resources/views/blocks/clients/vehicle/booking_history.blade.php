@@ -6,7 +6,7 @@
                 <tr>
                     <th scope="col">Xe thuê</th>
                     <th scope="col">Hình ảnh xe</th>
-                    <th scope="col">Tổng tiền</th>
+                    <th scope="col">Số tiền đã trả</th>
                     <th scope="col">Ngày bắt đầu thuê</th>
                     <th scope="col">Ngày kết thúc</th>
                     <th scope="col">Trạng thái</th>

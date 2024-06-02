@@ -38,7 +38,7 @@ class BookingController extends Controller
         ->join('vehicleimages', 'vehicleimages.vehicle_img_id', '=', 'vehicles.vehicle_image_id')
         ->join('models', 'models.model_id', '=', 'vehicles.model_id')
         ->join('paymentmethod', 'paymentmethod.payment_method_id', '=', 'payment.payment_method_id')
-        ->where('rental.user_id', '=', Auth::user()->user_id)
+        ->where('rental.user_id', '=', Auth::guard('web')->user()->user_id)
         ->where('payment.is_deleted', '=', false)
         ->select('*')
         ->orderBy('payment.created_at', 'desc')
@@ -65,7 +65,7 @@ class BookingController extends Controller
             $booking_end_date = str_replace(' / ', ' - ', explode(' - ', $request->booking_daterange)[1]);
 
             // Đầu tiên phải check được user đã đủ thông tin để booking được vehicle hay chưa
-            $user = Auth::user();
+            $user = Auth::guard('web')->user();
             if($user->phone_number == null || $user->CCCD == null || $user->date_of_birth == null || $user->name == null || $user->email == null ) {
                 return redirect()->route('user.update.profile', ['user' => $user->user_id])->with('msg--need-profile-user', 'Bạn cần nhập đầy đủ thông tin trước khi thuê xe!' );
             }
@@ -74,7 +74,7 @@ class BookingController extends Controller
             if(Auth::guard('web')->check() && $request->redirect === 'vnpay_payment') {
                 
                 // dd(Carbon::now());
-                $user_id = Auth::user()->user_id;
+                $user_id = Auth::guard('web')->user()->user_id;
 
                 $rental = new Rental;
                 $rental->user_id = $user_id;
@@ -87,7 +87,7 @@ class BookingController extends Controller
                 $rental_end_date = Carbon::parse($booking_end_date)->addDay()->addHours(12);
                 $rental->rental_end_date = $rental_end_date;
 
-                $rental->total_cost = $request->booking_total_price;
+                $rental->amount_paid = $request->booking_total_price;
                 // status === 1 đồng nghĩa với đang đợi thuê
                 $rental->rental_status_id = 1;
 
@@ -95,11 +95,14 @@ class BookingController extends Controller
 
                 $rental_id = $rental->rental_id;
                 if($rental_id) {
+                    $payment_status_not_paid = 1;
+                    $payment_method_id_VNPAY = 2;
                     $payment = new Payment;
                     $payment->rental_id = $rental_id;
                     $payment->payment_date = Carbon::now();
-                    $payment->amount = $request->booking_total_price;
-                    $payment->payment_method_id = 2;
+                    $payment->amount = $request->booking_total_price * (100/15);
+                    $payment->payment_method_id = $payment_method_id_VNPAY;
+                    $payment->payment_status_id = $payment_status_not_paid;
                     $payment->save();
                 }
                 
@@ -114,47 +117,48 @@ class BookingController extends Controller
                 $this->VNPAYpayment($request, $rental_id, $payment_id);
                 // $this->vnpayReturn();
             }
-            elseif(Auth::guard('web')->check() && $request->payment_method_id == 1) 
-            {
-                $user_id = Auth::user()->user_id;
+            // elseif(Auth::guard('web')->check() && $request->payment_method_id == 1) 
+            // {
+            //     $user_id = Auth::user()->user_id;
 
-                // $payment = Rental::created([
-                //     'user_id' => $user_id,
-                //     'vehicle_id' => $request->vehicle_id,
-                //     'rental_start_date' => $request->booking_start_date,
-                //     'rental_end_date' => $request->booking_end_date,
-                //     'total_cost' => $request->total_cost,
-                //     'rental_status_id' => 1
-                // ]);
+            //     // $payment = Rental::created([
+            //     //     'user_id' => $user_id,
+            //     //     'vehicle_id' => $request->vehicle_id,
+            //     //     'rental_start_date' => $request->booking_start_date,
+            //     //     'rental_end_date' => $request->booking_end_date,
+            //     //     'total_cost' => $request->total_cost,
+            //     //     'rental_status_id' => 1
+            //     // ]);
 
-                $rental = new Rental;
-                $rental->user_id = $user_id;
-                $rental->vehicle_id = $request->vehicle_id;
-                $rental->rental_start_date = $booking_start_date;
-                $rental->rental_end_date = $booking_end_date;
-                $rental->total_cost = $request->booking_total_price;
-                // status === 1 đồng nghĩa với việc đang đợi thuê
-                $rental->rental_status_id = 1;
+            //     $rental = new Rental;
+            //     $rental->user_id = $user_id;
+            //     $rental->vehicle_id = $request->vehicle_id;
+            //     $rental->rental_start_date = $booking_start_date;
+            //     $rental->rental_end_date = $booking_end_date;
+            //     $rental->total_cost = $request->booking_total_price;
+            //     // status === 1 đồng nghĩa với việc đang đợi thuê
+            //     $rental->rental_status_id = 1;
 
-                $rental->save();
+            //     $rental->save();
 
-                $rental_id = $rental->rental_id;
-                if($rental_id) {
-                    $payment = new Payment;
-                    $payment->rental_id = $rental_id;
-                    // Không thể update payment date bởi vì đây là phương thức thanh toán bằng tiền mặt
-                    // $payment->payment_date = Carbon::now();
-                    $payment->amount = $request->booking_total_price;
-                    $payment->payment_method_id = $request->payment_method_id;
-                    $payment->save();
-                }
+            //     $rental_id = $rental->rental_id;
+            //     if($rental_id) {
+            //         $payment = new Payment;
+            //         $payment->rental_id = $rental_id;
+            //         // Không thể update payment date bởi vì đây là phương thức thanh toán bằng tiền mặt
+            //         // $payment->payment_date = Carbon::now();
+            //         $payment->amount = $request->booking_total_price;
+            //         $payment->payment_method_id = $request->payment_method_id;
+            //         $payment->save();
+            //     }
 
-                return back()->with('msg--success', 'Đặt xe thành công vui lòng vào <a href="'.route('user.booking.history').'">Lịch sử đặt xe</a> để kiểm tra');
+            //     return back()->with('msg--success', 'Đặt xe thành công vui lòng vào <a href="'.route('user.booking.history').'">Lịch sử đặt xe</a> để kiểm tra');
 
-            }
+            // }
         } catch (\Throwable $th) {
             // dd($th->getMessage());
-            return redirect()->back()->with('msg--failure', 'Đặt xe thất bại! Hãy thử kiểm tra lại!');
+            // dd($th->getMessage());
+            return redirect()->back()->with('msg--failure', $th->getMessage());
         }
 
 
@@ -287,12 +291,15 @@ class BookingController extends Controller
             // $rental->save();
 
             $user = Auth::guard('web')->user();
-            $vehicle_information = DB::table('vehicles')
-                ->join('rental', 'rental.vehicle_id', '=', 'vehicles.vehicle_id')
-                ->join('models', 'models.model_id', '=', 'vehicles.model_id')
-                ->where('rental.rental_id', $rental->rental_id) // Thêm điều kiện này để lấy đúng bản ghi
-                ->select('vehicles.*', 'models.*', 'rental.*')
-                ->first();
+            $vehicle_information = DB::select("
+                SELECT vehicles.*, models.*, rental.*, payment.*
+                FROM vehicles
+                JOIN rental ON rental.vehicle_id = vehicles.vehicle_id
+                JOIN payment ON payment.rental_id = rental.rental_id
+                JOIN models ON models.model_id = vehicles.model_id
+                WHERE rental.rental_id = :rental_id
+                LIMIT 1
+            ", ['rental_id' => $rental->rental_id]);
 
             // dd($vehicle_information);
             Mail::send('email.booking_vehicle_information', compact('user', 'vehicle_information'), function ($email) use($user) {

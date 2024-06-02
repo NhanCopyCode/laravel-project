@@ -15,6 +15,7 @@ class Payment extends Model
         'payment_date',
         'amount',
         'payment_method_id',
+        'payment_status_id',
     ];
 
     public $primaryKey = 'payment_id';

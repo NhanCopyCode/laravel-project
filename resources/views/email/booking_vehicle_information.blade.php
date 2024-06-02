@@ -17,9 +17,9 @@
 </head>
 <body>
     <div style="width: 1000px; text-align:center; margin:0 auto; background-color: #f5f5f5; border-radius: 4px;">
-        <h2 style="">Bạn đã đặt xe từ ngày {{$vehicle_information->rental_start_date}} đến ngày {{$vehicle_information->rental_end_date}}</h2>
+        <h2 style="">Bạn đã đặt xe từ ngày {{$vehicle_information[0]->rental_start_date}} đến ngày {{$vehicle_information[0]->rental_end_date}}</h2>
         <h3>Dưới đây là thông tin đặt xe</h3>
-        <table style="overflow-x: scroll">
+        <table style="overflow-x: scroll;margin: auto;">
             <thead>
                 <tr>
                     <th>Tên xe</th>
@@ -27,7 +27,7 @@
                     <th>Năm sản xuất</th>
                     <th>Bắt đầu thuê từ ngày</th>
                     <th>Kết thúc từ ngày</th>
-                    <th>Tổng tiền</th>
+                    <th>Tổng tiền cần phải thanh toán</th>
                     <th>Giá đã thanh toán</th>
     
                 </tr>
@@ -36,13 +36,13 @@
     
             <tbody>
                 <tr>
-                    <td>{{$vehicle_information->model_name}}</td>
-                    <td>{{$vehicle_information->engine_type}}</td>
-                    <td>{{$vehicle_information->year_of_production}}</td>
-                    <td>{{$vehicle_information->rental_start_date}}</td>
-                    <td>{{$vehicle_information->rental_end_date}}</td>
-                    <td>{{$vehicle_information->total_cost}}</td>
-                    <td>{{$vehicle_information->total_cost}}</td>
+                    <td>{{$vehicle_information[0]->model_name}}</td>
+                    <td>{{$vehicle_information[0]->engine_type}}</td>
+                    <td>{{$vehicle_information[0]->year_of_production}}</td>
+                    <td>{{$vehicle_information[0]->rental_start_date}}</td>
+                    <td>{{$vehicle_information[0]->rental_end_date}}</td>
+                    <td>{{$vehicle_information[0]->amount}}</td>
+                    <td>{{$vehicle_information[0]->amount_paid}}</td>
                 </tr>
             </tbody>
             

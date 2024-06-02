@@ -19,6 +19,7 @@ use App\Http\Requests\Auth\LoginRequest;
 use Illuminate\Support\Facades\Validator;
 use Symfony\Component\VarDumper\Caster\RedisCaster;
 use App\Http\Requests\Auth\AdminRequest as AuthAdminRequest;
+use Illuminate\Support\Facades\DB;
 
 class UserController extends Controller
 {
@@ -375,7 +376,17 @@ class UserController extends Controller
 
     public function test_view()
     {
-        $user = User::all();
-        dd($user);
+        $vehicle_information = DB::select("
+        SELECT vehicles.*, models.*, rental.*, payment.*
+        FROM vehicles
+        JOIN rental ON rental.vehicle_id = vehicles.vehicle_id
+        JOIN payment ON payment.rental_id = rental.rental_id
+        JOIN models ON models.model_id = vehicles.model_id
+        WHERE rental.rental_id = :rental_id
+        LIMIT 1
+    ", ['rental_id' => 109]);
+
+    dd($vehicle_information);
+
     }
 }
