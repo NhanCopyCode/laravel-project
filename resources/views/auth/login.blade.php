@@ -65,9 +65,9 @@
         
     </form> --}}
     <div class="login-header d-flex flex-column">
-        <header style="margin-bottom: 40px; font-size: 50px;">Login</header>
+        <header style="margin-bottom: 40px; font-size: 50px;">Đăng nhập</header>
 
-        <a style="text-decoration: none;" class="login_google_btn btn btn-dark mt-10" href="/auth/google/redirect">Login with Google</a>
+        <a style="text-decoration: none;" class="login_google_btn btn btn-dark mt-10" href="/auth/google/redirect">Đăng nhập bằng Google</a>
     </div>
     {{-- <script src="{{asset('assets/clients/js/login.js')}}"></script> --}}
 

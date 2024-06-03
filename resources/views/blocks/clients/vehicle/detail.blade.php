@@ -73,7 +73,6 @@
                 <span class="text-success">Lưu ý: Bạn chỉ cần đặt cọc 10% số tiền phải trả khi nhận xe</span>
                
                 <input type="hidden" id="booking_total_price" name="booking_total_price" value="{{$vehicle->rental_price_day * (15/100)}}" >
-                <button style="margin-top: 24px;" name="form_booking_vehicle" id="booking_vehicle_button" class="btn btn-primary" type="button" data-toggle="modal" data-target="#bookingModal">Thanh toán bằng tiền mặt</button>
                 <button id="button_vnpay_payment" class="btn btn-dark" name="redirect" value="vnpay_payment" type="submit"><ion-icon name="card-outline"></ion-icon>Thanh toán VNPAY</button>
             </form>
 
