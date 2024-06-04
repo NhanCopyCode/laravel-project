@@ -37,25 +37,31 @@ class BookingVehicleRequest extends FormRequest
                     
                     // Định dạng lại ngày tháng cho đúng với dữ liệu nhận được
                     $start_date = Carbon::createFromFormat('Y-m-d', trim($start_date))->format('Y-m-d');
-                    $end_date = Carbon::createFromFormat('Y-m-d', trim($end_date))->subDay()->format('Y-m-d');
+                    $end_date = Carbon::createFromFormat('Y-m-d', trim($end_date))->format('Y-m-d');
+                    if($start_date === $end_date) {
+                        $end_date = Carbon::createFromFormat('Y-m-d', trim($end_date))->addDay()->format('Y-m-d');
+                        
+                    }
+
+                    // dd($start_date, $end_date);
                     
                     // Thực hiện truy vấn để kiểm tra xem khoảng thời gian đã tồn tại trong DB hay chưa
-                    $exists = DB::table('rental')
-                        ->where('vehicle_id', $request->vehicle_id)
-                        ->where(function($query) use ($start_date, $end_date) {
-                            $query->whereBetween('rental_start_date', [$start_date, $end_date])
-                                ->orWhereBetween('rental_end_date', [$start_date, $end_date]);
-                        })
-                        ->where(function($query) {
-                            $query->where('rental_status_id', 1)
-                                ->orWhere('rental_status_id', 4);
-                        })
-                        ->get();
+                    $exists = DB::select("
+                        SELECT *
+                        FROM rental
+                        WHERE vehicle_id = ?
+                        AND (
+                            (rental_start_date BETWEEN ? AND ?)
+                            OR (rental_end_date BETWEEN ? AND ?)
+                        )
+                        AND rental_status_id IN (1, 4)
+                    ", [$request->vehicle_id, $start_date, $end_date, $start_date, $end_date]);
                         // $sql = $exists->toSql();
                         // $bindings = $exists->getBindings();
                         // dd($sql, $bindings);
                     // Nếu tồn tại, trả về lỗi
-                    if (!$exists->isEmpty()) {
+                    // dd($exists);
+                    if (count($exists) > 0) {
                         $fail('Xe đã được đặt trong thời gian này!!');
                     }
                 },

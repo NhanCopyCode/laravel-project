@@ -66,12 +66,12 @@
                 <span>Quản lý user</span>
             </a>
         </li>
-        <li class="sidebar-item">
+        {{-- <li class="sidebar-item">
             <a href="#" class="sidebar-link" title="Setting">
                 <i class="lni lni-cog"></i>
                 <span>Setting</span>
             </a>
-        </li>
+        </li> --}}
     </ul>
     <div class="sidebar-footer" style="text-align:center;">
         <form action="{{route('admin.logout')}}" method="POST">

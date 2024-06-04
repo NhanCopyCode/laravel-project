@@ -186,8 +186,11 @@ class AdminBookingVehicleController extends Controller
                 $user = DB::selectOne("SELECT * FROM users WHERE user_id = ?", [$rental->user_id]);
                 $vehicle = DB::selectOne("SELECT * FROM vehicles WHERE vehicle_id = ?", [$rental->vehicle_id]);
                 $model = DB::selectOne('SELECT * FROM models where model_id = ?', [$vehicle->model_id]);
+                $payment = DB::selectOne('SELECT * FROM payment WHERE payment.rental_id = ?', [$rental->rental_id]);
                 return [
                     'rental_id' => $rental->rental_id,
+                    'rental' => $rental,
+                    'payment' => $payment,
                     'user' => $user,
                     'vehicle' => $vehicle,
                     'model' => $model,

@@ -1,6 +1,7 @@
 <section class="section__container vehicle__container">
-    <h2 class="section__header">Xe máy</h2> 
-    @if ($vehicles->count() === 0)
+    <div>
+        <h2 class="section__header">Xe máy</h2> 
+    @if (count($vehicles) === 0)
         <h2 class="mt-3 text-center alert alert-danger w-100">Không xe nào rảnh trong khoảng thời gian này</div>
     @else
         <div class="vehicle__grid">
@@ -34,4 +35,48 @@
         @endforeach
     @endif
     </div>
+    <nav aria-label="Page navigation example">
+        <ul class="pagination">
+            <!-- Nút trang trước -->
+            @if ($page > 1)
+                <li class="page-item">
+                    <a class="page-link" href="{{ route('home', ['page' => $page - 1]) }}" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                        <span class="sr-only">Previous</span>
+                    </a>
+                </li>
+            @else
+                <li class="page-item disabled">
+                    <a class="page-link" href="#" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                        <span class="sr-only">Previous</span>
+                    </a>
+                </li>
+            @endif
+
+            <!-- Hiển thị số trang -->
+            @for ($i = 1; $i <= $totalPages; $i++)
+                <li class="page-item {{ $i == $page ? 'active' : '' }}">
+                    <a class="page-link" href="{{ route('home', ['page' => $i]) }}">{{ $i }}</a>
+                </li>
+            @endfor
+
+            <!-- Nút trang sau -->
+            @if ($page < $totalPages)
+                <li class="page-item">
+                    <a class="page-link" href="{{ route('home', ['page' => $page + 1]) }}" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                        <span class="sr-only">Next</span>
+                    </a>
+                </li>
+            @else
+                <li class="page-item disabled">
+                    <a class="page-link" href="#" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                        <span class="sr-only">Next</span>
+                    </a>
+                </li>
+            @endif
+        </ul>
+    </nav>
 </section>

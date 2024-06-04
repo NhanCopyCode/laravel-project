@@ -1,3 +1,4 @@
+{{-- AdminBookingVehicleContorller@displayCalendar --}}
 <div id="admin_booking_calendar">
 
 </div>
@@ -29,8 +30,9 @@
                     <p class="w-100" >Loại xe: <span class="fw-normal" id="user_booking_model_name"></span></p>
                     <p class="w-100" >Biển số xe: <span class="fw-normal" id="user_booking_license_plate"></span></p>
                     <p class="w-100" >Năm sản xuất: <span class="fw-normal" id="user_booking_year_of_production"></span></p>
-                    <p class="w-100" >Tổng tiền phải trả: <span class="fw-normal vnd_format" id="user_booking_amount"></span></p>
-                    <p class="w-100" >Số tiền đã trả: <span class="fw-normal vnd_format" id="user_booking_total_cost"></span></p>
+                    <p class="w-100" >Tổng tiền phải trả: <span class="fw-normal vnd_format" id="user_booking_total_cost"></span></p>
+                    <p class="w-100" >Số tiền đã trả: <span class="fw-normal vnd_format" id="user_booking_amount"></span></p>
+                    <p class="w-100" >Số tiền còn lại phải trả: <span class="fw-normal vnd_format" id="user_booking_remaining_amount"></span></p>
                 </div>
             </div>
 
@@ -73,6 +75,7 @@
                     center: 'title',
                     right: 'month' // Thêm các chế độ xem khác
                 },
+                lang: 'vn',
                 disableDragging: true,
                 events: booking,
                 selectable: true,
@@ -105,6 +108,12 @@
                     $('#user_booking_license_plate').text(info.vehicle.license_plate);
                     $('#user_booking_year_of_production').text(info.model.year_of_production);
                     $('#user_booking_rental_price_day').text(info.vehicle.rental_price_day.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }));
+
+                    // Số tiền phải trả và số tiền đã trả
+                    $('#user_booking_amount').text(Number(info.rental.amount_paid).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }));
+                    $('#user_booking_total_cost').text(info.payment.amount.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }));
+                    console.log(typeof info.payment.amount);
+                    $('#user_booking_remaining_amount').text( (info.payment.amount - info.rental.amount_paid).toLocaleString('vi-VN', { style: 'currency', currency : 'VND'}));
                 }
             });
         }

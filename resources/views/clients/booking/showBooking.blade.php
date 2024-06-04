@@ -162,8 +162,6 @@
                     urlParamsReal = '?' + urlHeaderBooking + '&' + urlFilterSidebar + '&page=' + page ;
                 } 
 
-                console.log('urlFilterSideBar: ' + urlFilterSidebar);
-                console.log('urlHeaderBooking: ' + urlHeaderBooking);
                 // var urlParams = window.location.search;
                 // if(urlParams) {
                 //     urlParams = urlParams + formData;
@@ -180,7 +178,6 @@
 
                 var newFormData = urlParamsReal.replace(/\?/g, '');
                 // newFormData += '&page=' + currentPage + '&per_page=' + perPage;
-                console.log('newFormData', newFormData);
                 // Gửi yêu cầu AJAX đến server
                 $.ajax({
                     type: "GET",
@@ -193,25 +190,35 @@
                         // với dữ liệu trả về từ máy chủ
                         var html = '';
                         var pagination = '';
-                        console.log(response);
                         if(response.status === 'success') {
-                            var currentPage = response.current_page;
-                            var totalPages = response.total_pages;
+                            var currentPage = parseInt(response.current_page);
+                            var totalPages = parseInt(response.total_pages);
                             console.log('currentPage: ' + currentPage + ' totalPages: ' + totalPages);
-
                             // Paganation
-                            pagination = '<nav aria-label="Page navigation example"><ul class="pagination">';
+                            var pagination = '<nav aria-label="Page navigation example"><ul class="pagination">';
+    
+                            // Hiển thị nút "Previous"
                             if (currentPage > 1) {
                                 pagination += '<li class="page-item"><a class="page-link" href="#" data-page="' + (currentPage - 1) + '">&laquo;</a></li>';
                             }
-
-                            for (var i = 1; i <= totalPages; i++) {
+                            
+                            // Hiển thị các nút phân trang
+                            var startPage = Math.max(1, currentPage - 2);
+                            var endPage = Math.min(totalPages, startPage + 4);
+                            for (var i = startPage; i <= endPage; i++) {
                                 pagination += '<li class="page-item' + (i == currentPage ? ' active' : '') + '"><a class="page-link" href="#" data-page="' + i + '">' + i + '</a></li>';
                             }
-
+                            
+                            // Hiển thị nút "Next"
                             if (currentPage < totalPages) {
                                 pagination += '<li class="page-item"><a class="page-link" href="#" data-page="' + (currentPage + 1) + '">&raquo;</a></li>';
                             }
+                            
+                            // Hiển thị nút "Last"
+                            if (currentPage < totalPages - 2) {
+                                pagination += '<li class="page-item"><a class="page-link" href="#" data-page="' + totalPages + '">Last</a></li>';
+                            }
+                            
                             pagination += '</ul></nav>';
 
 
@@ -256,7 +263,6 @@
                             });
                         } else {
                             html = `<div class="col-md-12 alert alert-danger"><p>${response.message}</p></div>`;
-                            console.log(html);
                         }
 
                         // Cập nhật nội dung vào phần tử với class .booking__main
@@ -308,5 +314,18 @@
 
     });
 
+    
+
+    </script>
+    <script>
+    //    $('.vnd_format').each(function() {
+    //         var price = $(this).text(); // Lấy số tiền từ text của phần tử
+    //         var formattedPrice = formatVND(price); // Định dạng số tiền thành tiền VND
+    //         $(this).text(formattedPrice); // Cập nhật lại text của phần tử với số tiền đã được định dạng
+    //     });
+
+    //     function formatVND(amount) {
+    //         return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount);
+    //     }
     </script>
 @endsection

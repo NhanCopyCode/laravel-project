@@ -10,17 +10,28 @@ use Illuminate\Support\Facades\Mail;
 class HomeController extends Controller
 {
     //
-    public function index()
+    public function index(Request $request)
     {
-        $vehicles = DB::table('vehicles')
-        ->join('carrentalstore', 'carrentalstore.CarRentalStore_id', '=', 'vehicles.CarRentalStore_id')
-        ->join('models', 'models.model_id', '=', 'vehicles.model_id')
-        ->join('vehiclestatus', 'vehiclestatus.vehicle_status_id', '=', 'vehicles.vehicle_status_id')
-        ->join('vehicleimages', 'vehicleimages.vehicle_img_id', '=', 'vehicles.vehicle_image_id')
-        ->select('carrentalstore.*', 'vehicles.*', 'vehicleimages.*', 'models.*','vehiclestatus.*')
-        ->get();
-        return view('clients.home', compact('vehicles'));
+        $page = $request->input('page', 1); // Lấy số trang hiện tại từ request, mặc định là 1
+        $perPage = 10;
+        $offset = ($page - 1) * $perPage;
 
+        // Đếm tổng số vehicles để tính tổng số trang
+        $totalVehicles = DB::table('vehicles')->count();
+        $totalPages = ceil($totalVehicles / $perPage);
+
+        $vehicles = DB::select(
+            "SELECT carrentalstore.*, vehicles.*, vehicleimages.*, models.*, vehiclestatus.*
+            FROM vehicles
+            JOIN carrentalstore ON carrentalstore.CarRentalStore_id = vehicles.CarRentalStore_id
+            JOIN models ON models.model_id = vehicles.model_id
+            JOIN vehiclestatus ON vehiclestatus.vehicle_status_id = vehicles.vehicle_status_id
+            JOIN vehicleimages ON vehicleimages.vehicle_img_id = vehicles.vehicle_image_id
+            LIMIT ? OFFSET ?", 
+            [$perPage, $offset]
+        );
+
+        return view('clients.home', compact('vehicles', 'page', 'totalPages'));
     }
 
     public function testmail()

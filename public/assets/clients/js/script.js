@@ -233,14 +233,27 @@ document.addEventListener('DOMContentLoaded', function() {
               input.name = "redirect";
               input.value = "vnpay_payment";
               const form = document.getElementById("form_booking_vehicle_detail");
-
-              form.appendChild(input);
+              // Xử lý khi thuê 1 ngày
+              var datesRangeBooking = $('#booking_daterange').val();
+              const dates = datesRangeBooking.split(' - ');
+              const startDate = new Date(dates[0]).getTime();
+              const endDate = new Date(dates[1]).getTime();
+              console.log(startDate, endDate);
+              if(startDate !== endDate) {
+                  form.appendChild(input);
               
-              form.submit();
-
-              setTimeout(() => {
-                  form.removeChild(input);
-              }, 0);
+                  form.submit();
+    
+                  setTimeout(() => {
+                      form.removeChild(input);
+                  }, 0);
+              }else {
+                  Swal.fire({
+                      icon: "error",
+                      title: "Vui lòng chọn từ 1 ngày trở lên!",
+                  });
+              }
+             
           }
       })
       })
@@ -263,7 +276,20 @@ document.addEventListener('DOMContentLoaded', function() {
         cancelButtonText: 'Hủy',
     }).then((result) => {
         if (result.isConfirmed) {
-            document.getElementById("form_booking_vehicle_detail").submit();
+            var input = $('#booking_daterange').val();
+            const dates = input.split(' - ');
+            const startDate = new Date(dates[0]);
+            const endDate = new Date(dates[1]);
+            console.log(startDate, endDate);
+            if(startDate !== endDate) {
+                // document.getElementById("form_booking_vehicle_detail").submit();
+
+            }else {
+                Swal.fire({
+                    icon: "error",
+                    title: "Vui lòng chọn từ 1 ngày trở lên!",
+                });
+            }
         }
     })
   

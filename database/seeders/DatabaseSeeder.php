@@ -18,5 +18,9 @@ class DatabaseSeeder extends Seeder
         //     'name' => 'Test User',
         //     'email' => 'test@example.com',
         // ]);
+
+        // Model::unguard();
+        $this->call(VehicleTableSeeder::class);
+        // Model::reguard();
     }
 }
